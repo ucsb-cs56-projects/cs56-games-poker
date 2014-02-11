@@ -1,6 +1,8 @@
 cs56-games-poker
 ================
 
+ALMOST W14 ready--needs issues added
+
 TBD | TBD | TBD | (pconrad) Poker Game
 
 Original Programmer: Joey Dewan
