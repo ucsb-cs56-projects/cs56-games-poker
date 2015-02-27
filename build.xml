@@ -40,7 +40,7 @@
 
     <!-- copy the cards into the build directory -->
     <copy todir="build/Cards">
-      <fileset dir="src/Cards" includes="*.png"/>
+      <fileset dir="src/edu/ucsb/cs56/projects/games/poker/Cards" includes="*.png"/>
     </copy>
 
 </target> 
