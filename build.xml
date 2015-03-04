@@ -19,7 +19,7 @@
    <property name="javadocDest" value="${webRoot}/${project}/javadoc" /> 
    <property name="javadocURL" value="${webBaseURL}/${project}/javadoc" /> 
  
-<property name="mainClass" value="PokerGame"/>
+<property name="mainClass" value="edu/ucsb/cs56/projects/games/poker/PokerGame"/>
 
 
  <path id="project.class.path">
@@ -39,7 +39,7 @@
 	</javac>
 
     <!-- copy the cards into the build directory -->
-    <copy todir="build/Cards">
+    <copy todir="build/edu/ucsb/cs56/projects/games/poker/Cards">
       <fileset dir="src/edu/ucsb/cs56/projects/games/poker/Cards" includes="*.png"/>
     </copy>
 

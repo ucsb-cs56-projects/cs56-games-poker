@@ -105,61 +105,71 @@ public class PokerGame {
 		return new ImageIcon(url);
 		
 	}
+
+
+/**
+  Method lays out GUI elements
+*/
+
+  public void layoutSubViews()
+  {
+      playerSetUp();
+      
+      dealerPanel=new JPanel();
+      playerPanel=new JPanel();
+      centerPanel=new JPanel();
+      revealPanel=new JPanel();
+      turnButton=new JButton("TURN");
+      turnButton.addActionListener(new turnButtonListener());
+      for(int i=0;i<2;i++){
+        dealerPanel.add(new JLabel(backCardImage));
+        playerPanel.add(new JLabel(getCardImage(playerHand.get(i))));
+      }
+      centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+      for(int i=0;i<3;i++){
+        centerPanel.add(BorderLayout.CENTER, new 
+        JLabel(getCardImage(flop.get(i))));
+      }
+        
+      dealerPanel.add(new JLabel("DEALER"));
+      playerPanel.add(new JLabel("PLAYER"));
+      centerPanel.add(BorderLayout.SOUTH,turnButton);
+      if(playerHand.compareHands(dealerHand)==1){
+        winnerLabel=new JLabel("YOU WON!");
+      }
+      else if(playerHand.compareHands(dealerHand)==2){
+        winnerLabel=new JLabel("TIED");
+      }
+      else{
+        winnerLabel=new JLabel("Dealer won");
+      }
+      /**dealerPanel.add(new JLabel(Integer.toString(dealerHand.getHandValue())));
+      playerPanel.add(new JLabel(Integer.toString(playerHand.getHandValue())));
+      for(int i:dealerHand.sortHand()){
+          dealerPanel.add(new JLabel(Integer.toString(i)));
+        }
+        for(int i:playerHand.sortHand()){
+          playerPanel.add(new JLabel(Integer.toString(i)));
+        }*/
+      deck.reShuffle();
+        
+      
+      mainFrame=new JFrame();
+      mainFrame.setSize(600,600);
+      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      mainFrame.getContentPane().add(BorderLayout.NORTH, dealerPanel);
+      mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
+      mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+      mainFrame.setVisible(true);
+  }
 	
 /**
 	Method that sets up a new Poker game with new hands.
 */
-	public void replay(){
-		playerSetUp();
-  		
-  		dealerPanel=new JPanel();
-  		playerPanel=new JPanel();
-  		centerPanel=new JPanel();
-  		revealPanel=new JPanel();
-  		turnButton=new JButton("TURN");
-  		turnButton.addActionListener(new turnButtonListener());
-  		for(int i=0;i<2;i++){
-  			dealerPanel.add(new JLabel(backCardImage));
-  			playerPanel.add(new JLabel(getCardImage(playerHand.get(i))));
-  		}
-  		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-  		for(int i=0;i<3;i++){
-  			centerPanel.add(BorderLayout.CENTER, new 
-  			JLabel(getCardImage(flop.get(i))));
-  			}
-  			
-  		dealerPanel.add(new JLabel("DEALER"));
-  		playerPanel.add(new JLabel("PLAYER"));
-  		centerPanel.add(BorderLayout.SOUTH,turnButton);
-  		if(playerHand.compareHands(dealerHand)==1){
-  			winnerLabel=new JLabel("YOU WON!");
-  			}
-  		else if(playerHand.compareHands(dealerHand)==2){
-  				winnerLabel=new JLabel("TIED");
-  				}
-  		else{
-  			winnerLabel=new JLabel("Dealer won");
-  			}
-  		/**dealerPanel.add(new JLabel(Integer.toString(dealerHand.getHandValue())));
-  		playerPanel.add(new JLabel(Integer.toString(playerHand.getHandValue())));
-  		for(int i:dealerHand.sortHand()){
-  				dealerPanel.add(new JLabel(Integer.toString(i)));
-  			}
-  			for(int i:playerHand.sortHand()){
-  				playerPanel.add(new JLabel(Integer.toString(i)));
-  			}*/
-  		deck.reShuffle();
-  			
-  		
-  		mainFrame=new JFrame();
-  		mainFrame.setSize(600,600);
-  		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  		mainFrame.getContentPane().add(BorderLayout.NORTH, dealerPanel);
-  		mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
-  		mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-  		mainFrame.setVisible(true);
-  	
-	}
+	public void replay()
+  {  	
+    layoutSubViews();
+  }
 
 /**
 	Sets up the Poker game when the client clicks the Play button.
@@ -167,54 +177,7 @@ public class PokerGame {
 	class playButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
 	
-  			playerSetUp();
-  		
-  			dealerPanel=new JPanel();
-  			playerPanel=new JPanel();
-  			centerPanel=new JPanel();
-  			revealPanel=new JPanel();
-  			turnButton=new JButton("TURN");
-  			turnButton.addActionListener(new turnButtonListener());
-  			for(int i=0;i<2;i++){
-  				dealerPanel.add(new JLabel(backCardImage));
-  				playerPanel.add(new JLabel(getCardImage(playerHand.get(i))));
-  			}
-  			
-  			centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-  			for(int i=0;i<3;i++){
-  				centerPanel.add(BorderLayout.CENTER, new 
-  				JLabel(getCardImage(flop.get(i))));
-  				}
-  					
-  			dealerPanel.add(new JLabel("DEALER"));
-  			playerPanel.add(new JLabel("PLAYER"));
-			centerPanel.add(BorderLayout.SOUTH,turnButton);
-  			if(playerHand.compareHands(dealerHand)==1){
-  				winnerLabel=new JLabel("YOU WON!");
-  				}
-  			else if(playerHand.compareHands(dealerHand)==2){
-  				winnerLabel=new JLabel("TIED");
-  				}
-  			else{
-  				winnerLabel=new JLabel("Dealer won");
-  				}
-  			/**dealerPanel.add(new JLabel(Integer.toString(dealerHand.getHandValue())));	
-  			playerPanel.add(new JLabel(Integer.toString(playerHand.getHandValue())));
-  			for(int i:dealerHand.sortHand()){
-  				dealerPanel.add(new JLabel(Integer.toString(i)));
-  			}
-  			for(int i:playerHand.sortHand()){
-  				playerPanel.add(new JLabel(Integer.toString(i)));
-  			}*/
-  		
-  			mainFrame=new JFrame();
-  			mainFrame.setSize(600,600);
-  			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  			mainFrame.getContentPane().add(BorderLayout.NORTH, dealerPanel);
-  			mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
-  			mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-  			playButtonFrame.dispose();
-  			mainFrame.setVisible(true);
+  			layoutSubViews();
   	}
   }
 /**
