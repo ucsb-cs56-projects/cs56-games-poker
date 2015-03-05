@@ -3,15 +3,13 @@ package edu.ucsb.cs56.projects.games.poker;
 /**
 	Class that represents a poker player
 */
-interface PlayerDelegate {
-    public void fold();
-}
 
-class Player {
+
+public class Player {
     private int chips;
     private int wins;
     private Hand pokerHand;
-    PokerGame delegate;
+    public PokerGame delegate;
 
 
 
@@ -29,7 +27,16 @@ class Player {
     }
 
     public Player() {
-        Player(0);
+        this.chips = 0;
+        this.wins = 0;
+    }
+
+    public Hand getHand() {
+        return pokerHand;
+    }
+
+    public void setHand(Hand hand) {
+        this.pokerHand = hand;
     }
 
     public int getWins() {
@@ -48,31 +55,31 @@ class Player {
         this.chips = chips;
     }
 
-    public int bet(int chips) {
-        if (this.chips <= chips) {
-            int returnValue = this.chips;
-            this.chips = 0;
+    public int bet(int _chips) {
+        if (chips <= _chips) {
+            int returnValue = _chips;
+            chips = 0;
             return returnValue;
         } else {
-            this.chips -= chips;
-            return chips;
+            chips -= _chips;
+            return _chips;
         }
     }
 
     public void addCardToHand(Card card) {
-        this.pokerHand.add(card);
+        pokerHand.add(card);
     }
 
     public Card getCardFromHand(int index) {
-        return this.hand.get(index);
+        return pokerHand.get(index);
     }
 
     public void win() {
-        this.wins += 1;
+        wins += 1;
     }
 
     public void foldHand() {
-        this.delegate.fold();
+        delegate.fold();
     }
 
 
