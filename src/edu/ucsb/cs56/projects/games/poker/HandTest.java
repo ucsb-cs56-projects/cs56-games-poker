@@ -1,3 +1,5 @@
+package edu.ucsb.cs56.projects.games.poker;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

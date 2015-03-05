@@ -3,5 +3,4 @@ build/
 *.class
 *~
 .ant-targets-build.xml
-
-
+.idea/
