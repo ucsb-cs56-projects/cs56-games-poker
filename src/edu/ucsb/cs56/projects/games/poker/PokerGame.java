@@ -10,16 +10,10 @@ import static java.lang.Math.*;
 
 
 /**
-  Enum for dealing with winner
-*/
-
-
-
-/**
 	Class that represents a Texas Holdem' Style Poker Game.
 */
 
-public class PokerGame {
+public class PokerGame implements PlayerDelegate {
   public enum Winner { PLAYER, DEALER, TIE, NEW_GAME };
 	private JPanel panel;
 	private JFrame mainFrame,mainFrame2;
@@ -38,6 +32,8 @@ public class PokerGame {
   private static int playerChips = 500;
   private static int dealerChips = 500;
   private int pot;
+    private Player user;
+    private Dealer dealer;
 
 /**
 	No arg constructor that initializes a new deck.
@@ -84,22 +80,22 @@ public class PokerGame {
 */	
 	public void playerSetUp(){
 		deck=new Deck();
-		playerHand=new Hand(deck);
-		dealerHand=new Hand(deck);
-		flop=deck.showFlop();
-		turnCard=deck.returnCard();
-		riverCard=deck.returnCard();
-		backCard=new Card(100,"B");
+		player.setHand(new Hand(deck));
+		dealer.setHand(new Hand(deck));
+		flop = deck.showFlop();
+		turnCard = deck.returnCard();
+		riverCard = deck.returnCard();
+		backCard = new Card(100,"B");
 		//playerHand.include(flop);
 		for(Card c: flop){
-			playerHand.add(c);
-			dealerHand.add(c);
+			player.addCardToHand(c);
+			dealer.addCardToHand(c);
 		}
-		playerHand.add(turnCard);
-		playerHand.add(riverCard);
+		player.addCardToHand(turnCard);
+		player.addCardToHand(riverCard);
 		//dealerHand.include(flop);
-		dealerHand.add(turnCard);
-		dealerHand.add(riverCard);
+		dealer.addCardToHand(turnCard);
+		dealer.addCardToHand(riverCard);
 		
 		String dir="Cards/";
 		String cardFile="B.png";
@@ -121,43 +117,24 @@ public class PokerGame {
 		
 	}
 
-/**
-  Method for when user folds
-*/
+    /**
+     *  PlayerDelegate
+     */
 
-  public void userFold()
-  {
-    dealerWins++;
-    if (winnerType == Winner.PLAYER) {
-      playerWins--;
+    public void fold() {
+        if (winnerType == Winner.PLAYER) {
+            dealer.win();
+        } else if (winnerType == Winner.DEALER) {
+            player.win();
+        }
+        collectPot();
+        // Reset player win flag
+        deck.reShuffle();
+        winnerType = Winner.NEW_GAME;
+        mainFrame.dispose();
+        PokerGame gui2=new PokerGame();
+        gui2.replay();
     }
-    collectPot();
-    // Reset player win flag
-    deck.reShuffle();
-    winnerType = Winner.NEW_GAME;
-    mainFrame.dispose();
-    PokerGame gui2=new PokerGame();
-    gui2.replay();
-  }
-
-/**
-  Method for when dealer folds
-*/
-
-  public void dealerFold()
-  {
-    playerWins++;
-    if (winnerType == Winner.DEALER) {
-      dealerWins--;
-    }
-    collectPot();
-    // Reset player win flag
-    deck.reShuffle();
-    winnerType = Winner.NEW_GAME;
-    mainFrame.dispose();
-    PokerGame gui2=new PokerGame();
-    gui2.replay();
-  }
 
 /**
   Method for betting
@@ -251,19 +228,19 @@ public void bet(int chips, boolean isPlayer)
       // Player won
           System.out.println("Player");
           System.out.println(String.format("%d", pot));
-      playerChips += pot;
+        player.setChips(pot);
     } else if (winnerType == Winner.DEALER) {
       // Player lost
           System.out.println("DEALER");
           System.out.println(String.format("%d", pot));
-      dealerChips += pot;
+        dealer.setChips(pot);
     } else if (winnerType == Winner.TIE){
       // Tie, split pot
           System.out.println("Tie");
           System.out.println(String.format("%d", pot));
-      dealerChips += (pot/2);
+      dealer.setChips((pot/2));
       pot -= (pot/2);
-      playerChips += pot;
+      player.setChips(pot);
     } else {
       // New game, should never be called
       pot = 0;
@@ -285,8 +262,8 @@ public void bet(int chips, boolean isPlayer)
       revealPanel=new JPanel();
       dealerWinsLabel = new JLabel();
       playerWinsLabel = new JLabel();
-      dealerChipsLabel = new JLabel(String.format("Chips: %d", dealerChips));
-      playerChipsLabel = new JLabel(String.format("Chips: %d", playerChips));
+      dealerChipsLabel = new JLabel(String.format("Chips: %d", dealer.getChips()));
+      playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
       JPanel betArea = new JPanel();
       JPanel winCount = new JPanel();
       winCount.setLayout(new BorderLayout());
@@ -305,7 +282,7 @@ public void bet(int chips, boolean isPlayer)
       turnButton.addActionListener(new turnButtonListener());
       for(int i=0;i<2;i++){
         dealerPanel.add(new JLabel(backCardImage));
-        playerPanel.add(new JLabel(getCardImage(playerHand.get(i))));
+        playerPanel.add(new JLabel(getCardImage(player.getCardFromHand(i))));
       }
       centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
       for(int i=0;i<3;i++){
@@ -323,8 +300,8 @@ public void bet(int chips, boolean isPlayer)
       betArea.add(BorderLayout.SOUTH, betTextField);
 
 
-      playerWinsLabel.setText(String.format("Player wins: %d", playerWins));
-      dealerWinsLabel.setText(String.format("Dealer wins: %d", dealerWins));
+      playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
+      dealerWinsLabel.setText(String.format("Dealer wins: %d", dealer.getWins()));
       winCount.add(BorderLayout.NORTH, playerWinsLabel);
       winCount.add(BorderLayout.SOUTH, dealerWinsLabel);
 
@@ -373,7 +350,11 @@ public void bet(int chips, boolean isPlayer)
 */
 	class playButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent event){
-	
+	        this.player = new Player(500);
+            this.dealer = new Dealer(500);
+            player.delegate = this;
+            dealer.delegate = this;
+            
   			layoutSubViews();
   	}
   }
