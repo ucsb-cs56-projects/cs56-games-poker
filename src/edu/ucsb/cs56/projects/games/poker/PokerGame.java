@@ -6,6 +6,13 @@ import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
 import java.util.ArrayList;
+import static java.lang.Math.*;
+
+
+/**
+  Enum for dealing with winner
+*/
+
 
 
 /**
@@ -13,12 +20,13 @@ import java.util.ArrayList;
 */
 
 public class PokerGame {
-
+  public enum Winner { PLAYER, DEALER, TIE, NEW_GAME };
 	private JPanel panel;
 	private JFrame mainFrame,mainFrame2;
 	private JFrame playButtonFrame;
-	private JButton playButton, playAgainButton, turnButton, riverButton, foldButton;
-	private JLabel winnerLabel, playerWinsLabel, dealerWinsLabel;
+  private JTextField betTextField;
+	private JButton playButton, playAgainButton, turnButton, riverButton, foldButton, betButton;
+	private JLabel winnerLabel, playerWinsLabel, dealerWinsLabel, playerChipsLabel, dealerChipsLabel;
 	private JPanel dealerPanel, playerPanel, centerPanel, revealPanel;
 	private Hand dealerHand, playerHand, flop;
 	private Deck deck;
@@ -26,7 +34,10 @@ public class PokerGame {
 	private ImageIcon backCardImage;
   private static int playerWins = 0;
   private static int dealerWins = 0;
-  private static int playerWon = 2;
+  private Winner winnerType = Winner.NEW_GAME;
+  private static int playerChips = 500;
+  private static int dealerChips = 500;
+  private int pot;
 
 /**
 	No arg constructor that initializes a new deck.
@@ -114,19 +125,150 @@ public class PokerGame {
   Method for when user folds
 */
 
-  public void fold()
+  public void userFold()
   {
     dealerWins++;
-    if (playerWon == 0) {
+    if (winnerType == Winner.PLAYER) {
       playerWins--;
     }
+    collectPot();
     // Reset player win flag
-    playerWon = 2;
+    deck.reShuffle();
+    winnerType = Winner.NEW_GAME;
     mainFrame.dispose();
     PokerGame gui2=new PokerGame();
     gui2.replay();
   }
 
+/**
+  Method for when dealer folds
+*/
+
+  public void dealerFold()
+  {
+    playerWins++;
+    if (winnerType == Winner.DEALER) {
+      dealerWins--;
+    }
+    collectPot();
+    // Reset player win flag
+    deck.reShuffle();
+    winnerType = Winner.NEW_GAME;
+    mainFrame.dispose();
+    PokerGame gui2=new PokerGame();
+    gui2.replay();
+  }
+
+/**
+  Method for betting
+*/
+
+public void bet(int chips, boolean isPlayer)
+{
+  int randomNum = 1 + (int)(Math.random() * 10);
+  if (isPlayer) {
+    // Deal with user having no chips
+    if (chips > playerChips) {
+       System.out.println(String.format("random: %d", randomNum));
+      if (randomNum >= 3) {
+        if (dealerChips <= playerChips) {
+          pot += (dealerChips * 2);
+          playerChips -= dealerChips;
+          dealerChips = 0;
+        } else {
+          dealerChips -= playerChips;
+          pot += (playerChips * 2);
+          playerChips = 0;
+        }
+      } else {
+        winnerType = Winner.DEALER;
+        dealerFold();
+      }
+    } else {
+      
+      System.out.println(String.format("random: %d", randomNum));
+      if (randomNum >= 3) {
+        if (dealerChips <= chips) {
+          playerChips -= dealerChips;
+          pot += (dealerChips * 2);
+          dealerChips = 0;
+        } else {
+          pot += (chips * 2);
+          playerChips -= chips;
+          dealerChips -= chips; 
+        }
+
+      } else {
+        winnerType = Winner.DEALER;
+        dealerFold();
+      }
+    }
+
+  } else {
+    // Check to see if user wants to call
+    String message = String.format("Would you like to call: %d?", chips);
+    int option = JOptionPane.showConfirmDialog(null, message, "Betting", JOptionPane.YES_NO_OPTION);
+    if (option == JOptionPane.YES_OPTION) {
+      if (playerChips <= chips) {
+        pot += (2 * playerChips);
+        playerChips = 0;
+        dealerChips -= playerChips;
+      } else {
+        playerChips -= chips;
+        dealerChips -= chips;
+        pot += (chips * 2);
+      }
+    } else {
+      winnerType = Winner.DEALER;
+      userFold();
+    }
+  }
+}
+
+/**
+  Determine if dealer should bet
+*/
+
+  public boolean dealerShouldBet(int max)
+  {
+      int shouldBet = 1 + (int)(Math.random() * max);
+      int odds = 1 + (int)(Math.random() * max * 1.56);
+      if (shouldBet >= odds) {
+        return true;
+      } else {
+        return false;
+      }
+  }
+
+/**
+  Method to transfer winnings
+*/
+
+  public void collectPot()
+  {
+
+    if (winnerType == Winner.PLAYER) {
+      // Player won
+          System.out.println("Player");
+          System.out.println(String.format("%d", pot));
+      playerChips += pot;
+    } else if (winnerType == Winner.DEALER) {
+      // Player lost
+          System.out.println("DEALER");
+          System.out.println(String.format("%d", pot));
+      dealerChips += pot;
+    } else if (winnerType == Winner.TIE){
+      // Tie, split pot
+          System.out.println("Tie");
+          System.out.println(String.format("%d", pot));
+      dealerChips += (pot/2);
+      pot -= (pot/2);
+      playerChips += pot;
+    } else {
+      // New game, should never be called
+      pot = 0;
+    }
+  }
 
 /**
   Method lays out GUI elements
@@ -136,12 +278,27 @@ public class PokerGame {
   {
       playerSetUp();
 
+      pot = 0;
       dealerPanel=new JPanel();
       playerPanel=new JPanel();
       centerPanel=new JPanel();
       revealPanel=new JPanel();
       dealerWinsLabel = new JLabel();
       playerWinsLabel = new JLabel();
+      dealerChipsLabel = new JLabel(String.format("Chips: %d", dealerChips));
+      playerChipsLabel = new JLabel(String.format("Chips: %d", playerChips));
+      JPanel betArea = new JPanel();
+      JPanel winCount = new JPanel();
+      winCount.setLayout(new BorderLayout());
+      betArea.setLayout(new BorderLayout());
+      playerPanel.add(betArea);
+      dealerPanel.add(winCount);
+      dealerPanel.add(dealerChipsLabel);
+      betTextField = new JTextField(4);
+      betTextField.addActionListener(new betTextFieldListener());
+      betButton = new JButton("BET");
+      betButton.addActionListener(new betButtonListener());
+
       turnButton=new JButton("TURN");
       foldButton = new JButton("FOLD");
       foldButton.addActionListener(new foldButtonListener());
@@ -161,37 +318,31 @@ public class PokerGame {
       playerPanel.add(foldButton);
       centerPanel.add(BorderLayout.SOUTH,turnButton);
 
+      playerPanel.add(playerChipsLabel);
+      betArea.add(BorderLayout.NORTH, betButton);
+      betArea.add(BorderLayout.SOUTH, betTextField);
+
+
       playerWinsLabel.setText(String.format("Player wins: %d", playerWins));
       dealerWinsLabel.setText(String.format("Dealer wins: %d", dealerWins));
-      playerPanel.add(playerWinsLabel);
-      dealerPanel.add(dealerWinsLabel);
-
+      winCount.add(BorderLayout.NORTH, playerWinsLabel);
+      winCount.add(BorderLayout.SOUTH, dealerWinsLabel);
 
       if(playerHand.compareHands(dealerHand) == 1) {
         playerWins = playerWins + 1;
-        playerWon = 0;
+        winnerType = Winner.PLAYER;
         winnerLabel=new JLabel("YOU WON!");
         System.out.println("I win");
       } else if(playerHand.compareHands(dealerHand) == 2) {
-        playerWon = 1;
+        winnerType = Winner.TIE;
         winnerLabel=new JLabel("TIED");
         System.out.println("No one wins");
       } else {
-        playerWon = 1;
+        winnerType = Winner.DEALER;
         dealerWins = dealerWins + 1;
         winnerLabel=new JLabel("Dealer won");
         System.out.println("You win");
       }
-      /**dealerPanel.add(new JLabel(Integer.toString(dealerHand.getHandValue())));
-      playerPanel.add(new JLabel(Integer.toString(playerHand.getHandValue())));
-      for(int i:dealerHand.sortHand()){
-          dealerPanel.add(new JLabel(Integer.toString(i)));
-        }
-        for(int i:playerHand.sortHand()){
-          playerPanel.add(new JLabel(Integer.toString(i)));
-        }*/
-
-
 
       deck.reShuffle();
         
@@ -202,6 +353,11 @@ public class PokerGame {
       mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
       mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
       mainFrame.setVisible(true);
+
+      if (dealerShouldBet(20)) {
+        int randomBet = 1 + (int)(Math.random() * dealerChips);
+        bet(randomBet ,false);
+      }
   }
 	
 /**
@@ -233,7 +389,13 @@ public class PokerGame {
   		centerPanel.add(riverButton);
   		mainFrame.setVisible(false);
   		mainFrame.setVisible(true);
-  		}
+
+      if (dealerShouldBet(10)) {
+        int randomBet = 1 + (int)(Math.random() * dealerChips);
+        bet(randomBet ,false);
+      }
+      
+  	}
   }
 
 /**
@@ -256,6 +418,8 @@ public class PokerGame {
   			revealPanel.add(new JLabel(getCardImage(dealerHand.get(i))));
       }
   		revealPanel.add(new JLabel("DEALER"));
+
+      collectPot();
   		
   		mainFrame.remove(dealerPanel);
   		mainFrame.add(revealPanel);
@@ -269,7 +433,7 @@ public class PokerGame {
 */
   class foldButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent event) {
-      fold();
+      userFold();
     }
   }
 /**
@@ -277,6 +441,7 @@ public class PokerGame {
 */
   class playAgainListener implements ActionListener{
   	public void actionPerformed(ActionEvent event){
+      winnerType = Winner.NEW_GAME;
   		mainFrame.dispose();
   		PokerGame gui2=new PokerGame();
   		gui2.replay();
@@ -285,6 +450,39 @@ public class PokerGame {
   }
 
 
+/**
+  Bet button actions
+*/
+
+  class betButtonListener implements ActionListener {
+    public void actionPerformed(ActionEvent event) {
+      // Place Bet
+      String inputText = betTextField.getText();
+      if (!inputText.equals("")) {
+        int amount = Integer.parseInt(inputText);
+        betTextField.setText("");
+        bet(amount, true);
+      }
+
+    }
+  }
+
+/**
+  Betting field actions
+*/
+
+  class betTextFieldListener implements ActionListener {
+    public void actionPerformed(ActionEvent event) {
+      // Handle user pressing enter key to place bet
+      String inputText = betTextField.getText();
+      if (!inputText.equals("")) {
+        int amount = Integer.parseInt(inputText);
+        betTextField.setText("");
+        bet(amount, true);
+      }
+
+    }
+  }
 
 }
 

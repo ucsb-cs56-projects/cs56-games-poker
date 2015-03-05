@@ -77,7 +77,7 @@ public class Deck {
 			Card drawnCard=this.getActiveDeck().get(randomNum);
 			activeDeck.remove(drawnCard);
 			hand.add(drawnCard);
-			cardsLeft--;
+			--cardsLeft;
 		}
 		return hand;
 	}
