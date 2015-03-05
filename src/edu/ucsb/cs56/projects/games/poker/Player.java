@@ -56,6 +56,7 @@ public class Player {
     }
 
     public int bet(int _chips) {
+        if (chips == 0) return 0;
         if (chips <= _chips) {
             int returnValue = _chips;
             chips = 0;
