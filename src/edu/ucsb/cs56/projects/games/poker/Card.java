@@ -1,3 +1,6 @@
+package edu.ucsb.cs56.projects.games.poker;
+
+
 /**
  A class which represents a card from a standard 52 card deck
  @author Joey Dewan
