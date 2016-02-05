@@ -1,3 +1,5 @@
+package edu.ucsb.cs56.projects.games.poker;
+
 import java.util.*;
 import java.math.*;
 
@@ -75,7 +77,7 @@ public class Deck {
 			Card drawnCard=this.getActiveDeck().get(randomNum);
 			activeDeck.remove(drawnCard);
 			hand.add(drawnCard);
-			cardsLeft--;
+			--cardsLeft;
 		}
 		return hand;
 	}
