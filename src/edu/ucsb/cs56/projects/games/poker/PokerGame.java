@@ -20,18 +20,28 @@ import static java.lang.Math.*;
 
 public class PokerGame implements PlayerDelegate {
     public enum Winner { PLAYER, DEALER, TIE, NEW_GAME };
-    public enum Step {START, FLOP, TURN, RIVER, SHOWDOWN};
+    public enum Step {
+	START, FLOP, TURN, RIVER, SHOWDOWN;
+        public Step getNext(){
+	    return this.ordinal() < Step.values().length -1
+		? Step.values()[this.ordinal() + 1]
+		: null;
+	}
+    }
     private JPanel panel;
     private JFrame mainFrame;
     private JFrame mainFrame2;
     private JFrame playButtonFrame;
     private JTextField betTextField;
-    private JButton playButton, playAgainButton, turnButton, riverButton, foldButton, betButton;
+    private JButton playButton, playAgainButton, foldButton, betButton;
     private JButton checkButton;
     private JLabel playerWinsLabel, dealerWinsLabel, playerChipsLabel, dealerChipsLabel, potLabel;
     private JLabel dealerAction, playerPrompt;
     private JPanel dealerPanel, playerPanel, centerPanel, revealPanel;
     private JPanel dSubPane1, dSubPane2, dSubPane3, pSubPane1, pSubPane2, pSubPane3;
+    private boolean playerTurn = false;
+    private boolean dealerTurn = true;
+    private String gameMessage = "Dealer checks.";
     private Hand dealerHand, playerHand, flop;
     private Deck deck;
     private Card turnCard, riverCard, backCard;
@@ -41,6 +51,7 @@ public class PokerGame implements PlayerDelegate {
     private static int pot = 0;
     private static Player player = new Player(500);
     private static Player dealer = new Player(500);
+
 
     /**
        No arg constructor that initializes a new deck.
@@ -85,23 +96,9 @@ public class PokerGame implements PlayerDelegate {
         player.delegate = this;
         dealer.delegate = this;
 	deck = new Deck();
-	player.setHand(new Hand(deck));
-	dealer.setHand(new Hand(deck));
-	flop = deck.showFlop();
-	turnCard = deck.returnCard();
-	riverCard = deck.returnCard();
-	backCard = new Card(100,"B");
-	//playerHand.include(flop);
-	for(Card c: flop){
-	    player.addCardToHand(c);
-	    dealer.addCardToHand(c);
-	}
-	player.addCardToHand(turnCard);
-	player.addCardToHand(riverCard);
-	//dealerHand.include(flop);
-	dealer.addCardToHand(turnCard);
-	dealer.addCardToHand(riverCard);
-	
+	player.setHand(deck.dealCards());
+	dealer.setHand(deck.dealCards());
+	backCard = new Card(100,"B");	
 	String dir="Cards/";
 	String cardFile="B.png";
 	URL url=getClass().getResource(dir+cardFile);
@@ -154,6 +151,7 @@ public class PokerGame implements PlayerDelegate {
 	    return false;
 	
     }
+
     
     /**
        Method to transfer winnings
@@ -228,10 +226,8 @@ public class PokerGame implements PlayerDelegate {
 	betButton = new JButton("BET");
 	betButton.addActionListener(new betButtonListener());
 	checkButton = new JButton("CHECK");
-	turnButton = new JButton("TURN");
 	foldButton = new JButton("FOLD");
 	foldButton.addActionListener(new foldButtonListener());
-	turnButton.addActionListener(new turnButtonListener());
 
 	JPanel optionArea = new JPanel();
 	optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
@@ -260,49 +256,18 @@ public class PokerGame implements PlayerDelegate {
 	    pSubPane2.add(new JLabel(getCardImage(player.getCardFromHand(i))));
 	}
 
+	
 	centerPanel = new JPanel();
 	centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-	for(int i=0;i<3;i++){
-	    centerPanel.add(BorderLayout.CENTER, new
-			    JLabel(getCardImage(flop.get(i))));
-	}
+
 	potLabel = new JLabel();
 	potLabel.setText(String.format("Pot: %d", pot));
 	centerPanel.add(potLabel, BorderLayout.SOUTH);
 	centerPanel.add(Box.createRigidArea(new Dimension(50,0)));
-	playerPrompt = new JLabel("What will you do?");
+	playerPrompt = new JLabel(gameMessage);
 	centerPanel.add(playerPrompt, BorderLayout.EAST);
 	
 	revealPanel = new JPanel();
-	
-
-	
-	
-	
-
-        
-	
-
-
-
-	
-	
-	
-
-	
-
-	
-
-	
-	
-
-     
-	
-	
-
-	
-	
-	deck.reShuffle();
 
 	mainFrame = new JFrame("Poker Game");
 	mainFrame.setSize(600,600);
@@ -312,11 +277,6 @@ public class PokerGame implements PlayerDelegate {
 	mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
 	mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
 	mainFrame.setVisible(true);
-
-	if (dealerShouldBet(20)) {
-	    int dealerBet = 1 + (int)(Math.random() * dealer.getChips());
-	    showPlayerCallBetAlert(dealerBet);
-	}
     }
     
     /**
@@ -348,77 +308,43 @@ public class PokerGame implements PlayerDelegate {
     /**
      * Method that updates the panels in the frame.
      */
-    public void updateFrame () {
+    public synchronized void updateFrame () {
 	dealerPanel.updateUI();
 	playerPanel.updateUI();
 	centerPanel.updateUI();
     }
+    /*
+    public void runGameLoop()
+    {
+	Thread loop = new Thread(){
+		public void run()
+		{
+		    gameLoop();
+		}
+	    };
+	loop.start();
+    }
+
+    private void gameLoop(){
+	while(true)
+    }
+    */
     
     /**
        Sets up the Poker game when the client clicks the Play button.
     */
     class playButtonListener implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
-	    layoutSubViews();
-	    playButtonFrame.dispose();
+	    playSinglePlayer();
+	    playButtonFrame.setVisible(false);
   	}
     }
 
-    
-    /**
-       Displays the turn card when the user clicks the button.
-    */
-    class turnButtonListener implements ActionListener{
-  	public void actionPerformed(ActionEvent event){
-	    centerPanel.remove(turnButton);
-	    centerPanel.add(new JLabel(getCardImage(turnCard)));
-	    riverButton = new JButton("RIVER");
-	    riverButton.addActionListener(new riverButtonListener());
-	    centerPanel.add(riverButton);
-
-	    updateFrame();
-	    
-	    if (dealerShouldBet(10)) {
-		int dealerBet = 1 + (int)(Math.random() * dealer.getChips());
-		showPlayerCallBetAlert(dealerBet);
-	    }
-	    potLabel.setText(String.format("Pot: %d", pot));
-	    centerPanel.add(potLabel, BorderLayout.SOUTH);
-	    
-  	}
-    }
-    
-    /**
-       Displays the river card when the user clicks the button.
-    */
-    class riverButtonListener implements ActionListener{
-  	public void actionPerformed(ActionEvent event){
-	    centerPanel.remove(riverButton);
-	    centerPanel.add(new
-			    JLabel(getCardImage(riverCard)));
-	    
-	    playAgainButton=new JButton("Play Again");
-	    playAgainButton.addActionListener(new playAgainListener());
-	    
-	    determineWinner();
-	    
-	    deck.reShuffle();
-	    centerPanel.add(playAgainButton);
-	    potLabel.setText(String.format("Pot: %d", pot));
-	    centerPanel.add(potLabel);
-	    
-	    for(int i=0;i<2;i++) {
-		revealPanel.add(new JLabel(getCardImage(dealer.getCardFromHand(i))));
-	    }
-	    revealPanel.add(new JLabel("DEALER"));
-	    
-	    collectPot();
-	    
-	    mainFrame.remove(dealerPanel);
-	    mainFrame.add(revealPanel);
-	    updateFrame();
-	    showWinnerAlert();
-  	}
+    public void playSinglePlayer () {
+	layoutSubViews();
+	TurnManager t = new TurnManager();
+	Thread turn = new Thread(t);
+	turn.start();
     }
     
     
@@ -466,11 +392,9 @@ public class PokerGame implements PlayerDelegate {
 		    winnerType = Winner.PLAYER;
 		    dealer.foldHand();
 		}
-		
 	    }
 	    potLabel.setText(String.format("Pot: %d", pot));
-	    centerPanel.add(potLabel, BorderLayout.SOUTH);
-	    
+	    updateFrame();
 	}
     }
     
@@ -546,6 +470,28 @@ public class PokerGame implements PlayerDelegate {
             // Quit
             System.exit(1);
         }
+    }
+    
+
+    public class TurnManager implements Runnable {
+	public void run() {
+	    while (true) {
+		if(!playerTurn){
+		    pSubPane3.setVisible(false);
+		    gameMessage = "Dealer checks.";
+		    playerTurn = true;
+		    dealerTurn = false;
+		    updateFrame();
+		}
+		else{
+		    pSubPane3.setVisible(true);
+		    gameMessage = "Your turn to bet. What will you do?";
+		    dealerTurn = true;
+		    playerTurn = false;
+		    updateFrame();
+		}
+	    }
+	}
     }
     
 }
