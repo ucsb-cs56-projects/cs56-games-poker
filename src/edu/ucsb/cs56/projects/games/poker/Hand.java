@@ -7,7 +7,7 @@ import java.util.*;
 */
 public class Hand extends ArrayList<Card>{
 
-private int handValue;
+    private int handValue;
 
 /**
 	No arg constructor for Hand
@@ -116,7 +116,7 @@ private int handValue;
 */
 	public ArrayList<Integer> sortHand(){
 		ArrayList<Integer> sortedHand=new ArrayList<Integer>();
-		for(int i=0;i<7;i++)
+		for(int i=0;i<this.size();i++)
 		{
 			sortedHand.add(this.get(i).getValue());
 		}
