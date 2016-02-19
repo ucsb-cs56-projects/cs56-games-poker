@@ -23,17 +23,16 @@ public class PokerGame implements PlayerDelegate {
     public enum Step {BLIND, FLOP, TURN, RIVER, SHOWDOWN;}
     public enum Turn {PLAYER, DEALER};
     private JPanel panel;
-    private JFrame mainFrame;
-    private JFrame mainFrame2;
-    private JFrame playButtonFrame;
+    private JFrame mainFrame, mainFrame2, playButtonFrame;
     private JTextField betTextField;
-    private JButton playButton, playAgainButton, foldButton, betButton, checkButton, showdownButton, passTurnButton;
+    private JButton playButton, playAgainButton, foldButton1, foldButton2, betButton, checkButton,
+	showdownButton, passTurnButton, callButton;
     private JLabel playerWinsLabel, dealerWinsLabel, playerChipsLabel, dealerChipsLabel, potLabel;
-    private JLabel dealerAction, playerPrompt, backCardLabel1, backCardLabel2;
+    private JLabel gameMessage, playerPrompt, backCardLabel1, backCardLabel2;
     private JPanel dealerPanel, playerPanel, centerPanel, revealPanel;
     private JPanel dSubPane1, dSubPane2, dSubPane3, pSubPane1, pSubPane2, pSubPane3, optionArea;
-    private JPanel flopPane, turnPane, riverPane;
-    private String gameMessage = "Game is starting.";
+    private JPanel flopPane, turnPane, riverPane, betPane, respondPane;
+    private String message, prompt;
     private Hand dealerHand, playerHand, flop;
     private Deck deck;
     private Card turnCard, riverCard, backCard;
@@ -218,15 +217,31 @@ public class PokerGame implements PlayerDelegate {
 	betButton.addActionListener(new betButtonListener());
 	checkButton = new JButton("CHECK");
 	checkButton.addActionListener(new checkButtonListener());
-	foldButton = new JButton("FOLD");
-	foldButton.addActionListener(new foldButtonListener());
+	foldButton1 = new JButton("FOLD");
+	foldButton1.addActionListener(new foldButtonListener());
+	foldButton2 = new JButton("FOLD");
+	foldButton2.addActionListener(new foldButtonListener());
+	callButton = new JButton("CALL");
+	callButton.addActionListener(new callButtonListener());
 
 	optionArea = new JPanel();
-	optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
-	optionArea.add(betButton);
-	optionArea.add(betTextField);
-	optionArea.add(foldButton);
-	optionArea.add(checkButton);
+	CardLayout cardlayout = new CardLayout();
+	optionArea.setLayout(cardlayout);
+	
+	betPane = new JPanel();
+	betPane.setLayout(new BoxLayout(betPane, BoxLayout.Y_AXIS));
+	betPane.add(betButton);
+	betPane.add(betTextField);
+	betPane.add(checkButton);
+	betPane.add(foldButton1);
+	
+	respondPane = new JPanel();
+	respondPane.setLayout(new BoxLayout(respondPane, BoxLayout.Y_AXIS));
+	respondPane.add(callButton);
+	respondPane.add(foldButton2);
+
+	optionArea.add(betPane);
+	optionArea.add(respondPane);
 	
 	playerPanel = new JPanel();
 	playerPanel.setLayout(new BorderLayout());
@@ -275,7 +290,10 @@ public class PokerGame implements PlayerDelegate {
 	potLabel.setText(String.format("Pot: %d", pot));
 	centerPanel.add(potLabel);
 	centerPanel.add(Box.createRigidArea(new Dimension(50,0)));
-	playerPrompt = new JLabel(gameMessage);
+
+	gameMessage = new JLabel(message);
+	centerPanel.add(gameMessage);
+	playerPrompt = new JLabel(prompt);
 	centerPanel.add(playerPrompt);
 
 	passTurnButton = new JButton("END TURN");
@@ -318,14 +336,15 @@ public class PokerGame implements PlayerDelegate {
     /**
      * Method that updates the panels in the frame.
      */
-    public void updateUI () {
-	playerPrompt.setText(gameMessage);
+    public void updateFrame () {
+	gameMessage.setText(message);
+	playerPrompt.setText(prompt);
 	potLabel.setText(String.format("Pot: %d", pot));
-	dealerChipsLabel = new JLabel(String.format("Chips: %d", dealer.getChips()));
-	playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
-	dealerPanel.updateUI();
-	playerPanel.updateUI();
-	centerPanel.updateUI();
+	dealerChipsLabel.setText(String.format("Chips: %d", dealer.getChips()));
+	playerChipsLabel.setText(String.format("Chips: %d", player.getChips()));
+	dealerPanel.revalidate();
+	playerPanel.revalidate();
+	centerPanel.revalidate();
     }
 
     /**
@@ -339,18 +358,19 @@ public class PokerGame implements PlayerDelegate {
 		dealerAI();
 	    }
 	    else{
-		gameMessage = "Dealer turn.";
-		updateUI();
+		prompt = "Dealer turn.";
+		updateFrame();
 		nextStep();
 		turn = Turn.DEALER;
 		dealerAI();
 	    }
 	}
 	else if(turn == Turn.DEALER){
-	    gameMessage = "Player turn.";
+	    message = "Dealer checks.";
+	    prompt = "What will you do?";
 	    if(step !=Step.SHOWDOWN)
 		optionArea.setVisible(true);
-	    updateUI();
+	    updateFrame();
 	    turn = Turn.PLAYER;
 	}
     }
@@ -361,19 +381,17 @@ public class PokerGame implements PlayerDelegate {
      */
     public void dealerAI () {
 	if(responding == true){
-	    gameMessage = "Dealer calls.";
+	    message = "Dealer calls.";
 	    pot += bet;
-	    potLabel.setText(String.format("Pot: %d", pot));
-	    dealer.setChips(dealer.bet(bet));
+	    dealer.setChips(dealer.getChips() - dealer.bet(bet));
 	    bet = 0;
 	    responding = false;
-	    updateUI();
+	    updateFrame();
 	    nextStep();
 	    dealerAI();
 	}
 	else {
-	    gameMessage = "Dealer checks.";
-	    updateUI();
+	    updateFrame();
 	    changeTurn();
 	}
     }
@@ -385,6 +403,7 @@ public class PokerGame implements PlayerDelegate {
     
     public void nextStep() {
 	if(step == Step.BLIND){
+	    message = "Dealer has dealt the flop.";
 	    flopPane.setVisible(true);
 	    step = Step.FLOP;
 	}
@@ -399,13 +418,15 @@ public class PokerGame implements PlayerDelegate {
 	else if (step == Step.RIVER){
 	    optionArea.setVisible(false);
 	    showdownButton.setVisible(true);
-	    updateUI();
+	    updateFrame();
 	    step = Step.SHOWDOWN;
 	}
 	else {
 	    optionArea.setVisible(false);
 	    showdownButton.setVisible(true);
-	    updateUI();
+	    message = "All bets are in.";
+	    prompt = "";
+	    updateFrame();
 	}
     }
 
@@ -431,15 +452,6 @@ public class PokerGame implements PlayerDelegate {
     }
     
     
-    /**
-       Fold button actions
-    */
-    class foldButtonListener implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    player.foldHand();
-	    
-	}
-    }
     /**
        Sets up the Poker game when the Client clicks the PlayAgain button.
     */
@@ -468,13 +480,13 @@ public class PokerGame implements PlayerDelegate {
 		bet = Integer.parseInt(inputText);
 		betTextField.setText("");
 		pot += bet;
-		player.setChips(player.bet(bet));
+		player.setChips(player.getChips() - player.bet(bet));
 	    }
-	    gameMessage = "Player bets " + bet + ".";
+	    prompt = "Player bets " + bet + ".";
 	    optionArea.setVisible(false);
 	    passTurnButton.setVisible(true);
 	    responding = true;
-	    updateUI();
+	    updateFrame();
 	}
     }
     
@@ -485,10 +497,30 @@ public class PokerGame implements PlayerDelegate {
    
     class checkButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-	    gameMessage = "Player checks.";
+	    prompt = "Player checks.";
 	    passTurnButton.setVisible(true);
 	    optionArea.setVisible(false);
-	    updateUI();
+	    updateFrame();
+	}
+    }
+
+    /**
+       Fold button actions
+    */
+    class foldButtonListener implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+	    player.foldHand();
+	    
+	}
+    }
+
+    /**
+       Call button actions
+     */
+    class callButtonListener implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+	    pot += bet;
+	    player.setChips(player.getChips() - player.bet(bet));
 	}
     }
 
@@ -513,7 +545,7 @@ public class PokerGame implements PlayerDelegate {
 	public void actionPerformed(ActionEvent e) {
 	    changeTurn();
 	    passTurnButton.setVisible(false);
-	    updateUI();
+	    updateFrame();
 	}
     }
     
@@ -529,7 +561,7 @@ public class PokerGame implements PlayerDelegate {
 	for(int i=0;i<2;i++){
 	    dSubPane2.add(new JLabel(getCardImage(dealer.getCardFromHand(i))));
 	}
-	updateUI();
+	updateFrame();
         if (winnerType == Winner.PLAYER) {
             System.out.println("player");
             message = "You won! \n\n Play Again?";
