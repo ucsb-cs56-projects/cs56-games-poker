@@ -1,12 +1,13 @@
 package edu.ucsb.cs56.projects.games.poker;
 
+import java.io.Serializable;
 
 /**
  A class which represents a card from a standard 52 card deck
  @author Joey Dewan
  @version 5/29/12 CS56 S12
   */
-public class Card{
+public class Card implements Serializable{
 	private int value;
 	private String suit;
 	
