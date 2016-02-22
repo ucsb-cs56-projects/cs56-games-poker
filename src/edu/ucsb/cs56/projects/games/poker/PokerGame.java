@@ -29,7 +29,7 @@ public class PokerGame implements PlayerDelegate {
 	showdownButton, passTurnButton, callButton;
     private JLabel playerWinsLabel, dealerWinsLabel, playerChipsLabel, dealerChipsLabel, potLabel;
     private JLabel gameMessage, playerPrompt, backCardLabel1, backCardLabel2;
-    private JPanel dealerPanel, playerPanel, centerPanel, revealPanel;
+    private JPanel dealerPanel, playerPanel, centerPanel, revealPanel, messagePanel;
     private JPanel dSubPane1, dSubPane2, dSubPane3, pSubPane1, pSubPane2, pSubPane3, optionArea;
     private JPanel flopPane, turnPane, riverPane, betPane, respondPane;
     private String message, prompt;
@@ -195,6 +195,7 @@ public class PokerGame implements PlayerDelegate {
     public void layoutSubViews()
     {
 	playerSetUp();
+	Color pokerGreen = new Color(83,157,89);
 	
 	dealerPanel = new JPanel();
 	dealerPanel.setLayout(new BorderLayout());
@@ -280,35 +281,53 @@ public class PokerGame implements PlayerDelegate {
 	centerPanel.add(flopPane);
 	centerPanel.add(turnPane);
 	centerPanel.add(riverPane);
+
+	messagePanel = new JPanel();
+	messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+	messagePanel.add(Box.createRigidArea(new Dimension(0,20)));
 	potLabel = new JLabel();
 	potLabel.setText(String.format("Pot: %d", pot));
-	centerPanel.add(potLabel);
-	centerPanel.add(Box.createRigidArea(new Dimension(10,0)));
+	messagePanel.add(potLabel);
+	messagePanel.add(Box.createRigidArea(new Dimension(10,20)));
 
 	gameMessage = new JLabel(message);
-	centerPanel.add(gameMessage);
+	messagePanel.add(Box.createRigidArea(new Dimension(10,20)));
+	messagePanel.add(gameMessage);
 	playerPrompt = new JLabel(prompt);
-	centerPanel.add(playerPrompt);
+	messagePanel.add(playerPrompt);
+	messagePanel.add(Box.createRigidArea(new Dimension(10,0)));
 
 	passTurnButton = new JButton("END TURN");
 	passTurnButton.addActionListener(b);
 	showdownButton = new JButton("SHOWDOWN");
 	showdownButton.addActionListener(b);
 	showdownButton.setVisible(false);
-	centerPanel.add(showdownButton);
-	centerPanel.add(passTurnButton);
+	messagePanel.add(showdownButton);
+	messagePanel.add(Box.createRigidArea(new Dimension(0,20)));
+	messagePanel.add(passTurnButton);
+	messagePanel.add(Box.createRigidArea(new Dimension(0,20)));
 	
 	revealPanel = new JPanel();
 
+	dSubPane1.setBackground(pokerGreen);
+	dSubPane2.setBackground(pokerGreen);
+	dSubPane3.setBackground(pokerGreen);
+	pSubPane1.setBackground(pokerGreen);
+	pSubPane2.setBackground(pokerGreen);
+	pSubPane3.setBackground(pokerGreen);
+	messagePanel.setBackground(pokerGreen);
+	centerPanel.setBackground(pokerGreen);
+	optionArea.setBackground(pokerGreen);
+
 	mainFrame = new JFrame("Poker Game");
-	mainFrame.setSize(900,600);
+	mainFrame.setSize(700,500);
 	mainFrame.setResizable(false);
 	mainFrame.setLocation(250, 250);
 	mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	mainFrame.setVisible(false);
 	mainFrame.getContentPane().add(BorderLayout.NORTH, dealerPanel);
 	mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
 	mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+	mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
 	mainFrame.setVisible(true);
     }
     
