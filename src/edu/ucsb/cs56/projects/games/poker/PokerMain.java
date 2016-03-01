@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class PokerMain {
 
     JFrame playButtonFrame;
-    JButton singlePlayerButton;
+    JButton singlePlayerButton, serverButton, clientButton;
     JPanel panel;
 
     public static void main (String [] args) {
@@ -19,15 +19,27 @@ public class PokerMain {
     public void go() {
 	playButtonFrame = new JFrame();
 	playButtonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-	panel=new JPanel();
-	singlePlayerButton = new JButton("Play Single Player");
 
-	singlePlayerButton.addActionListener(new PlayButtonHandler());
-	panel.add(singlePlayerButton, BorderLayout.CENTER);
+	PlayButtonLister listener = new PlayButtonListener();
+	panel=new JPanel();
 	panel.setBackground(Color.darkGray);
 	
-	playButtonFrame.add(BorderLayout.CENTER, panel);
+	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+	singlePlayerButton = new JButton("Play Single Player");
+	singlePlayerButton.addActionListener(listener);
+	panel.add(singlePlayerButton);
+
+	serverButton = new JButton("Create Server");
+	serverButton.addActionListener(listener);
+	panel.add(serverButton);
+
+	clientButton = new JButton("Connect to Server");
+	clientButton.addActionListener(listener);
+	panel.add(clientButton);
+	
+	
+        playButtonFrame.add(BorderLayout.CENTER, panel);
 	playButtonFrame.setSize(200,200);
 	playButtonFrame.setLocation(250, 250);
 	
@@ -41,6 +53,14 @@ public class PokerMain {
 		PokerSinglePlayer singlePlayer = new PokerSinglePlayer(500,500);
 		singlePlayer.go();
 		playButtonFrame.setVisible(false);	
+	    }
+	    else if (src == serverButton){
+		PokerServer server = new PokerServer();
+		server.go();
+	    }
+	    else if(src == clientButton) {
+		PokerClient client = new PokerClient();
+		client.go();
 	    }
 	}
     }
