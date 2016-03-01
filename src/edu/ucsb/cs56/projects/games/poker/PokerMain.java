@@ -20,7 +20,7 @@ public class PokerMain {
 	playButtonFrame = new JFrame();
 	playButtonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	PlayButtonLister listener = new PlayButtonListener();
+	PlayButtonHandler listener = new PlayButtonHandler();
 	panel=new JPanel();
 	panel.setBackground(Color.darkGray);
 	

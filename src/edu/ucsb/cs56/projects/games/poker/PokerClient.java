@@ -1,6 +1,7 @@
 package edu.ucsb.cs56.projects.games.poker;
 
-
+import java.io.*;
+import java.net.*;
 
 public class PokerClient extends PokerGame {
     private Socket sock;
@@ -10,17 +11,32 @@ public class PokerClient extends PokerGame {
     
     public static void main (String[] args){
 	PokerClient client =  new PokerClient();
-	client.go();
+	try {
+		client.go();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     }
 
-    public void go() {
+    public void go() throws IOException{
 	setUpNetworking();
-	inputReader = new InputStreamReader(sock.getInputStream());
-	reader = new BufferedReader(inputReader);
-	message = reader.readLine();
-	System.out.println(message);
+	System.out.println("we connected");
+		inputReader = new InputStreamReader(sock.getInputStream());
+		reader = new BufferedReader(inputReader);
+		while((message = reader.readLine()) != null){
+			if(message.equals("start")){
+				PokerSinglePlayer game = new PokerSinglePlayer();
+				game.go();
+				System.out.println(message);
+			}
+			}
+		}
+		
 	
-    }
+
+	
+    
 
 
     public void setUpNetworking() {

@@ -53,7 +53,7 @@ public class Hand extends ArrayList<Card>{
 	super(7);
 	for(Card c:deck.dealCards())
 	    this.add(c);
-	handValue=100;
+		handValue=100;
     }
     /**
 	Sets the Hand value.
