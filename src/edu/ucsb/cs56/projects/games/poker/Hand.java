@@ -1,11 +1,13 @@
 package edu.ucsb.cs56.projects.games.poker;
 
+import java.io.Serializable;
 import java.util.*;
+
 
 /**
 	Class that represents a hand of 5 Cards.
 */
-public class Hand extends ArrayList<Card>{
+public class Hand extends ArrayList<Card> implements Serializable{
 
     private int handValue;
     

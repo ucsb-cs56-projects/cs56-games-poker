@@ -12,54 +12,55 @@ final class PokerSinglePlayer extends PokerGame {
     }
     
     public PokerSinglePlayer(int dChips, int pChips){
-	dealer.setChips(dChips);
+	opponent.setChips(dChips);
 	player.setChips(pChips);
     }
     
     public void go() {
 	pot = 0;
+	playerSetUp();
 	layoutSubViews();
 	if(!gameOver){
 	    step = Step.BLIND;
-	    turn = Turn.DEALER;
+	    turn = Turn.OPPONENT;
 	    timer = new Timer(2000, new ActionListener() {
 		    public void actionPerformed(ActionEvent e){
-			dealerAI();
+			opponentAI();
 		    }
 		});
 	    timer.setRepeats(false);
-	    message = "Dealer is thinking...";
-	    prompt = "Dealer goes first!";
+	    message = "opponent is thinking...";
+	    prompt = "opponent goes first!";
 	    timer.restart();
 	}
     }
 
     /**
-     *  Overwritten method to activate the dealer AI on turn change.
+     *  Overwritten method to activate the opponent AI on turn change.
     */
     public void changeTurn() {
 	if(turn == Turn.PLAYER){
 	    if(responding == true){
-		turn = Turn.DEALER;
+		turn = Turn.OPPONENT;
 		controlButtons();
 		updateFrame();
-		message = "Dealer is thinking...";
+		message = "opponent is thinking...";
 		timer.restart();
 	    }
 	    else{
 		updateFrame();
 		nextStep();
 		if(step != Step.SHOWDOWN){
-		    turn = Turn.DEALER;
+		    turn = Turn.OPPONENT;
 		    controlButtons();
-		    prompt = "Dealer turn.";
-		    message = "Dealer is thinking...";
+		    prompt = "opponent Turn.";
+		    message = "opponent is thinking...";
 		    updateFrame();
 		    timer.restart();
 		}
 	    }
 	}
-	else if(turn == Turn.DEALER){
+	else if(turn == Turn.OPPONENT){
 	    if(responding == true){
 		turn = Turn.PLAYER;
 		controlButtons();
@@ -77,40 +78,40 @@ final class PokerSinglePlayer extends PokerGame {
     }
 
     /**
-     *  Simple method called in single player to play the dealer's turn.
-     *  Currently the dealer will only check or call.
+     *  Simple method called in single player to play the opponent's 
+     *  Currently the opponent will only check or call.
      */
-    public void dealerAI () {
-	Hand dealerHand = new Hand();
+    public void opponentAI () {
+	Hand opponentHand = new Hand();
 	if (step == Step.BLIND) {
-	    if(dealerHand.size() != 2){
+	    if(opponentHand.size() != 2){
 		for(int i =0; i<2; i++) {
-		    dealerHand.add(dealer.getHand().get(i));
+		    opponentHand.add(opponent.getHand().get(i));
 		}
 	    }
 	}
 	else if(step == Step.FLOP) {
-	    if(dealerHand.size() < 5){
+	    if(opponentHand.size() < 5){
 		for(Card c : flop) {
-		    dealerHand.add(c);
+		    opponentHand.add(c);
 		}
 	    }
 	}
 	else if(step == Step.TURN) {
-	    if(dealerHand.size() < 6){
-		dealerHand.add(turnCard);
+	    if(opponentHand.size() < 6){
+		opponentHand.add(turnCard);
 	    }
 	}
 	else if(step == Step.RIVER) {
-	    if (dealerHand.size() < 7) {
-		dealerHand.add(riverCard);
+	    if (opponentHand.size() < 7) {
+		opponentHand.add(riverCard);
 	    }
 	}
 	else {}
 
 	boolean shouldBet = false;
 	boolean shouldCall = true;
-	int dValue = dealerHand.calculateValue();
+	int dValue = opponentHand.calculateValue();
 	int betAmount = 5*dValue;
 	if(step == Step.BLIND) {
 	    if(dValue >= 1){
@@ -143,9 +144,9 @@ final class PokerSinglePlayer extends PokerGame {
 	
 	if(responding == true){
 	    if(shouldCall) {
-		message = "Dealer calls.";
+		message = "opponent calls.";
 		pot += bet;
-		dealer.setChips(dealer.getChips() - dealer.bet(bet));
+		opponent.setChips(opponent.getChips() - opponent.bet(bet));
 		bet = 0;
 		responding = false;
 		nextStep();
@@ -153,28 +154,28 @@ final class PokerSinglePlayer extends PokerGame {
 		timer.restart();
 	    }
 	    else{
-		message = "Dealer folds.";
-		dealer.foldHand();
+		message = "opponent folds.";
+		opponent.foldHand();
 	    }
 	}
 	else if(shouldBet && step != Step.SHOWDOWN) {
-	    if((dealer.getChips() - betAmount >= 0) && (player.getChips()-betAmount >=0)){
+	    if((opponent.getChips() - betAmount >= 0) && (player.getChips()-betAmount >=0)){
 		bet = betAmount;
 		pot += bet;
-		dealer.setChips(dealer.getChips() - dealer.bet(bet));
+		opponent.setChips(opponent.getChips() - opponent.bet(bet));
 		responding = true;
-		message = "Dealer bets " + bet + " chips.";
+		message = "opponent bets " + bet + " chips.";
 		updateFrame();
 		changeTurn();
 	    }
 	    else{
-		message = "Dealer checks.";
+		message = "opponent checks.";
 		updateFrame();
 		changeTurn();
 	    }
 	}
 	else if(step != Step.SHOWDOWN){
-	    message = "Dealer checks.";
+	    message = "opponent checks.";
 	    updateFrame();
 	    changeTurn();
 	}
@@ -187,18 +188,18 @@ final class PokerSinglePlayer extends PokerGame {
     public void showWinnerAlert() {
 	if(!gameOver){
 	    String message = "";
-	    dSubPane2.remove(backCardLabel1);
-	    dSubPane2.remove(backCardLabel2);
+	    oSubPane2.remove(backCardLabel1);
+	    oSubPane2.remove(backCardLabel2);
 	    for(int i=0;i<2;i++){
-		dSubPane2.add(new JLabel(getCardImage(dealer.getCardFromHand(i))));
+		oSubPane2.add(new JLabel(getCardImage(opponent.getCardFromHand(i))));
 	    }
 	    updateFrame();
 	    if (winnerType == Winner.PLAYER) {
             System.out.println("player");
             message = "You won! \n\n Next round?";
-	    } else if (winnerType == Winner.DEALER) {
-		System.out.println("dealer");
-		message = "Dealer won. \n\n Next round?";
+	    } else if (winnerType == Winner.OPPONENT) {
+		System.out.println("opponent");
+		message = "opponent won. \n\n Next round?";
 	    } else if (winnerType == Winner.TIE){
             System.out.println("tie");
             message = "Tie \n\n Next round?";
@@ -232,8 +233,8 @@ final class PokerSinglePlayer extends PokerGame {
 			restart.go();
 		    }
 		});
-	    if(dealer.getChips() < 5) {
-		gameOverLabel = new JLabel("GAME OVER!\n\n Dealer has run of of chips!");
+	    if(opponent.getChips() < 5) {
+		gameOverLabel = new JLabel("GAME OVER!\n\n opponent has run of of chips!");
 	    }
 	    else
 		gameOverLabel = new JLabel("GAME OVER!\n\n You have run of of chips!");
