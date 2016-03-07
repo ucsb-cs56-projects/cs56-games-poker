@@ -186,38 +186,38 @@ final class PokerSinglePlayer extends PokerGame {
      */
     
     public void showWinnerAlert() {
-	if(!gameOver){
-	    String message = "";
-	    oSubPane2.remove(backCardLabel1);
-	    oSubPane2.remove(backCardLabel2);
-	    for(int i=0;i<2;i++){
-		oSubPane2.add(new JLabel(getCardImage(opponent.getCardFromHand(i))));
-	    }
-	    updateFrame();
-	    if (winnerType == Winner.PLAYER) {
-            System.out.println("player");
-            message = "You won! \n\n Next round?";
-	    } else if (winnerType == Winner.OPPONENT) {
-		System.out.println("opponent");
-		message = "opponent won. \n\n Next round?";
-	    } else if (winnerType == Winner.TIE){
-            System.out.println("tie");
-            message = "Tie \n\n Next round?";
-	    }
-	    
-	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
-						       JOptionPane.YES_NO_OPTION);
-	    if (option == JOptionPane.YES_OPTION) {
-		// Restart
-		mainFrame.dispose();
-		// Create new game
-		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
-		singlePlayerReplay.go();
-	    } else {
-		// Quit
-		System.exit(1);
-	    }
-	}
+    	if(!gameOver){
+    	    String message = "";
+    	    oSubPane2.remove(backCardLabel1);
+    	    oSubPane2.remove(backCardLabel2);
+    	    for(int i=0;i<2;i++){
+    		oSubPane2.add(new JLabel(getCardImage(opponent.getCardFromHand(i))));
+    	    }
+    	    updateFrame();
+    	    if (winnerType == Winner.PLAYER) {
+                System.out.println("player");
+                message = "You won! \n\n Next round?";
+    	    } else if (winnerType == Winner.OPPONENT) {
+    		System.out.println("opponent");
+    		message = "opponent won. \n\n Next round?";
+    	    } else if (winnerType == Winner.TIE){
+                System.out.println("tie");
+                message = "Tie \n\n Next round?";
+    	    }
+    	    
+    	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
+    						       JOptionPane.YES_NO_OPTION);
+    	    if (option == JOptionPane.YES_OPTION) {
+    		// Restart
+    		mainFrame.dispose();
+    		// Create new game
+    		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
+    		singlePlayerReplay.go();
+    	    } else {
+    		// Quit
+    		System.exit(1);
+    	    }
+    	}
 	else{
 	    gameOverFrame = new JFrame();
 	    gameOverFrame.setLayout(new FlowLayout());

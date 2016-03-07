@@ -152,7 +152,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
 		    diamondCounter++;
 		    diamonds.add(c.getValue());
 		}
-		else{
+		else if(c.getSuit()=="H"){
 		    heartCounter++;
 		    hearts.add(c.getValue());
 		}

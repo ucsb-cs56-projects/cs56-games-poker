@@ -4,16 +4,21 @@ import java.io.Serializable;
 
 public class PokerGameState implements Serializable {
 
-	private int pot, bet, player1Chips, player2Chips, step, turn;
+	private static final long serialVersionUID = 1L;
+	private int pot, bet, player1Chips, player2Chips, step, turn, winner;
 	private boolean respond = false;
+	private boolean justUpdate = false;
+	private boolean roundOver = false;
+	private boolean player1Continue;
+	private boolean player2Continue;
 	private Deck deck;
 	private Hand player1Hand, player2Hand, flop;
 	private Card turnCard, riverCard;
 	
-	public PokerGameState(int pot, int p1Chips, int p2Chips){
-		this.pot = pot;
-		this.player1Chips = p1Chips;
-		this.player2Chips = p2Chips;
+	public PokerGameState(){
+		this.pot = 0;
+		this.player1Chips = 500;
+		this.player2Chips = 500;
 		this.step = 0;
 		this.turn = 1;
 		
@@ -64,15 +69,15 @@ public class PokerGameState implements Serializable {
 	public int getStep() {
 		return this.step;
 	}	
+
 	
-	public boolean mustRespond () {
-		return this.respond;
-	}
-	
-	public void requestRespond (boolean responding) {
+	public void setRespond (boolean responding) {
 		respond = responding;
 	}
 	
+	public boolean getRespond () {
+		return respond;
+	}
 	
 	public void nextStep(){
 		if(step < 4)
@@ -80,10 +85,10 @@ public class PokerGameState implements Serializable {
 	}
 	
 	public void changeTurn() {
-		if(this.turn == 0)
-			this.turn = 1;
+		if(this.turn == 1)
+			this.turn = 2;
 		else
-			this.turn = 0;
+			this.turn = 1;
 	}
 	
 	public Hand getFlop (){
@@ -106,4 +111,40 @@ public class PokerGameState implements Serializable {
 		return riverCard;
 	}
 	
+	public boolean getJustUpdate() {
+		return justUpdate;
+	}
+	
+	public void setJustUpdate(boolean update) {
+		justUpdate = update;
+	}
+	
+	public boolean getRoundOver() {
+		return roundOver;
+	}
+	
+	public void setRoundOver(boolean over) {
+		roundOver = over;
+	}
+	
+	public int getWinner() {
+		return winner;
+	}
+	
+	public void setWinner (int wnr) {
+		winner = wnr;
+	}
+	
+	public boolean getPlayer1Continue() {
+		return player1Continue;
+	}
+	public boolean getPlayer2Continue() {
+		return player2Continue;
+	}
+	public void setPlayer1Continue(boolean cont) {
+		player1Continue = cont;
+	}
+	public void setPlayer2Continue(boolean cont) {
+		player2Continue = cont;
+	}
 }

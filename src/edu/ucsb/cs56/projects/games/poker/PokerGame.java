@@ -296,7 +296,7 @@ public class PokerGame implements PlayerDelegate {
 			riverPane.setBackground(pokerGreen);
 
 			mainFrame = new JFrame("Poker Game");
-			mainFrame.setSize(700, 500);
+			mainFrame.setSize(800, 500);
 			mainFrame.setResizable(false);
 			mainFrame.setLocation(250, 250);
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -338,6 +338,13 @@ public class PokerGame implements PlayerDelegate {
 	 * Method that updates the panels in the frame.
 	 */
 	public void updateFrame() {
+		if (step == Step.FLOP) {
+			flopPane.setVisible(true);
+		} else if (step == Step.TURN) {
+			turnPane.setVisible(true);
+		} else if (step == Step.RIVER) {
+			riverPane.setVisible(true);
+		}
 		gameMessage.setText(message);
 		playerPrompt.setText(prompt);
 		potLabel.setText(String.format("Pot: %d", pot));
@@ -412,13 +419,10 @@ public class PokerGame implements PlayerDelegate {
 
 	public void nextStep() {
 		if (step == Step.BLIND) {
-			flopPane.setVisible(true);
 			step = Step.FLOP;
 		} else if (step == Step.FLOP) {
-			turnPane.setVisible(true);
 			step = Step.TURN;
 		} else if (step == Step.TURN) {
-			riverPane.setVisible(true);
 			step = Step.RIVER;
 		} else if (step == Step.RIVER) {
 			step = Step.SHOWDOWN;

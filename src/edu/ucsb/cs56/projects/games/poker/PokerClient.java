@@ -6,6 +6,11 @@ import java.io.*;
 import java.net.*;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import edu.ucsb.cs56.projects.games.poker.PokerGame.Turn;
+import edu.ucsb.cs56.projects.games.poker.PokerGame.Winner;
 
 public class PokerClient extends PokerGame {
 	private Socket sock;
@@ -14,6 +19,7 @@ public class PokerClient extends PokerGame {
 	PokerGameState state;
 	Thread listener;
 	int playerNumber;
+	boolean clientRoundOver = false;
 
 	public static void main(String[] args) {
 		PokerClient client = new PokerClient();
@@ -28,12 +34,9 @@ public class PokerClient extends PokerGame {
 		setUpNetworking();
 		try {
 			System.out.println("You connected.");
+			state = new PokerGameState();
 			clientInput = new ObjectInputStream(sock.getInputStream());
 			clientOutput = new ObjectOutputStream(sock.getOutputStream());
-			
-			PokerGameState test = new PokerGameState(0,0,0);
-			clientOutput.writeObject(test);
-			clientOutput.flush();
 			
 			playerNumber = (int) clientInput.readObject();
 			System.out.println("You are Player " + playerNumber);
@@ -104,69 +107,144 @@ public class PokerClient extends PokerGame {
 		passTurnButton.addActionListener(b);
 	}
 	
+	public void changeTurn() {
+		if(playerNumber == 1){
+			if(turn == Turn.PLAYER){
+				turn = Turn.OPPONENT;
+				controlButtons();
+			}
+			else {
+				turn = Turn.PLAYER;
+				controlButtons();
+			}
+		}
+		else if(playerNumber == 2){
+			if (turn == Turn.PLAYER) {
+				if (responding == true) {
+					turn = Turn.OPPONENT;
+					controlButtons();
+				} else {
+					nextStep();
+					turn = Turn.OPPONENT;
+					controlButtons();
+				}
+			} else if (turn == Turn.OPPONENT) {
+				turn = Turn.PLAYER;
+				controlButtons();
+			}
+		}
+		
+	}
+	
+	public void showWinnerAlert() {
+		if(!gameOver){
+		    String message = "";
+		    oSubPane2.remove(backCardLabel1);
+		    oSubPane2.remove(backCardLabel2);
+		    for(int i=0;i<2;i++){
+			oSubPane2.add(new JLabel(getCardImage(opponent.getCardFromHand(i))));
+		    }
+		    updateFrame();
+		    if (winnerType == Winner.PLAYER) {
+	            System.out.println("player");
+	            message = "You won! \n\n Next round?";
+		    } else if (winnerType == Winner.OPPONENT) {
+			System.out.println("opponent");
+			message = "opponent won. \n\n Next round?";
+		    } else if (winnerType == Winner.TIE){
+	            System.out.println("tie");
+	            message = "Tie \n\n Next round?";
+		    }
+		    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
+							       JOptionPane.YES_NO_OPTION);
+			if (option == JOptionPane.YES_OPTION) {
+				try {
+					clientOutput.writeObject("continue");
+					clientOutput.reset();
+					System.out.println("Waiting on opponent to continue");
+					state = (PokerGameState) clientInput.readObject();
+					System.out.println("Creating new round.");
+					mainFrame.dispose();
+					playerSetUp();
+					layoutSubViews();
+					if(playerNumber == 1)
+						turn = Turn.PLAYER;
+					else
+						turn = Turn.OPPONENT;
+					step = Step.BLIND;
+					controlButtons();
+					updateFrame();
+				} catch (ClassNotFoundException | IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				// Quit
+				System.exit(1);
+			}
+		}		
+	}
+	
 	public class InputReader implements Runnable {
 		
 		public void run () {
 			try {
 				while (true) {
+					if (playerNumber == 1 && state.getStep() == 4)
+						break;
+					System.out.println("waiting");
 					state = (PokerGameState) clientInput.readObject();
-					if(state.getPlayer1Chips() == 1){
-						System.out.println("read");
-					}
+					System.out.println("Read from server.");
+					System.out.println("New turn: " + state.getTurn());
+					System.out.println("New step: " + state.getStep());
 					if (state != null) {
 						int stateStep = state.getStep();
 						int stateTurn = state.getTurn();
-						if (playerNumber == 1) {
-							if (stateStep == 0 && stateTurn == 1) {
-								System.out.println("Starting game");
-								playerSetUp();
-								layoutSubViews();
-								if (!gameOver) {
-									if (state.mustRespond()) {
-										responding = true;
-										controlButtons();
-										updateFrame();
-									} else {
+						responding = state.getRespond();
+						if (!state.getRoundOver()) {
+							if (playerNumber == 1) {
+								if (stateStep == 0 && stateTurn == 1 && !responding) {
+									System.out.println("Starting game");
+									playerSetUp();
+									layoutSubViews();
+									if (!gameOver) {
 										turn = Turn.PLAYER;
 										step = Step.BLIND;
 										controlButtons();
 										updateFrame();
 									}
-								}
-							} else if (stateStep == 4) {
-								step = Step.SHOWDOWN;
-								controlButtons();
-								updateFrame();
-							} else {
-								if (state.mustRespond()) {
-									responding = true;
-									nextStep();
-									player.setChips(state.getPlayer1Chips());
-									opponent.setChips(state.getPlayer2Chips());
-									bet = state.getBet();
-									pot = state.getPot();
-									changeTurn();
+								} else if (stateStep == 4) {
+									step = Step.SHOWDOWN;
+									controlButtons();
 									updateFrame();
 								} else {
+									switch (stateStep) {
+									case 1:
+										step = Step.FLOP;
+										break;
+									case 2:
+										step = Step.TURN;
+										break;
+									case 3:
+										step = Step.RIVER;
+										break;
+
+									}
 									player.setChips(state.getPlayer1Chips());
 									opponent.setChips(state.getPlayer2Chips());
 									bet = state.getBet();
 									pot = state.getPot();
-									changeTurn();
+									if (!state.getJustUpdate()) {
+										changeTurn();
+									}
 									updateFrame();
+									state.setJustUpdate(false);
 								}
-							}
-						} else if (playerNumber == 2) {
-							if (stateStep == 0 && stateTurn == 1) {
-								System.out.println("Starting game");
-								playerSetUp();
-								layoutSubViews();
-								if (!gameOver) {
-									if (state.mustRespond()) {
-										responding = true;
-										controlButtons();
-										updateFrame();
-									} else {
+							} else if (playerNumber == 2) {
+								if (stateStep == 0 && stateTurn == 1) {
+									System.out.println("Starting game");
+									playerSetUp();
+									layoutSubViews();
+									if (!gameOver) {
 										turn = Turn.OPPONENT;
 										step = Step.BLIND;
 										controlButtons();
@@ -178,31 +256,59 @@ public class PokerClient extends PokerGame {
 									showdownButton.setEnabled(false);
 									updateFrame();
 								} else {
-									if (state.mustRespond()) {
-										responding = true;
-										nextStep();
-										player.setChips(state.getPlayer2Chips());
-										opponent.setChips(state.getPlayer1Chips());
-										bet = state.getBet();
-										pot = state.getPot();
-										changeTurn();
-										updateFrame();
-									} else {
-										nextStep();
-										player.setChips(state.getPlayer2Chips());
-										opponent.setChips(state.getPlayer1Chips());
-										bet = state.getBet();
-										pot = state.getPot();
-										changeTurn();
-										checkButton.setEnabled(true);
-										updateFrame();
+									System.out.println("Just update: " + state.getJustUpdate());
+									switch (stateStep) {
+									case 1:
+										step = Step.FLOP;
+										break;
+									case 2:
+										step = Step.TURN;
+										break;
+									case 3:
+										step = Step.RIVER;
+										break;
+
 									}
+									player.setChips(state.getPlayer2Chips());
+									opponent.setChips(state.getPlayer1Chips());
+									bet = state.getBet();
+									pot = state.getPot();
+									if (!state.getJustUpdate()) {
+										System.out.println("hehe");
+										changeTurn();
+									}
+									updateFrame();
+									state.setJustUpdate(false);
 								}
+							}
+						} else {
+							if (playerNumber == 1) {
+								if (state.getWinner() == 1)
+									winnerType = Winner.PLAYER;
+								else if (state.getWinner() == 2)
+									winnerType = Winner.OPPONENT;
+								else
+									winnerType = Winner.TIE;
+								player.setChips(state.getPlayer1Chips());
+								opponent.setChips(state.getPlayer2Chips());
+								showWinnerAlert();
+							} else {
+								if (state.getWinner() == 2)
+									winnerType = Winner.PLAYER;
+								else if (state.getWinner() == 1)
+									winnerType = Winner.OPPONENT;
+								else
+									winnerType = Winner.TIE;
+								player.setChips(state.getPlayer2Chips());
+								opponent.setChips(state.getPlayer1Chips());
+								showWinnerAlert();
 							}
 						}
 					}
 
-					clientOutput.flush();
+						
+					
+					clientOutput.reset();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -215,9 +321,13 @@ public class PokerClient extends PokerGame {
 		public void actionPerformed(ActionEvent event) {
 			Object src = event.getSource();
 			if(src == passTurnButton){
-				changeTurn();
-				state.changeTurn();
-				state.requestRespond(responding);
+				state.setJustUpdate(false);
+				System.out.println("Are we just updating? : " + state.getJustUpdate());
+				if(!state.getJustUpdate()){
+					changeTurn();
+					state.changeTurn();
+				}
+				state.setRespond(responding);
 				if(playerNumber == 1){
 					state.setPlayer1Chips(player.getChips());
 					state.setPlayer2Chips(opponent.getChips());
@@ -225,12 +335,19 @@ public class PokerClient extends PokerGame {
 				else{
 					state.setPlayer1Chips(opponent.getChips());
 					state.setPlayer2Chips(player.getChips());
+					if(!responding){
+						state.nextStep();
+						updateFrame();
+					}
 				}
 				state.setBet(bet);
 				state.setPot(pot);
 				try {
+					System.out.println("Writing Turn: " + state.getTurn());
+					System.out.println("Writing Step: " + state.getStep());
 					clientOutput.writeObject(state);
-					clientOutput.flush();
+					clientOutput.reset();
+					System.out.println("Wrote to server.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -281,30 +398,58 @@ public class PokerClient extends PokerGame {
 				responding = false;
 				callButton.setEnabled(false);
 				foldButton.setEnabled(false);
-				updateFrame();
-				changeTurn();
-				state.changeTurn();
-				state.requestRespond(responding);
-				if(playerNumber == 1){
+				if (playerNumber == 1) {
+					nextStep();
+					updateFrame();
+					controlButtons();
+					state.nextStep();
+					state.setRespond(responding);
 					state.setPlayer1Chips(player.getChips());
 					state.setPlayer2Chips(opponent.getChips());
+					state.setBet(bet);
+					state.setPot(pot);
+					state.setJustUpdate(true);
+					try {
+						System.out.println("Writing Turn: " + state.getTurn());
+						System.out.println("Writing Step: " + state.getStep());
+						clientOutput.writeObject(state);
+						System.out.println("Wrote to server. (call)");
+						clientOutput.reset();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					state.setJustUpdate(false);
 				}
-				else{
-					state.setPlayer1Chips(opponent.getChips());
-					state.setPlayer2Chips(player.getChips());
-				}
-				state.setBet(bet);
-				state.setPot(pot);
-				try {
-					clientOutput.writeObject(state);
-					clientOutput.flush();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				else 
+					passTurnButton.setEnabled(true);
 			}
 			else if(src == showdownButton){
 				determineWinner();
 				collectPot();
+				if(winnerType == Winner.PLAYER) { 
+					state.setWinner(1);
+				}
+				else if (winnerType == Winner.TIE){
+					state.setWinner(0);
+				}
+				else
+					state.setWinner(2);
+				state.setRoundOver(true);
+				clientRoundOver = true;
+				state.setPlayer1Chips(player.getChips());
+				state.setPlayer2Chips(opponent.getChips());
+				state.setBet(bet);
+				state.setPot(pot);
+				state.setJustUpdate(true);
+				try {
+					System.out.println("Winner: " + state.getWinner());
+					System.out.println("Round over: " + state.getRoundOver());
+					clientOutput.writeObject(state);
+					System.out.println("Wrote to server. (over)");
+					clientOutput.reset();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				showWinnerAlert();
 			}
 		}
