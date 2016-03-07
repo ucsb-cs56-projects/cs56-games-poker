@@ -17,6 +17,7 @@ public class PokerClient extends PokerGame {
 	ObjectOutputStream clientOutput;
 	ObjectInputStream clientInput;
 	PokerGameState state;
+	String address;
 	Thread listener;
 	int playerNumber;
 	boolean clientRoundOver = false;
@@ -29,7 +30,9 @@ public class PokerClient extends PokerGame {
 			e.printStackTrace();
 		}
 	}
-
+	public void setAddress(String address){
+	this.address = address;
+	}
 	public void go() throws IOException {
 		setUpNetworking();
 		try {
@@ -51,7 +54,7 @@ public class PokerClient extends PokerGame {
 	public void setUpNetworking() {
 
 		try {
-			sock = new Socket("127.0.0.1", 15000);
+			sock = new Socket(address, 15000);
 			System.out.println("Player connected");
 		} catch (IOException e) {
 			e.printStackTrace();

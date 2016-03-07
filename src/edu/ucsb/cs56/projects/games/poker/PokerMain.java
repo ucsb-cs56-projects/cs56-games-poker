@@ -8,8 +8,9 @@ import java.io.*;
 public class PokerMain {
 
 	JFrame playButtonFrame;
-	JButton singlePlayerButton, serverButton, clientButton;
+	JButton singlePlayerButton, serverButton, clientButton, clientChatButton,serverChatButton;
 	JPanel panel;
+	String address;
 
 	public static void main(String[] args) {
 		PokerMain start = new PokerMain();
@@ -31,16 +32,24 @@ public class PokerMain {
 		singlePlayerButton.addActionListener(listener);
 		panel.add(singlePlayerButton);
 
-		serverButton = new JButton("Create Server");
+		serverButton = new JButton("Create Poker Server");
 		serverButton.addActionListener(listener);
 		panel.add(serverButton);
 
-		clientButton = new JButton("Connect to Server");
+		clientButton = new JButton("Connect to Poker Server");
 		clientButton.addActionListener(listener);
 		panel.add(clientButton);
+		
+		serverChatButton = new JButton("Create Poker Chat Server");
+		serverChatButton.addActionListener(listener);
+		panel.add(serverChatButton);
+		
+		clientChatButton = new JButton("Connect to Poker Chat Server");
+		clientChatButton.addActionListener(listener);
+		panel.add(clientChatButton);
 
 		playButtonFrame.add(BorderLayout.CENTER, panel);
-		playButtonFrame.setSize(200, 200);
+		playButtonFrame.setSize(400, 200);
 		playButtonFrame.setLocation(250, 250);
 
 		playButtonFrame.setVisible(true);
@@ -57,14 +66,29 @@ public class PokerMain {
 				PokerServer server = new PokerServer();
 				server.go();
 			} else if (src == clientButton) {
-				PokerClient client = new PokerClient();
-				try {
-					client.go();
-				} catch (IOException ex) {
-					ex.printStackTrace();
+			    PokerClient client = new PokerClient();
+			    address = JOptionPane.showInputDialog(playButtonFrame, "What IP Address are you connecting to?");
+			    if(address != null){
+			    	client.setAddress(address);	
+			    	try{
+			    		client.go();
+			    	} catch (IOException ex){ex.printStackTrace();
+			    	}
+			    	}
+		
+			    } else if(src == serverChatButton){
+				PokerChatServer server2 = new PokerChatServer();
+				server2.go();
+			} else if(src == clientChatButton){
+			    address = JOptionPane.showInputDialog(playButtonFrame, "What IP Address are you connecting to?");
+				PokerChatClient client2 = new PokerChatClient();
+				if(address != null){
+				client2.setAddress(address);
+				client2.go();
 				}
 			}
 			playButtonFrame.setVisible(false);
 		}
 	}
-}
+	
+	}
