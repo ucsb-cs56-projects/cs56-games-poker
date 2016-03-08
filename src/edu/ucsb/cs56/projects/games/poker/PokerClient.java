@@ -496,8 +496,6 @@ public class PokerClient extends PokerGame {
 					updateFrame();
 					controlButtons();
 					state.nextStep();
-					if(state.getStep() == 3)
-						state.nextStep();
 					state.setRespond(responding);
 					state.setPlayer1Chips(player.getChips());
 					state.setPlayer2Chips(opponent.getChips());
