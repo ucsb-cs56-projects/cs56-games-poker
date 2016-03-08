@@ -18,7 +18,11 @@ public class PokerServer {
 		PokerServer server = new PokerServer();
 		server.go();
 	}
-
+	
+	/**
+	 * Start the server and accept the first two clients connecting.
+	 * Write to clients the initial game state.
+	 */
 	public void go() {
 		try {
 			serverSock = new ServerSocket(15000);
@@ -55,6 +59,10 @@ public class PokerServer {
 
 	}
 	
+	/**
+	 * Runnable class for server thread that reads from both clients and 
+	 * writes to the other in order to keep both clients up to date.
+	 */
 	public class ClientHandler implements Runnable {
 		
 		public void run() {
@@ -71,6 +79,7 @@ public class PokerServer {
 						System.out.println("Are we just updating? : " + state.getJustUpdate());
 						player2Output.writeObject(state);
 						System.out.println("Wrote to p2");
+
 					} else {
 						System.out.println("Read from p2 write to p1");
 						state = (PokerGameState) player2Input.readObject();
@@ -89,7 +98,7 @@ public class PokerServer {
 			}
 			if(state.getRoundOver()){
 				try {
-					System.out.println("Round over.\n Waiting for players to continue");
+					System.out.println("Round over.\nWaiting for players to continue");
 					
 					String p1Cont = (String) player1Input.readObject();
 					String p2Cont = (String) player2Input.readObject();

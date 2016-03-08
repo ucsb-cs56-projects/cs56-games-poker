@@ -18,6 +18,9 @@ public class PokerMain {
 
 	}
 
+	/**
+	 * Brings up option window to start game.
+	 */
 	public void go() {
 		playButtonFrame = new JFrame();
 		playButtonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,12 +52,16 @@ public class PokerMain {
 		panel.add(clientChatButton);
 
 		playButtonFrame.add(BorderLayout.CENTER, panel);
-		playButtonFrame.setSize(400, 200);
+		playButtonFrame.setSize(300, 200);
+		playButtonFrame.setResizable(false);
 		playButtonFrame.setLocation(250, 250);
 
 		playButtonFrame.setVisible(true);
 	}
 
+	/**
+	 * Handles the buttons in the option window.
+	 */
 	private class PlayButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			Object src = event.getSource();

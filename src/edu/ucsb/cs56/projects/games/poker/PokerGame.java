@@ -46,6 +46,8 @@ public class PokerGame implements PlayerDelegate {
 	protected int bet = 0;
 	protected boolean responding = false;
 	protected boolean gameOver = false;
+	protected boolean youFold = false;
+	protected boolean opponentFold = false;
 	protected static int pot = 0;
 	protected static Player player = new Player(500);
 	protected static Player opponent = new Player(500);
@@ -83,6 +85,7 @@ public class PokerGame implements PlayerDelegate {
 		for (Card c : flop) {
 			player.addCardToHand(c);
 			opponent.addCardToHand(c);
+			
 		}
 		player.addCardToHand(turnCard);
 		player.addCardToHand(riverCard);
@@ -112,7 +115,7 @@ public class PokerGame implements PlayerDelegate {
 	}
 
 	/**
-	 * PlayerDelegate
+	 * PlayerDelegate method to handle folding.
 	 */
 
 	public void fold() {
@@ -131,7 +134,7 @@ public class PokerGame implements PlayerDelegate {
 	}
 
 	/**
-	 * Method to transfer winnings
+	 * Method to transfer winnings.
 	 */
 
 	public void collectPot() {
@@ -308,6 +311,9 @@ public class PokerGame implements PlayerDelegate {
 		}
 	}
 	
+	/**
+	 * Adds action listeners to all buttons in the main GUI.
+	 */
 	public void addActionListeners() {
 		ButtonHandler b = new ButtonHandler();
 		foldButton.addActionListener(b);
@@ -354,7 +360,11 @@ public class PokerGame implements PlayerDelegate {
 		playerPanel.revalidate();
 		centerPanel.revalidate();
 	}
-
+	
+	/**
+	 *  Enables and disables buttons one the screen, depending
+	 *  on the turn and step.
+	 */
 	public void controlButtons() {
 		if (step == Step.SHOWDOWN) {
 			passTurnButton.setVisible(false);
@@ -436,7 +446,10 @@ public class PokerGame implements PlayerDelegate {
 			controlButtons();
 		}
 	}
-
+	
+	/**
+	 * Inner class that handles all buttons in the GUI.
+	 */
 	protected class ButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Object src = e.getSource();
@@ -504,7 +517,7 @@ public class PokerGame implements PlayerDelegate {
 	}
 
 	/**
-	 * Method shows winner alertview
+	 * Method shows winner and exits game.
 	 */
 
 	public void showWinnerAlert() {

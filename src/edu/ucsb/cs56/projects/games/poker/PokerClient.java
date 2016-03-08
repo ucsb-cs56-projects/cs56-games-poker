@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -21,7 +22,10 @@ public class PokerClient extends PokerGame {
 	Thread listener;
 	int playerNumber;
 	boolean clientRoundOver = false;
-
+	String serverMessage;
+	String [] descriptions = {"chilling", "sweating", "cool", "emotionless", 
+			"panicking", "clearly worried", "not even worried", "smiling", "waiting"};
+	
 	public static void main(String[] args) {
 		PokerClient client = new PokerClient();
 		try {
@@ -30,9 +34,20 @@ public class PokerClient extends PokerGame {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Set the address of the server.
+	 * @param address 
+	 */
 	public void setAddress(String address){
 	this.address = address;
 	}
+	
+	/**
+	 * Set up connection with the server and initialize thread
+	 * to read and write to server.
+	 * @throws IOException
+	 */
 	public void go() throws IOException {
 		setUpNetworking();
 		try {
@@ -51,6 +66,9 @@ public class PokerClient extends PokerGame {
 		}
 	}
 
+	/**
+	 * Attempt to connect to the server.
+	 */
 	public void setUpNetworking() {
 
 		try {
@@ -61,6 +79,10 @@ public class PokerClient extends PokerGame {
 		}
 	}
 	
+	/**
+	 * Receive cards dealt from the server's states and
+	 * prepare variables for game start.
+	 */
 	public void playerSetUp() {
 		player.delegate = this;
 		opponent.delegate = this;
@@ -71,7 +93,7 @@ public class PokerClient extends PokerGame {
 			message = "Ante of 5 chips set.";
 		} else {
 			gameOver = true;
-			showWinnerAlert();
+			System.exit(1);
 		}
 		flop = state.getFlop();
 		turnCard = state.getTurnCard();
@@ -100,6 +122,10 @@ public class PokerClient extends PokerGame {
 		
 	}
 	
+	/**
+	 * Adds action listeners to the buttons on the GUI.
+	 * Overridden to allow for new ActionListener class for client.
+	 */
 	public void addActionListeners() {
 		ClientButtonHandler b = new ClientButtonHandler();
 		foldButton.addActionListener(b);
@@ -110,6 +136,11 @@ public class PokerClient extends PokerGame {
 		passTurnButton.addActionListener(b);
 	}
 	
+	/**
+	 * Change turns from player to opponent, or vice versa.
+	 * Activates/deactivates buttons appropriate to the 
+	 * correct turn and step.
+	 */
 	public void changeTurn() {
 		if(playerNumber == 1){
 			if(turn == Turn.PLAYER){
@@ -139,6 +170,40 @@ public class PokerClient extends PokerGame {
 		
 	}
 	
+	/**
+	 * Fold the round and prompt for next round.
+	 */
+	public void fold () {
+		if(playerNumber == 1){
+			state.setWinner(2);
+		} else {
+			state.setWinner(1);
+		}
+		winnerType = Winner.OPPONENT;
+		state.setRoundOver(true);
+		clientRoundOver = true;
+		state.setPlayer1Chips(player.getChips());
+		state.setPlayer2Chips(opponent.getChips());
+		state.setBet(bet);
+		state.setPot(pot);
+		state.setJustUpdate(true);
+		try {
+			System.out.println("Winner: " + state.getWinner());
+			System.out.println("Round over: " + state.getRoundOver());
+			clientOutput.writeObject(state);
+			System.out.println("Wrote to server. (over)");
+			clientOutput.reset();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		collectPot();
+		showWinnerAlert();
+	}
+	
+	/**
+	 * Reveal opponent's cards, alert user to the winner and
+	 * prompt for next round.
+	 */
 	public void showWinnerAlert() {
 		if(!gameOver){
 		    String message = "";
@@ -165,19 +230,8 @@ public class PokerClient extends PokerGame {
 					clientOutput.writeObject("continue");
 					clientOutput.reset();
 					System.out.println("Waiting on opponent to continue");
-					state = (PokerGameState) clientInput.readObject();
-					System.out.println("Creating new round.");
 					mainFrame.dispose();
-					playerSetUp();
-					layoutSubViews();
-					if(playerNumber == 1)
-						turn = Turn.PLAYER;
-					else
-						turn = Turn.OPPONENT;
-					step = Step.BLIND;
-					controlButtons();
-					updateFrame();
-				} catch (ClassNotFoundException | IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else {
@@ -187,19 +241,25 @@ public class PokerClient extends PokerGame {
 		}		
 	}
 	
+	/**
+	 * Runnable class for client's thread to continuously read from the server
+	 * and update appropriately based on the state read in.
+	 */
 	public class InputReader implements Runnable {
 		
 		public void run () {
 			try {
 				while (true) {
-					if (playerNumber == 1 && state.getStep() == 4)
-						break;
-					System.out.println("waiting");
-					state = (PokerGameState) clientInput.readObject();
-					System.out.println("Read from server.");
-					System.out.println("New turn: " + state.getTurn());
-					System.out.println("New step: " + state.getStep());
 					if (state != null) {
+						System.out.println("Before read: Turn : " + state.getTurn());
+						System.out.println("Step: " + state.getStep());
+
+						System.out.println("waiting");
+						state = (PokerGameState) clientInput.readObject();
+						System.out.println("Read from server.");
+						System.out.println("New turn: " + state.getTurn());
+						System.out.println("New step: " + state.getStep());
+
 						int stateStep = state.getStep();
 						int stateTurn = state.getTurn();
 						responding = state.getRespond();
@@ -212,11 +272,15 @@ public class PokerClient extends PokerGame {
 									if (!gameOver) {
 										turn = Turn.PLAYER;
 										step = Step.BLIND;
+										message = "Player 2 is " + getRandomDescription() + ".";
+										prompt = "You go first.\n What will you do?";
 										controlButtons();
 										updateFrame();
 									}
 								} else if (stateStep == 4) {
 									step = Step.SHOWDOWN;
+									message = "Player 2 is " + getRandomDescription() + ".";
+									prompt = "Determine winner: ";
 									controlButtons();
 									updateFrame();
 								} else {
@@ -237,6 +301,8 @@ public class PokerClient extends PokerGame {
 									bet = state.getBet();
 									pot = state.getPot();
 									if (!state.getJustUpdate()) {
+										message = state.getServerMessage();
+										prompt = "Your turn. What will you do?";
 										changeTurn();
 									}
 									updateFrame();
@@ -256,8 +322,8 @@ public class PokerClient extends PokerGame {
 								} else if (stateStep == 4) {
 									step = Step.SHOWDOWN;
 									controlButtons();
-									showdownButton.setEnabled(false);
 									updateFrame();
+									state.changeTurn();
 								} else {
 									System.out.println("Just update: " + state.getJustUpdate());
 									switch (stateStep) {
@@ -276,11 +342,13 @@ public class PokerClient extends PokerGame {
 									opponent.setChips(state.getPlayer1Chips());
 									bet = state.getBet();
 									pot = state.getPot();
+									message = state.getServerMessage();
 									if (!state.getJustUpdate()) {
-										System.out.println("hehe");
+										prompt = "Your turn. What will you do?";
 										changeTurn();
 									}
 									updateFrame();
+									showdownButton.setEnabled(false);
 									state.setJustUpdate(false);
 								}
 							}
@@ -307,11 +375,9 @@ public class PokerClient extends PokerGame {
 								showWinnerAlert();
 							}
 						}
+						clientOutput.reset();
 					}
-
-						
 					
-					clientOutput.reset();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -320,6 +386,11 @@ public class PokerClient extends PokerGame {
 	
 	}
 	
+	/**
+	 * Inner class for handling all buttons on the GUI.
+	 * Certain buttons write back to the server to update
+	 * the server on what the user has changed.
+	 */
 	public class ClientButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			Object src = event.getSource();
@@ -334,6 +405,9 @@ public class PokerClient extends PokerGame {
 				if(playerNumber == 1){
 					state.setPlayer1Chips(player.getChips());
 					state.setPlayer2Chips(opponent.getChips());
+					prompt = "Player 2 turn.";
+					message = "Player 2 is " + getRandomDescription() + ".";
+					updateFrame();
 				}
 				else{
 					state.setPlayer1Chips(opponent.getChips());
@@ -342,9 +416,15 @@ public class PokerClient extends PokerGame {
 						state.nextStep();
 						updateFrame();
 					}
+					if( !(state.getStep() == 4) ) {
+						prompt = "Player 1 turn.";
+						message = "Player 1 is " + getRandomDescription() + ".";
+						updateFrame();
+					}	
 				}
 				state.setBet(bet);
 				state.setPot(pot);
+				state.setServerMessage(serverMessage);
 				try {
 					System.out.println("Writing Turn: " + state.getTurn());
 					System.out.println("Writing Step: " + state.getStep());
@@ -363,8 +443,6 @@ public class PokerClient extends PokerGame {
 						betTextField.setText("");
 						pot += bet;
 						player.setChips(player.getChips() - player.bet(bet));
-						message = "Opponent waiting for turn.";
-						prompt = "Player bets " + bet + ".";
 						passTurnButton.setEnabled(true);
 						betButton.setEnabled(false);
 						betTextField.setEnabled(false);
@@ -372,6 +450,9 @@ public class PokerClient extends PokerGame {
 						callButton.setEnabled(false);
 						foldButton.setEnabled(false);
 						responding = true;
+						prompt = "Allow response: ";
+						message = "You bet " + bet + " chips.";
+						serverMessage = "Player " + playerNumber + " bets " + bet + " chips.";
 						updateFrame();
 					} else {
 						prompt = "Not enough chips!";
@@ -390,6 +471,12 @@ public class PokerClient extends PokerGame {
 				checkButton.setEnabled(false);
 				callButton.setEnabled(false);
 				foldButton.setEnabled(false);
+				message = "You check.";
+				if(playerNumber == 1)
+					prompt = "Pass turn: ";
+				else
+					prompt = "Deal cards: ";
+				serverMessage = "Player " + playerNumber + " checks."; 
 				updateFrame();
 			}
 			else if(src == foldButton){
@@ -401,16 +488,22 @@ public class PokerClient extends PokerGame {
 				responding = false;
 				callButton.setEnabled(false);
 				foldButton.setEnabled(false);
+				message = "You call.";
+				prompt = "Next turn: ";
+				serverMessage = "Player" + playerNumber + " calls.";
 				if (playerNumber == 1) {
 					nextStep();
 					updateFrame();
 					controlButtons();
 					state.nextStep();
+					if(state.getStep() == 3)
+						state.nextStep();
 					state.setRespond(responding);
 					state.setPlayer1Chips(player.getChips());
 					state.setPlayer2Chips(opponent.getChips());
 					state.setBet(bet);
 					state.setPot(pot);
+					state.setServerMessage(serverMessage);
 					state.setJustUpdate(true);
 					try {
 						System.out.println("Writing Turn: " + state.getTurn());
@@ -456,5 +549,14 @@ public class PokerClient extends PokerGame {
 				showWinnerAlert();
 			}
 		}
+	}
+	
+	/**
+	 * Creates random descriptions for interesting server messages.
+	 * @return String
+	 */
+	public String getRandomDescription (){
+		int index = new Random().nextInt(descriptions.length);
+		return (descriptions[index]);
 	}
 }
