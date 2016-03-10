@@ -40,7 +40,7 @@ Game Options :
 Betting
 =======
 * If you choose to bet, enter the amount in the betting field and press bet or enter
-* As of now, raising is implemented as a response to a bet.
+* As of now, raising is not implemented as a response to a bet.
 
 Folding
 =======
