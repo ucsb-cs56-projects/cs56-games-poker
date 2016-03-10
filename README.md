@@ -25,15 +25,15 @@ ant run
 ```
 Game Options :
 
-*Play Single Player : Play versus the computer
+* Play Single Player : Play versus the computer
 
-*Create Poker Server : Host a socket server on the local machine for a poker game. This must be done in a separate terminal from the clients.
+* Create Poker Server : Host a socket server on the local machine for a poker game. This must be done in a separate terminal from the clients.
 
-*Connect to Poker Server : Connect to an open poker server. Enter "localhost" or "127.0.0.1" into the prompt textbox to connect to a local host, else enter the IP address of the host you want to connect to (the computers in CSIL lab have this on the computers).
+* Connect to Poker Server : Connect to an open poker server. Enter "localhost" or "127.0.0.1" into the prompt textbox to connect to a local host, else enter the IP address of the host you want to connect to (the computers in CSIL lab have this on the computers).
 
-*Create Poker Chat Server : Host a socket server for the chat program. This must be done in a separate terminal from the clients, and is entirely separated from the server for the poker game.
+* Create Poker Chat Server : Host a socket server for the chat program. This must be done in a separate terminal from the clients, and is entirely separated from the server for the poker game.
 
-*Connect to Poker Chat Server : Connect to an open poker chat server. Inputs work the same as connecting to a poker game server.
+* Connect to Poker Chat Server : Connect to an open poker chat server. Inputs work the same as connecting to a poker game server.
 
 
 
@@ -58,5 +58,5 @@ End Of Game
 * If you wish to quit playing press No
 
 
-*W16 final remarks :
+* W16 final remarks :
 When following the game logic for the multiplayer portion of the game, note that each client for player 1 and 2 is managing their own instance variables inherited from PokerGame while sharing its information with the server and the other player by updating and sending a serializable game state through the socket connection. One major improvement that can be made to the game would be refactoring it to follow a model, view, controller design pattern which would allow for easier future changes to the GUI and game separately(see issue #18). This would open up possibilities like having more than two player multiplayer, which would better simulate a real game of poker. For other bugfixes and improvements see issue #19 and #20. 
