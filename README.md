@@ -57,6 +57,7 @@ End Of Game
 * If you wish to continue playing, press Yes
 * If you wish to quit playing press No
 
+===========
+W16 final remarks :
 
-* W16 final remarks :
 When following the game logic for the multiplayer portion of the game, note that each client for player 1 and 2 is managing their own instance variables inherited from PokerGame while sharing its information with the server and the other player by updating and sending a serializable game state through the socket connection. One major improvement that can be made to the game would be refactoring it to follow a model, view, controller design pattern which would allow for easier future changes to the GUI and game separately(see issue #18). This would open up possibilities like having more than two player multiplayer, which would better simulate a real game of poker. For other bugfixes and improvements see issue #19 and #20. 
