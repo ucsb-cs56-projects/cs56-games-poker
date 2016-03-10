@@ -1,11 +1,13 @@
 package edu.ucsb.cs56.projects.games.poker;
 
+import java.io.Serializable;
 import java.util.*;
+
 
 /**
 	Class that represents a hand of 5 Cards.
 */
-public class Hand extends ArrayList<Card>{
+public class Hand extends ArrayList<Card> implements Serializable{
 
     private int handValue;
     
@@ -53,7 +55,7 @@ public class Hand extends ArrayList<Card>{
 	super(7);
 	for(Card c:deck.dealCards())
 	    this.add(c);
-	handValue=100;
+		handValue=100;
     }
     /**
 	Sets the Hand value.
@@ -150,7 +152,7 @@ public class Hand extends ArrayList<Card>{
 		    diamondCounter++;
 		    diamonds.add(c.getValue());
 		}
-		else{
+		else if(c.getSuit()=="H"){
 		    heartCounter++;
 		    hearts.add(c.getValue());
 		}
