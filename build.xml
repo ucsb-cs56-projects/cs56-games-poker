@@ -19,7 +19,7 @@
    <property name="javadocDest" value="${webRoot}/${project}/javadoc" /> 
    <property name="javadocURL" value="${webBaseURL}/${project}/javadoc" /> 
  
-<property name="mainClass" value="edu/ucsb/cs56/projects/games/poker/PokerGame"/>
+<property name="mainClass" value="edu/ucsb/cs56/projects/games/poker/PokerMain"/>
 
 
  <path id="project.class.path">

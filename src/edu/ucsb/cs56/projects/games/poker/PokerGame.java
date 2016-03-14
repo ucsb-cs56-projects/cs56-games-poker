@@ -1,7 +1,6 @@
 package edu.ucsb.cs56.projects.games.poker;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.*;
 import java.lang.String;
 import java.lang.System;
@@ -9,494 +8,540 @@ import java.net.URL;
 import javax.swing.*;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.border.Border;
-import java.util.ArrayList;
-import static java.lang.Math.*;
-
 
 /**
-	Class that represents a Texas Holdem' Style Poker Game.
-*/
+ * Class that represents a Texas Holdem' Style Poker Game.
+ */
 
 public class PokerGame implements PlayerDelegate {
-    public enum Winner { PLAYER, DEALER, TIE, NEW_GAME };
-	private JPanel panel;
-	private JFrame mainFrame,mainFrame2;
-	private JFrame playButtonFrame;
-    private JTextField betTextField;
-	private JButton playButton, playAgainButton, turnButton, riverButton, foldButton, betButton;
-	private JLabel playerWinsLabel, dealerWinsLabel, playerChipsLabel, dealerChipsLabel, potLabel;
-	private JPanel dealerPanel, playerPanel, centerPanel, revealPanel;
-	private Hand dealerHand, playerHand, flop;
-	private Deck deck;
-	private Card turnCard, riverCard, backCard;
-	private ImageIcon backCardImage;
-    private Winner winnerType = Winner.NEW_GAME;
-    private static int pot = 0;
-    private static Player player = new Player(500);
-    private static Player dealer = new Player(500);
+	public enum Winner {
+		PLAYER, OPPONENT, TIE, NEW_GAME
+	};
 
-/**
-	No arg constructor that initializes a new deck.
-*/
-	public PokerGame(){
-		//deck=new Deck();
+	public enum Step {
+		BLIND, FLOP, TURN, RIVER, SHOWDOWN
+	};
+
+	public enum Turn {
+		PLAYER, OPPONENT
+	};
+
+	protected JFrame mainFrame, mainFrame2, gameOverFrame;
+	protected JTextField betTextField;
+	protected JButton foldButton, betButton, checkButton, showdownButton, passTurnButton, callButton;
+	protected JButton gameOverButton;
+	protected JLabel playerWinsLabel, opponentWinsLabel, playerChipsLabel, opponentChipsLabel, potLabel;
+	protected JLabel gameMessage, playerPrompt, backCardLabel1, backCardLabel2, gameOverLabel;
+	protected JPanel opponentPanel, playerPanel, centerPanel, messagePanel, gameOverPanel;
+	protected JPanel oSubPane1, oSubPane2, oSubPane3, pSubPane1, pSubPane2, pSubPane3, optionArea;
+	protected JPanel flopPane, turnPane, riverPane, betPane, respondPane;
+	protected String message, prompt;
+	protected Hand opponentHand, playerHand, flop;
+	protected Card turnCard, riverCard, backCard;
+	protected ImageIcon backCardImage;
+	protected Winner winnerType = Winner.NEW_GAME;
+	protected Step step;
+	protected Turn turn;
+	protected Deck deck;
+	protected int bet = 0;
+	protected boolean responding = false;
+	protected boolean gameOver = false;
+	protected boolean youFold = false;
+	protected boolean opponentFold = false;
+	protected static int pot = 0;
+	protected static Player player = new Player(500);
+	protected static Player opponent = new Player(500);
+
+	/**
+	 * No arg constructor that initializes a new deck.
+	 */
+	public PokerGame() {
 	}
-	
-/**
-	Main method of PokerGame class.
-*/
-	public static void main(String[] args)
-	{
-		PokerGame gui=new PokerGame();
-		gui.go();
-	}
-	
-/**
-	Creates a window with a Play button.
-*/
-	public void go(){
-		playButtonFrame = new JFrame();
-		playButtonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		panel=new JPanel();
+	/**
+	 * Sets up the player's and opponent's hand.
+	 */
+	public void playerSetUp() {
+		player.delegate = this;
+		opponent.delegate = this;
+		if (player.getChips() > 5 && opponent.getChips() > 5) {
+			bet = 10;
+			player.setChips(player.getChips() - 5);
+			opponent.setChips(opponent.getChips() - 5);
+			pot += bet;
+			message = "Ante of 5 chips set.";
+		} else {
+			gameOver = true;
+			showWinnerAlert();
+		}
 
-		playButton = new JButton("Click to Play");
-		playButton.addActionListener(new playButtonListener());
-		panel.add(playButton, BorderLayout.CENTER);
-		panel.setBackground(Color.darkGray);
-
-		playButtonFrame.add(BorderLayout.CENTER, panel);
-		playButtonFrame.setSize(200,200);
-
-		playButtonFrame.setVisible(true);
-	}
-	
-/**
-	Sets up the player's and dealer's hand.
-*/	
-	public void playerSetUp(){
-        player.delegate = this;
-        dealer.delegate = this;
 		deck = new Deck();
-		player.setHand(new Hand(deck));
-		dealer.setHand(new Hand(deck));
+		player.setHand(deck.dealCards());
+		opponent.setHand(deck.dealCards());
+
 		flop = deck.showFlop();
 		turnCard = deck.returnCard();
 		riverCard = deck.returnCard();
-		backCard = new Card(100,"B");
-		//playerHand.include(flop);
-		for(Card c: flop){
+		for (Card c : flop) {
 			player.addCardToHand(c);
-			dealer.addCardToHand(c);
+			opponent.addCardToHand(c);
+			
 		}
 		player.addCardToHand(turnCard);
 		player.addCardToHand(riverCard);
-		//dealerHand.include(flop);
-		dealer.addCardToHand(turnCard);
-		dealer.addCardToHand(riverCard);
-		
-		String dir="Cards/";
-		String cardFile="B.png";
-		URL url=getClass().getResource(dir+cardFile);
-		backCardImage=new ImageIcon(url);
-		
+		opponent.addCardToHand(turnCard);
+		opponent.addCardToHand(riverCard);
+		backCard = new Card(100, "B");
+		String dir = "Cards/";
+		String cardFile = "B.png";
+		URL url = getClass().getResource(dir + cardFile);
+		backCardImage = new ImageIcon(url);
+
 	}
-	
-/**
-	Returns an ImageIcon by using the URL class in order to make the 
-	ImageIcon web compatible.
-	@param c card whose image is to be retrieved.
-*/
-	public ImageIcon getCardImage(Card c){
-		String dir="Cards/";
-		String cardFile=c.toString()+".png";
-		URL url=getClass().getResource(dir+cardFile);
+
+	/**
+	 * Returns an ImageIcon by using the URL class in order to make the
+	 * ImageIcon web compatible.
+	 * 
+	 * @param c
+	 *            card whose image is to be retrieved.
+	 */
+	public ImageIcon getCardImage(Card c) {
+		String dir = "Cards/";
+		String cardFile = c.toString() + ".png";
+		URL url = getClass().getResource(dir + cardFile);
 		return new ImageIcon(url);
-		
+
 	}
 
-    /**
-     *  PlayerDelegate
-     */
+	/**
+	 * PlayerDelegate method to handle folding.
+	 */
 
-    public void fold() {
-        if (winnerType == Winner.PLAYER) {
-            dealer.win();
-        } else if (winnerType == Winner.DEALER) {
-            player.win();
-        }
-        collectPot();
-        showWinnerAlert();
-        // Reset player win flag
-        deck.reShuffle();
-        winnerType = Winner.NEW_GAME;
-    }
+	public void fold() {
+		if (turn == Turn.PLAYER) {
+			winnerType = Winner.OPPONENT;
+			opponent.win();
+		} else {
+			winnerType = Winner.PLAYER;
+			player.win();
+		}
+		collectPot();
+		showWinnerAlert();
+		// Reset player win flag
+		deck.reShuffle();
+		winnerType = Winner.NEW_GAME;
+	}
 
-  /**
-    Determine if dealer should bet
-    @param max the odds the dealer should bet
-  */
+	/**
+	 * Method to transfer winnings.
+	 */
 
-  public boolean dealerShouldBet(int max)
-  {
-      int shouldBet = 1 + (int)(Math.random() * max);
-      int odds = 1 + (int)(Math.random() * max * 1.56);
-      if (shouldBet >= odds)
-        return true;
-      else
-        return false;
+	public void collectPot() {
 
-  }
+		if (winnerType == Winner.PLAYER) {
+			// Player won
+			System.out.println("Player");
+			System.out.println(String.format("%d", pot));
+			int playerChips = player.getChips();
+			playerChips += pot;
+			player.setChips(playerChips);
+		} else if (winnerType == Winner.OPPONENT) {
+			// Player lost
+			System.out.println("OPPONENT");
+			System.out.println(String.format("%d", pot));
+			int opponentChips = opponent.getChips();
+			opponentChips += pot;
+			opponent.setChips(opponentChips);
+		} else if (winnerType == Winner.TIE) {
+			// Tie, split pot
+			System.out.println("Tie");
+			System.out.println(String.format("%d", pot));
+			int opponentChips = opponent.getChips();
+			opponentChips += (pot / 2);
+			opponent.setChips(opponentChips);
+			pot -= (pot / 2);
+			int playerChips = player.getChips();
+			playerChips += pot;
+			player.setChips(playerChips);
+		} else {
+			// New game, should never be called
+			pot = 0;
+		}
+	}
 
-  /**
-    Method to transfer winnings
-  */
+	/**
+	 * Method lays out GUI elements
+	 */
 
-  public void collectPot()
-  {
+	public void layoutSubViews() {
+		if (!gameOver) {
+			Color pokerGreen = new Color(83, 157, 89);
 
-    if (winnerType == Winner.PLAYER) {
-      // Player won
-          System.out.println("Player");
-          System.out.println(String.format("%d", pot));
-        int playerChips = player.getChips();
-        playerChips += pot;
-        player.setChips(playerChips);
-    } else if (winnerType == Winner.DEALER) {
-      // Player lost
-          System.out.println("DEALER");
-          System.out.println(String.format("%d", pot));
-        int dealerChips = dealer.getChips();
-        dealerChips += pot;
-        dealer.setChips(dealerChips);
-    } else if (winnerType == Winner.TIE){
-      // Tie, split pot
-          System.out.println("Tie");
-          System.out.println(String.format("%d", pot));
-        int dealerChips = dealer.getChips();
-        dealerChips += (pot/2);
-        dealer.setChips(dealerChips);
-        pot -= (pot/2);
-        int playerChips = player.getChips();
-        playerChips += pot;
-        player.setChips(playerChips);
-    } else {
-      // New game, should never be called
-      pot = 0;
-    }
-  }
+			foldButton = new JButton("FOLD");
+			foldButton.setEnabled(false);
+			betButton = new JButton("BET");
+			betButton.setEnabled(false);
+			betTextField = new JTextField(4);
+			checkButton = new JButton("CHECK");
+			checkButton.setEnabled(false);
+			callButton = new JButton("CALL");
+			callButton.setEnabled(false);
+			showdownButton = new JButton("SHOWDOWN");
+			passTurnButton = new JButton("PASS TURN");
+			passTurnButton.setEnabled(false);
+			addActionListeners();
 
-  /**
-    Method lays out GUI elements
-  */
+			opponentPanel = new JPanel();
+			opponentPanel.setLayout(new BorderLayout());
+			oSubPane1 = new JPanel();
+			oSubPane1.setLayout(new BoxLayout(oSubPane1, BoxLayout.Y_AXIS));
+			oSubPane2 = new JPanel();
+			oSubPane3 = new JPanel();
+			oSubPane3.setLayout(new BorderLayout());
 
-  public void layoutSubViews()
-  {
-      playerSetUp();
+			opponentChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+			opponentWinsLabel = new JLabel();
+			opponentWinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+			playerWinsLabel = new JLabel();
+			playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
+			oSubPane1.add(new JLabel("OPPONENT"));
+			oSubPane1.add(opponentChipsLabel);
+			oSubPane3.add(BorderLayout.NORTH, playerWinsLabel);
+			oSubPane3.add(BorderLayout.SOUTH, opponentWinsLabel);
+			opponentPanel.add(BorderLayout.WEST, oSubPane1);
+			opponentPanel.add(BorderLayout.CENTER, oSubPane2);
+			opponentPanel.add(BorderLayout.EAST, oSubPane3);
 
-      pot = 0;
-      dealerPanel = new JPanel();
-      playerPanel = new JPanel();
-      centerPanel = new JPanel();
-      revealPanel = new JPanel();
-      dealerWinsLabel = new JLabel();
-      playerWinsLabel = new JLabel();
-      potLabel = new JLabel();
-      dealerChipsLabel = new JLabel(String.format("Chips: %d", dealer.getChips()));
-      playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
-      JPanel betArea = new JPanel();
-      JPanel winCount = new JPanel();
-      winCount.setLayout(new BorderLayout());
-      betArea.setLayout(new BorderLayout());
-      playerPanel.add(betArea);
-      dealerPanel.add(winCount);
-      dealerPanel.add(dealerChipsLabel);
-      betTextField = new JTextField(4);
-      betTextField.addActionListener(new betTextFieldListener());
-      betButton = new JButton("BET");
-      betButton.addActionListener(new betButtonListener());
+			optionArea = new JPanel();
+			optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
+			optionArea.add(betButton);
+			optionArea.add(betTextField);
+			optionArea.add(callButton);
+			optionArea.add(checkButton);
+			optionArea.add(foldButton);
 
-      turnButton = new JButton("TURN");
-      foldButton = new JButton("FOLD");
-      foldButton.addActionListener(new foldButtonListener());
-      turnButton.addActionListener(new turnButtonListener());
-      for(int i=0;i<2;i++){
-        dealerPanel.add(new JLabel(backCardImage));
-        playerPanel.add(new JLabel(getCardImage(player.getCardFromHand(i))));
-      }
-      centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-      for(int i=0;i<3;i++){
-        centerPanel.add(BorderLayout.CENTER, new
-                JLabel(getCardImage(flop.get(i))));
-      }
-        
-      dealerPanel.add(new JLabel("DEALER"));
-      playerPanel.add(new JLabel("PLAYER"));
-      playerPanel.add(foldButton);
-      centerPanel.add(BorderLayout.SOUTH, turnButton);
+			playerPanel = new JPanel();
+			playerPanel.setLayout(new BorderLayout());
+			pSubPane1 = new JPanel();
+			pSubPane1.setLayout(new BoxLayout(pSubPane1, BoxLayout.Y_AXIS));
+			pSubPane2 = new JPanel();
+			pSubPane3 = new JPanel();
 
-      playerPanel.add(playerChipsLabel);
-      betArea.add(BorderLayout.NORTH, betButton);
-      betArea.add(BorderLayout.SOUTH, betTextField);
+			playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
+			pSubPane1.add(new JLabel("PLAYER"));
+			pSubPane1.add(playerChipsLabel);
+			pSubPane3.add(optionArea);
+			playerPanel.add(BorderLayout.WEST, pSubPane1);
+			playerPanel.add(BorderLayout.CENTER, pSubPane2);
+			playerPanel.add(BorderLayout.EAST, pSubPane3);
 
+			backCardLabel1 = new JLabel(backCardImage);
+			backCardLabel2 = new JLabel(backCardImage);
+			oSubPane2.add(backCardLabel1);
+			oSubPane2.add(backCardLabel2);
+			for (int i = 0; i < 2; i++) {
+				pSubPane2.add(new JLabel(getCardImage(player.getCardFromHand(i))));
+			}
 
-      playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
-      dealerWinsLabel.setText(String.format("Dealer wins: %d", dealer.getWins()));
-      winCount.add(BorderLayout.NORTH, playerWinsLabel);
-      winCount.add(BorderLayout.SOUTH, dealerWinsLabel);
+			centerPanel = new JPanel();
+			centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+			flopPane = new JPanel();
+			flopPane.add(new JLabel("Flop:"));
+			for (int i = 0; i < 3; i++) {
+				flopPane.add(new JLabel(getCardImage(flop.get(i))));
+			}
+			flopPane.setVisible(false);
+			turnPane = new JPanel();
+			turnPane.add(new JLabel("Turn:"));
+			turnPane.add(new JLabel(getCardImage(turnCard)));
+			turnPane.setVisible(false);
+			riverPane = new JPanel();
+			riverPane.add(new JLabel("River:"));
+			riverPane.add(new JLabel(getCardImage(riverCard)));
+			riverPane.setVisible(false);
+			centerPanel.add(flopPane);
+			centerPanel.add(turnPane);
+			centerPanel.add(riverPane);
 
-      deck.reShuffle();
+			messagePanel = new JPanel();
+			messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+			messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+			potLabel = new JLabel();
+			potLabel.setText(String.format("Pot: %d", pot));
+			messagePanel.add(potLabel);
+			messagePanel.add(Box.createRigidArea(new Dimension(10, 20)));
 
-      mainFrame = new JFrame();
-      mainFrame.setSize(600,600);
-      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      mainFrame.getContentPane().add(BorderLayout.NORTH, dealerPanel);
-      mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
-      mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-      mainFrame.setVisible(true);
+			gameMessage = new JLabel(message);
+			messagePanel.add(Box.createRigidArea(new Dimension(10, 20)));
+			messagePanel.add(gameMessage);
+			playerPrompt = new JLabel(prompt);
+			messagePanel.add(playerPrompt);
+			messagePanel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-      if (dealerShouldBet(20)) {
-          int dealerBet = 1 + (int)(Math.random() * dealer.getChips());
-          showPlayerCallBetAlert(dealerBet);
-      }
-      potLabel.setText(String.format("Pot: %d", pot));
-      centerPanel.add(potLabel, BorderLayout.SOUTH);
-  }
+			showdownButton.setVisible(false);
+			messagePanel.add(showdownButton);
+			messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+			messagePanel.add(passTurnButton);
+			messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-    /**
-     * Method to determine the winner of the game
-     */
+			oSubPane1.setBackground(pokerGreen);
+			oSubPane2.setBackground(pokerGreen);
+			oSubPane3.setBackground(pokerGreen);
+			pSubPane1.setBackground(pokerGreen);
+			pSubPane2.setBackground(pokerGreen);
+			pSubPane3.setBackground(pokerGreen);
+			messagePanel.setBackground(pokerGreen);
+			centerPanel.setBackground(pokerGreen);
+			optionArea.setBackground(pokerGreen);
+			flopPane.setBackground(pokerGreen);
+			turnPane.setBackground(pokerGreen);
+			riverPane.setBackground(pokerGreen);
 
-    public void determineWinner() {
-        if(player.getHand().compareHands(dealer.getHand()) == 1) {
-            player.win();
-            winnerType = Winner.PLAYER;
-        } else if(player.getHand().compareHands(dealer.getHand()) == 2) {
-            winnerType = Winner.TIE;
-        } else {
-            winnerType = Winner.DEALER;
-            dealer.win();
-        }
-    }
+			mainFrame = new JFrame("Poker Game");
+			mainFrame.setSize(800, 500);
+			mainFrame.setResizable(false);
+			mainFrame.setLocation(250, 250);
+			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mainFrame.getContentPane().add(BorderLayout.NORTH, opponentPanel);
+			mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
+			mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+			mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
+			mainFrame.setVisible(true);
+		}
+	}
 	
-    /**
-     * Method that sets up a new Poker game with new hands.
-     */
-    public void replay()
-    {
-        pot = 0;
-        layoutSubViews();
+	/**
+	 * Adds action listeners to all buttons in the main GUI.
+	 */
+	public void addActionListeners() {
+		ButtonHandler b = new ButtonHandler();
+		foldButton.addActionListener(b);
+		betButton.addActionListener(b);
+		checkButton.addActionListener(b);
+		callButton.addActionListener(b);
+		showdownButton.addActionListener(b);
+		passTurnButton.addActionListener(b);
+	}
+    
+	/**
+	 * Method to determine the winner of the game
+	 */
 
-    }
+	public void determineWinner() {
+		if (player.getHand().compareHands(opponent.getHand()) == 1) {
+			player.win();
+			winnerType = Winner.PLAYER;
+		} else if (player.getHand().compareHands(opponent.getHand()) == 2) {
+			winnerType = Winner.TIE;
+		} else {
+			winnerType = Winner.OPPONENT;
+			opponent.win();
+		}
+	}
 
-   /**
-	 Sets up the Poker game when the client clicks the Play button.
-   */
-	class playButtonListener implements ActionListener{
-		public void actionPerformed(ActionEvent event) {
-  			layoutSubViews();
-  	}
-  }
-/**
-	Displays the turn card when the user clicks the button.
-*/
-  class turnButtonListener implements ActionListener{
-  	public void actionPerformed(ActionEvent event){
-  		centerPanel.remove(turnButton);
-  		centerPanel.add(new JLabel(getCardImage(turnCard)));
-  		riverButton = new JButton("RIVER");
-  		riverButton.addActionListener(new riverButtonListener());
-  		centerPanel.add(riverButton);
-  		mainFrame.setVisible(false);
-  		mainFrame.setVisible(true);
+	/**
+	 * Method that updates the panels in the frame.
+	 */
+	public void updateFrame() {
+		if (step == Step.FLOP) {
+			flopPane.setVisible(true);
+		} else if (step == Step.TURN) {
+			turnPane.setVisible(true);
+		} else if (step == Step.RIVER) {
+			riverPane.setVisible(true);
+		}
+		gameMessage.setText(message);
+		playerPrompt.setText(prompt);
+		potLabel.setText(String.format("Pot: %d", pot));
+		opponentChipsLabel.setText(String.format("Chips: %d", opponent.getChips()));
+		playerChipsLabel.setText(String.format("Chips: %d", player.getChips()));
+		opponentPanel.revalidate();
+		playerPanel.revalidate();
+		centerPanel.revalidate();
+	}
+	
+	/**
+	 *  Enables and disables buttons one the screen, depending
+	 *  on the turn and step.
+	 */
+	public void controlButtons() {
+		if (step == Step.SHOWDOWN) {
+			passTurnButton.setVisible(false);
+			betButton.setEnabled(false);
+			betTextField.setEnabled(false);
+			checkButton.setEnabled(false);
+			callButton.setEnabled(false);
+			foldButton.setEnabled(false);
+			showdownButton.setVisible(true);
+		} else if (turn == Turn.PLAYER && responding) {
+			passTurnButton.setEnabled(false);
+			betButton.setEnabled(false);
+			betTextField.setEnabled(false);
+			checkButton.setEnabled(false);
+			callButton.setEnabled(true);
+			foldButton.setEnabled(true);
+		} else if (turn == Turn.PLAYER) {
+			passTurnButton.setEnabled(false);
+			betButton.setEnabled(true);
+			betTextField.setEnabled(true);
+			checkButton.setEnabled(true);
+			callButton.setEnabled(false);
+			foldButton.setEnabled(true);
+		} else {
+			passTurnButton.setEnabled(false);
+			betButton.setEnabled(false);
+			betTextField.setEnabled(false);
+			checkButton.setEnabled(false);
+			callButton.setEnabled(false);
+			foldButton.setEnabled(false);
+		}
+	}
 
-        if (dealerShouldBet(10)) {
-            int dealerBet = 1 + (int)(Math.random() * dealer.getChips());
-            showPlayerCallBetAlert(dealerBet);
-        }
-        potLabel.setText(String.format("Pot: %d", pot));
-        centerPanel.add(potLabel, BorderLayout.SOUTH);
-      
-  	}
-  }
+	/**
+	 * Method to pass the turn from opponent to player, or player to opponent.
+	 */
 
-/**
-	Displays the river card when the user clicks the button.
-*/  
-  class riverButtonListener implements ActionListener{
-  	public void actionPerformed(ActionEvent event){
-  		centerPanel.remove(riverButton);
-  		centerPanel.add(new
-  		JLabel(getCardImage(riverCard)));
-  		
-  		playAgainButton=new JButton("Play Again");
-        playAgainButton.addActionListener(new playAgainListener());
+	public void changeTurn() {
+		if (turn == Turn.PLAYER) {
+			if (responding == true) {
+				turn = Turn.OPPONENT;
+				controlButtons();
+			} else {
+				prompt = "Opponent turn.";
+				updateFrame();
+				nextStep();
+				turn = Turn.OPPONENT;
+				controlButtons();
+			}
+		} else if (turn == Turn.OPPONENT) {
+			prompt = "What will you do?";
+			turn = Turn.PLAYER;
+			controlButtons();
+			updateFrame();
+		}
+	}
 
-        determineWinner();
-  	
-  		deck.reShuffle();
-  		centerPanel.add(playAgainButton);
-        potLabel.setText(String.format("Pot: %d", pot));
-        centerPanel.add(potLabel);
+	/**
+	 * Method used to advance the game from each step to the next. Specifically,
+	 * Blind-Flop-Turn-River-Showdown in order.
+	 */
 
-  		for(int i=0;i<2;i++) {
-  			revealPanel.add(new JLabel(getCardImage(dealer.getCardFromHand(i))));
-        }
-  		revealPanel.add(new JLabel("DEALER"));
+	public void nextStep() {
+		if (step == Step.BLIND) {
+			step = Step.FLOP;
+		} else if (step == Step.FLOP) {
+			step = Step.TURN;
+		} else if (step == Step.TURN) {
+			step = Step.RIVER;
+		} else if (step == Step.RIVER) {
+			step = Step.SHOWDOWN;
+			controlButtons();
+			message = "All bets are in.";
+			prompt = "Determine Winner: ";
+		} else {
+			message = "All bets are in.";
+			prompt = "Determine Winner: ";
+			updateFrame();
+			controlButtons();
+		}
+	}
+	
+	/**
+	 * Inner class that handles all buttons in the GUI.
+	 */
+	protected class ButtonHandler implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object src = e.getSource();
+			if (src == passTurnButton) {
+				changeTurn();
+				passTurnButton.setEnabled(false);
+				updateFrame();
+			} else if (src == betButton) {
+				// Place Bet
+				String inputText = betTextField.getText();
+				if (!inputText.equals("")) {
+					bet = Integer.parseInt(inputText);
+					if ((player.getChips() - bet >= 0) && (opponent.getChips() - bet >= 0)) {
+						betTextField.setText("");
+						pot += bet;
+						player.setChips(player.getChips() - player.bet(bet));
+						message = "Opponent waiting for turn.";
+						prompt = "Player bets " + bet + ".";
+						passTurnButton.setEnabled(true);
+						betButton.setEnabled(false);
+						betTextField.setEnabled(false);
+						checkButton.setEnabled(false);
+						callButton.setEnabled(false);
+						foldButton.setEnabled(false);
+						responding = true;
+						updateFrame();
+					} else {
+						prompt = "Not enough chips!";
+						updateFrame();
+					}
+				} else {
+					prompt = "Enter a number of chips to bet!";
+					updateFrame();
+				}
+			} else if (src == checkButton) {
+				message = "Opponent waiting to deal.";
+				prompt = "Player checks.";
+				passTurnButton.setEnabled(true);
+				betButton.setEnabled(false);
+				betTextField.setEnabled(false);
+				checkButton.setEnabled(false);
+				callButton.setEnabled(false);
+				foldButton.setEnabled(false);
+				updateFrame();
+			} else if (src == foldButton) {
+				message = "Opponent waiting for turn.";
+				prompt = "You fold.";
+				player.foldHand();
+			} else if (src == callButton) {
+				pot += bet;
+				player.setChips(player.getChips() - player.bet(bet));
+				prompt = "You call.";
+				responding = false;
+				callButton.setEnabled(false);
+				foldButton.setEnabled(false);
+				updateFrame();
+				changeTurn();
+			} else if (src == showdownButton) {
+				determineWinner();
+				deck.reShuffle();
+				collectPot();
+				showWinnerAlert();
+			}
+		}
+	}
 
-        collectPot();
-  		
-  		mainFrame.remove(dealerPanel);
-  		mainFrame.add(revealPanel);
-  		mainFrame.setVisible(false);
-  		mainFrame.setVisible(true);
+	/**
+	 * Method shows winner and exits game.
+	 */
 
-        showWinnerAlert();
-  	}
-  }
-
-/**
-  Fold button actions
-*/
-  class foldButtonListener implements ActionListener {
-    public void actionPerformed(ActionEvent event) {
-        player.foldHand();
-
-    }
-  }
-/**
-	Sets up the Poker game when the Client clicks the PlayAgain button.
-*/
-  class playAgainListener implements ActionListener{
-  	public void actionPerformed(ActionEvent event){
-        winnerType = Winner.NEW_GAME;
-  		mainFrame.dispose();
-
-        // Create new game
-  		PokerGame gui2 = new PokerGame();
-  		gui2.replay();
-  	}
-  	
-  }
-
-
-/**
-  Bet button actions
-*/
-
-  class betButtonListener implements ActionListener {
-    public void actionPerformed(ActionEvent event) {
-      // Place Bet
-      String inputText = betTextField.getText();
-      if (!inputText.equals("")) {
-          int amount = Integer.parseInt(inputText);
-          betTextField.setText("");
-          // Dealer calls
-          if (dealerShouldBet(10)) {
-              pot += player.bet(amount);
-              pot += dealer.bet(amount);
-          } else {
-              winnerType = Winner.PLAYER;
-              dealer.foldHand();
-          }
-
-      }
-        potLabel.setText(String.format("Pot: %d", pot));
-        centerPanel.add(potLabel, BorderLayout.SOUTH);
-
-    }
-  }
-
-/**
-  Betting field actions
-*/
-
-  class betTextFieldListener implements ActionListener {
-    public void actionPerformed(ActionEvent event) {
-      // Handle user pressing enter key to place bet
-      String inputText = betTextField.getText();
-      if (!inputText.equals("")) {
-          int amount = Integer.parseInt(inputText);
-          betTextField.setText("");
-          // Dealer calls
-          if (dealerShouldBet(10)) {
-              pot += player.bet(amount);
-              pot += dealer.bet(amount);
-          } else {
-              System.out.println("BETTING");
-              winnerType = Winner.PLAYER;
-              dealer.foldHand();
-          }
-      }
-        potLabel.setText(String.format("Pot: %d", pot));
-        centerPanel.add(potLabel, BorderLayout.SOUTH);
-    }
-  }
-
-    /**
-     * Method to show determine of player calls bet
-     */
-
-    public void showPlayerCallBetAlert(int amount) {
-        String message = String.format("Would you like to call: %d?", amount);
-        int option = JOptionPane.showConfirmDialog(null, message, "Betting", JOptionPane.YES_NO_OPTION);
-        if (option == JOptionPane.YES_OPTION) {
-            pot += dealer.bet(amount);
-            pot += player.bet(amount);
-        } else {
-            // Player folds
-            winnerType = Winner.DEALER;
-            player.foldHand();
-        }
-    }
-
-    /**
-     * Method shows winner alertview
-     */
-
-    public void showWinnerAlert() {
-
-        String message = "";
-        if (winnerType == Winner.PLAYER) {
-            System.out.println("player");
-            message = "You won! \n\n Play Again?";
-        } else if (winnerType == Winner.DEALER) {
-            System.out.println("dealer");
-            message = "Dealer won. \n\n Play Again?";
-        } else if (winnerType == Winner.TIE){
-            System.out.println("tie");
-            message = "Tie \n\n Play Again?";
-        }
-
-        int option = JOptionPane.showConfirmDialog(null, message, "Winner", JOptionPane.YES_NO_OPTION);
-        if (option == JOptionPane.YES_OPTION) {
-            // Restart
-            mainFrame.dispose();
-            // Create new game
-            PokerGame gui2 = new PokerGame();
-            gui2.replay();
-        } else {
-            // Quit
-            System.exit(1);
-        }
-    }
+	public void showWinnerAlert() {
+		if (!gameOver) {
+			message = "";
+			oSubPane2.remove(backCardLabel1);
+			oSubPane2.remove(backCardLabel2);
+			for (int i = 0; i < 2; i++) {
+				oSubPane2.add(new JLabel(getCardImage(opponent.getCardFromHand(i))));
+			}
+			if (winnerType == Winner.PLAYER) {
+				System.out.println("player");
+				prompt = "You won!";
+			} else if (winnerType == Winner.OPPONENT) {
+				System.out.println("opponent");
+				prompt = "Opponent won.";
+			} else if (winnerType == Winner.TIE) {
+				System.out.println("tie");
+				prompt = "Tie!";
+			}
+			updateFrame();
+			System.exit(1);
+		} else
+			System.exit(1);
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

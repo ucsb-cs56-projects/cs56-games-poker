@@ -1,12 +1,14 @@
 package edu.ucsb.cs56.projects.games.poker;
 
 import java.util.*;
+
+import java.io.Serializable;
 import java.math.*;
 
 /**
 	Class that represents a 52 card deck
 */
-public class Deck {
+public class Deck implements Serializable{
 
 	private ArrayList<Card> activeDeck;
 	private ArrayList<Card> discardPile;
