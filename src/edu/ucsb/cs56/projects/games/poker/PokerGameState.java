@@ -44,7 +44,7 @@ public class PokerGameState implements Serializable {
 	 * @param bet
 	 */
 	public void setBet(int bet){
-		this.bet = bet;
+	    this.bet = bet;
 	}
 	
 	/**
