@@ -48,135 +48,135 @@ final class PokerSinglePlayer extends PokerGame {
 
     /**
      * Method to activate the opponent AI on turn change.
-    */
-	public void changeTurn() {
-		if (turn == Turn.PLAYER) {
-			if (responding == true) {
-				turn = Turn.OPPONENT;
-				controlButtons();
-				updateFrame();
-				message = "opponent is thinking...";
-				timer.restart();
-			} else {
-				updateFrame();
-				nextStep();
-				if (step != Step.SHOWDOWN) {
-					turn = Turn.OPPONENT;
-					controlButtons();
-					prompt = "opponent Turn.";
-					message = "opponent is thinking...";
-					updateFrame();
-					timer.restart();
-				}
-			}
-		} else if (turn == Turn.OPPONENT) {
-			if (responding == true) {
-				turn = Turn.PLAYER;
-				controlButtons();
-				responding = false;
-				prompt = "What will you do?";
-				updateFrame();
-			} else {
-				prompt = "What will you do?";
-				turn = Turn.PLAYER;
-				controlButtons();
-				updateFrame();
-			}
+     */
+    public void changeTurn() {
+	if (turn == Turn.PLAYER) {
+	    if (responding == true) {
+		turn = Turn.OPPONENT;
+		controlButtons();
+		updateFrame();
+		message = "opponent is thinking...";
+		timer.restart();
+	    } else {
+		updateFrame();
+		nextStep();
+		if (step != Step.SHOWDOWN) {
+		    turn = Turn.OPPONENT;
+		    controlButtons();
+		    prompt = "opponent Turn.";
+		    message = "opponent is thinking...";
+		    updateFrame();
+		    timer.restart();
 		}
+	    }
+	} else if (turn == Turn.OPPONENT) {
+	    if (responding == true) {
+		turn = Turn.PLAYER;
+		controlButtons();
+		responding = false;
+		prompt = "What will you do?";
+		updateFrame();
+	    } else {
+		prompt = "What will you do?";
+		turn = Turn.PLAYER;
+		controlButtons();
+		updateFrame();
+	    }
 	}
+    }
 
     /**
      *  Simple AI for the opponent in single player.
      */
-	public void opponentAI() {
-		Hand opponentHand = new Hand();
-		if (step == Step.BLIND) {
-			if (opponentHand.size() != 2) {
-				for (int i = 0; i < 2; i++) {
-					opponentHand.add(opponent.getHand().get(i));
-				}
-			}
-		} else if (step == Step.FLOP) {
-			if (opponentHand.size() < 5) {
-				for (Card c : flop) {
-					opponentHand.add(c);
-				}
-			}
-		} else if (step == Step.TURN) {
-			if (opponentHand.size() < 6) {
-				opponentHand.add(turnCard);
-			}
-		} else if (step == Step.RIVER) {
-			if (opponentHand.size() < 7) {
-				opponentHand.add(riverCard);
-			}
-		} else {
+    public void opponentAI() {
+	Hand opponentHand = new Hand();
+	if (step == Step.BLIND) {
+	    if (opponentHand.size() != 2) {
+		for (int i = 0; i < 2; i++) {
+		    opponentHand.add(opponent.getHand().get(i));
 		}
-
-		boolean shouldBet = false;
-		boolean shouldCall = true;
-		int dValue = opponentHand.calculateValue();
-		int betAmount = 5 * dValue;
-		if (step == Step.BLIND) {
-			if (dValue >= 1) {
-				shouldBet = true;
-			}
-		} else if (step == Step.FLOP) {
-			if (dValue >= 3) {
-				shouldBet = true;
-			}
-			if ((dValue == 0 && bet >= 20)) {
-				shouldCall = false;
-			}
-		} else if (step == Step.TURN) {
-			if (dValue >= 4) {
-				shouldBet = true;
-			}
-			if ((dValue < 2 && bet > 20)) {
-				shouldCall = false;
-			}
-		} else if (step == Step.RIVER) {
-			if (dValue >= 4) {
-				shouldBet = true;
-			}
-			if ((dValue < 2 && bet > 20))
-				shouldCall = false;
+	    }
+	} else if (step == Step.FLOP) {
+	    if (opponentHand.size() < 5) {
+		for (Card c : flop) {
+		    opponentHand.add(c);
 		}
-
-		if (responding == true) {
-			if (shouldCall) {
-				message = "opponent calls.";
-				pot += bet;
-				opponent.setChips(opponent.getChips() - opponent.bet(bet));
-				bet = 0;
-				responding = false;
-				nextStep();
-				updateFrame();
-				timer.restart();
-			} else {
-				message = "opponent folds.";
-				opponent.foldHand();
-			}
-		} else if (shouldBet && step != Step.SHOWDOWN) {
-			if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
-				bet = betAmount;
-				pot += bet;
-				opponent.setChips(opponent.getChips() - opponent.bet(bet));
-				responding = true;
-				message = "opponent bets " + bet + " chips.";
-				updateFrame();
-				changeTurn();
-			} else {
-				message = "opponent checks.";
-				updateFrame();
-				changeTurn();
-			}
-		} else if (step != Step.SHOWDOWN) {
-			message = "opponent checks.";
-			updateFrame();
-			changeTurn();
-		}
+	    }
+	} else if (step == Step.TURN) {
+	    if (opponentHand.size() < 6) {
+		opponentHand.add(turnCard);
+	    }
+	} else if (step == Step.RIVER) {
+	    if (opponentHand.size() < 7) {
+		opponentHand.add(riverCard);
+	    }
+	} else {
 	}
+
+	boolean shouldBet = false;
+	boolean shouldCall = true;
+	int dValue = opponentHand.calculateValue();
+	int betAmount = 5 * dValue;
+	if (step == Step.BLIND) {
+	    if (dValue >= 1) {
+		shouldBet = true;
+	    }
+	} else if (step == Step.FLOP) {
+	    if (dValue >= 3) {
+		shouldBet = true;
+	    }
+	    if ((dValue == 0 && bet >= 20)) {
+		shouldCall = false;
+	    }
+	} else if (step == Step.TURN) {
+	    if (dValue >= 4) {
+		shouldBet = true;
+	    }
+	    if ((dValue < 2 && bet > 20)) {
+		shouldCall = false;
+	    }
+	} else if (step == Step.RIVER) {
+	    if (dValue >= 4) {
+		shouldBet = true;
+	    }
+	    if ((dValue < 2 && bet > 20))
+		shouldCall = false;
+	}
+
+	if (responding == true) {
+	    if (shouldCall) {
+		message = "opponent calls.";
+		pot += bet;
+		opponent.setChips(opponent.getChips() - opponent.bet(bet));
+		bet = 0;
+		responding = false;
+		nextStep();
+		updateFrame();
+		timer.restart();
+	    } else {
+		message = "opponent folds.";
+		opponent.foldHand();
+	    }
+	} else if (shouldBet && step != Step.SHOWDOWN) {
+	    if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
+		bet = betAmount;
+		pot += bet;
+		opponent.setChips(opponent.getChips() - opponent.bet(bet));
+		responding = true;
+		message = "opponent bets " + bet + " chips.";
+		updateFrame();
+		changeTurn();
+	    } else {
+		message = "opponent checks.";
+		updateFrame();
+		changeTurn();
+	    }
+	} else if (step != Step.SHOWDOWN) {
+	    message = "opponent checks.";
+	    updateFrame();
+	    changeTurn();
+	}
+    }
 
     /**
      * Method overridden to allow for a new single player game to start.
