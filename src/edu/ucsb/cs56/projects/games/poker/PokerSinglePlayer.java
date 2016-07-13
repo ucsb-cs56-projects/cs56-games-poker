@@ -7,6 +7,7 @@ import java.awt.event.*;
 final class PokerSinglePlayer extends PokerGame {
 
     Timer timer;
+    int timer_value = 1500; // milliseconds
 
     /**
      * Default no-arg constructor;
@@ -34,7 +35,7 @@ final class PokerSinglePlayer extends PokerGame {
 	if(!gameOver){
 	    step = Step.BLIND;
 	    turn = Turn.OPPONENT;
-	    timer = new Timer(2000, new ActionListener() {
+	    timer = new Timer(timer_value, new ActionListener() {
 		    public void actionPerformed(ActionEvent e){
 			opponentAI();
 		    }

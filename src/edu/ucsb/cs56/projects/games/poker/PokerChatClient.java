@@ -24,20 +24,24 @@ public class PokerChatClient {
     public void setAddress(String address){
 	this.address = address;
     }
-    public void go(){
-		
+
+    public void go(){		
 	JFrame frame = new JFrame("Poker Chat Client");
 	JPanel mainPanel = new JPanel();
 	chatText = new JTextArea(15,50);
 	chatText.setLineWrap(true);
 	chatText.setWrapStyleWord(true);
 	chatText.setEditable(false);
+
 	JScrollPane qScroller = new JScrollPane(chatText);
 	qScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	qScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER); 
+	
 	outgoingText = new JTextField(20);
+	outgoingText.addActionListener(new SendListener());
+
 	JButton sendButton = new JButton("Send");
-	sendButton.addActionListener(new SendButtonListener());;
+	sendButton.addActionListener(new SendListener());
 	mainPanel.add(qScroller);
 	mainPanel.add(outgoingText);
 	mainPanel.add(sendButton);
@@ -61,7 +65,7 @@ public class PokerChatClient {
 	}
     }
 	
-    public class SendButtonListener implements ActionListener{
+    public class SendListener implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 	    try{
 		writer.println(outgoingText.getText());

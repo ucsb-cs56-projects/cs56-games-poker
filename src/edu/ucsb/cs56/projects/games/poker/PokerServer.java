@@ -29,7 +29,7 @@ public class PokerServer {
 	    System.out.println("Poker server is running.\n Waiting for players to connect.");
 			
 	    state = new PokerGameState();
-			
+	    
 	    player1Sock = serverSock.accept();
 	    System.out.println("Player 1 connected. Waiting on player 2.");
 	    player1Output = new ObjectOutputStream(player1Sock.getOutputStream());
@@ -102,7 +102,13 @@ public class PokerServer {
 					
 		    String p1Cont = (String) player1Input.readObject();
 		    String p2Cont = (String) player2Input.readObject();
-		    if (p1Cont.equals("continue") && p2Cont.equals("continue")) {
+
+		    // DV Added This
+		    if (!p1Cont.equals("continue") || !p2Cont.equals("continue")) {
+			System.exit(1);
+		    }
+
+		    else if (p1Cont.equals("continue") && p2Cont.equals("continue")) {
 			state = new PokerGameState();
 			player1Output.writeObject(state);
 			player2Output.writeObject(state);

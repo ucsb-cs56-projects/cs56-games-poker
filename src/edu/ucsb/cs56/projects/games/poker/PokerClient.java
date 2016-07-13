@@ -6,6 +6,11 @@ import java.io.*;
 import java.net.*;
 import java.util.Random;
 
+import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
+import java.awt.Dimension;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,6 +19,8 @@ import edu.ucsb.cs56.projects.games.poker.PokerGame.Turn;
 import edu.ucsb.cs56.projects.games.poker.PokerGame.Winner;
 
 public class PokerClient extends PokerGame {
+    protected JButton chatButton;
+
     private Socket sock;
     ObjectOutputStream clientOutput;
     ObjectInputStream clientInput;
@@ -24,8 +31,9 @@ public class PokerClient extends PokerGame {
     boolean clientRoundOver = false;
     String serverMessage;
     String [] descriptions = {"chilling", "sweating", "cool", "emotionless", 
-			      "panicking", "clearly worried", "not even worried", "smiling", "waiting"};
-	
+			      "panicking", "clearly worried", "not even worried",
+			      "smiling", "waiting"};
+
     public static void main(String[] args) {
 	PokerClient client = new PokerClient();
 	try {
@@ -42,7 +50,7 @@ public class PokerClient extends PokerGame {
     public void setAddress(String address){
 	this.address = address;
     }
-	
+
     /**
      * Set up connection with the server and initialize thread
      * to read and write to server.
@@ -70,7 +78,6 @@ public class PokerClient extends PokerGame {
      * Attempt to connect to the server.
      */
     public void setUpNetworking() {
-
 	try {
 	    sock = new Socket(address, 15000);
 	    System.out.println("Player connected");
@@ -394,8 +401,14 @@ public class PokerClient extends PokerGame {
     public class ClientButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 	    Object src = event.getSource();
-	    if(src == chatButton){
+	    if(src == chatButton){ // FIXED TO CREATE CHAT SERVER SCREEN USING SAME IP ADDRESS
 		System.out.println("We're Chit Chatting");
+		PokerChatClient chitchat = new PokerChatClient();
+		if (address != null) {
+		    chitchat.setAddress(address);
+		    chitchat.go();
+		    chatButton.setEnabled(false);
+		}
 	    }
 	    else if(src == betButton) {
 		String inputText = betTextField.getText();
@@ -639,5 +652,33 @@ public class PokerClient extends PokerGame {
     public String getRandomDescription (){
 	int index = new Random().nextInt(descriptions.length);
 	return (descriptions[index]);
+    }
+
+    /**
+     * Method lays out GUI elements
+     */
+
+    public void layoutSubViews() {
+        if (!gameOver) {
+	    super.layoutSubViews();
+	    chatButton = new JButton("CHAT");
+            chatButton.setEnabled(true);
+            addActionListeners();
+
+	    messagePanel.add(chatButton);
+            messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+	    
+	    mainFrame.validate();
+	    mainFrame.repaint();
+	}
+    }
+
+    /**
+     *  Enables and disables buttons one the screen, depending
+     *  on the turn and step.
+     */
+    public void controlButtons() {
+	chatButton.setEnabled(true);
+	super.controlButtons();
     }
 }

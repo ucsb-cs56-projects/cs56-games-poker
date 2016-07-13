@@ -15,7 +15,6 @@ public class PokerMain {
     public static void main(String[] args) {
 	PokerMain start = new PokerMain();
 	start.go();
-
     }
 
     /**
@@ -68,11 +67,12 @@ public class PokerMain {
 	    if (src == singlePlayerButton) {
 		PokerSinglePlayer singlePlayer = new PokerSinglePlayer(500, 500);
 		singlePlayer.go();
-		playButtonFrame.setVisible(false);
-	    } else if (src == serverButton) {
+	    }
+	    else if (src == serverButton) {
 		PokerServer server = new PokerServer();
 		server.go();
-	    } else if (src == clientButton) {
+	    } 
+	    else if (src == clientButton) {
 		PokerClient client = new PokerClient();
 		address = JOptionPane.showInputDialog(playButtonFrame, "What IP Address are you connecting to?");
 		if(address != null){
@@ -82,11 +82,13 @@ public class PokerMain {
 		    } catch (IOException ex){ex.printStackTrace();
 		    }
 		}
-		
-	    } else if(src == serverChatButton){
+	    }
+	    
+	    else if(src == serverChatButton){
 		PokerChatServer server2 = new PokerChatServer();
 		server2.go();
-	    } else if(src == clientChatButton){
+	    }
+	    else if(src == clientChatButton){
 		address = JOptionPane.showInputDialog(playButtonFrame, "What IP Address are you connecting to?");
 		PokerChatClient client2 = new PokerChatClient();
 		if(address != null){
@@ -96,6 +98,5 @@ public class PokerMain {
 	    }
 	    playButtonFrame.setVisible(false);
 	}
-    }
-	
+    }	
 }

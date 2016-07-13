@@ -279,7 +279,5 @@ public class PokerGameState implements Serializable {
      */
     public void setServerMessage (String msg){
 	serverMessage = msg;
-    }
-	
-	
+    }	
 }

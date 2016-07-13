@@ -30,9 +30,8 @@ public class PokerGame implements PlayerDelegate {
     protected JTextField betTextField;
     protected JButton foldButton, betButton, checkButton, callButton;
     
-    protected JButton showdownButton; // // +++++++++++++++++++++++++++++++++++++++Doesn't exist
-    protected JButton chatButton; // ++++++++++++++++++++++++++++++++++++++++++++++FIX TO CHAT
-    
+    protected JButton showdownButton;
+
     protected JButton gameOverButton;
     protected JLabel playerWinsLabel, opponentWinsLabel, playerChipsLabel, opponentChipsLabel, potLabel;
     protected JLabel gameMessage, playerPrompt, backCardLabel1, backCardLabel2, gameOverLabel;
@@ -192,10 +191,6 @@ public class PokerGame implements PlayerDelegate {
 	    callButton = new JButton("CALL");
 	    callButton.setEnabled(false);
 	    showdownButton = new JButton("SHOWDOWN");
-
-	    chatButton = new JButton("CHAT");  // ++++++++++++++++++++FIX TO CHAT
-	    chatButton.setEnabled(true);  // ++++++++++++++++++++++++++FIX TO CHAT
-
 	    addActionListeners();
 
 	    opponentPanel = new JPanel();
@@ -288,10 +283,7 @@ public class PokerGame implements PlayerDelegate {
 	    showdownButton.setVisible(false);
 	    messagePanel.add(showdownButton);
 	    messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-	    messagePanel.add(chatButton);
-	    messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
+	    
 	    oSubPane1.setBackground(pokerGreen);
 	    oSubPane2.setBackground(pokerGreen);
 	    oSubPane3.setBackground(pokerGreen);
@@ -328,7 +320,6 @@ public class PokerGame implements PlayerDelegate {
 	checkButton.addActionListener(b);
 	callButton.addActionListener(b);
 	showdownButton.addActionListener(b);
-	chatButton.addActionListener(b);  // ++++++++++++++++++++++++++++++++++++FIX TO CHAT
     }
     
     /**
@@ -374,30 +365,26 @@ public class PokerGame implements PlayerDelegate {
      */
     public void controlButtons() {
 	if (step == Step.SHOWDOWN) {
-	    chatButton.setVisible(false);  // +++++++++++++++++++++++FIX TO CHAT
 	    betButton.setEnabled(false);
 	    betTextField.setEnabled(false);
 	    checkButton.setEnabled(false);
 	    callButton.setEnabled(false);
 	    foldButton.setEnabled(false);
-	    showdownButton.setVisible(true);  // ++++++++++++++++++++++What is this?
+	    showdownButton.setVisible(true);
 	}
 	else if (turn == Turn.PLAYER && responding) {
-	    chatButton.setEnabled(true);  // +++++++++++++++++++++++++FIX TO CHAT
 	    betButton.setEnabled(false);
 	    betTextField.setEnabled(false);
 	    checkButton.setEnabled(false);
 	    callButton.setEnabled(true);
 	    foldButton.setEnabled(true);
 	} else if (turn == Turn.PLAYER) {
-	    chatButton.setEnabled(true); // +++++++++++++++++++++++++++FIX TO CHAT
 	    betButton.setEnabled(true);
 	    betTextField.setEnabled(true);
 	    checkButton.setEnabled(true);
 	    callButton.setEnabled(false);
 	    foldButton.setEnabled(true);
 	} else {
-	    chatButton.setEnabled(true);   // +++++++++++++++++++++++++++++FIX TO CHAT
 	    betButton.setEnabled(false);
 	    betTextField.setEnabled(false);
 	    checkButton.setEnabled(false);
@@ -461,23 +448,17 @@ public class PokerGame implements PlayerDelegate {
     protected class ButtonHandler implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    Object src = e.getSource();
-	    if (src == chatButton) { // ++++++++++++++++++++++++++++++++++++++++++++++++FIX TO CHAT
-
-		// HARD HERE
-
-	    }
-	    else if (src == betButton) {
+	    if (src == betButton) {
 		// Place Bet
 		String inputText = betTextField.getText();
 		if (!inputText.equals("")) {
 		    bet = Integer.parseInt(inputText);
-		    if ((player.getChips() - bet >= 0) && (opponent.getChips() - bet >= 0) && (bet > 0)) {
+		    if ((player.getChips()-bet>=0) && (opponent.getChips()-bet>=0) && (bet>0)) {
 			betTextField.setText("");
 			pot += bet;
 			player.setChips(player.getChips() - player.bet(bet));
 			message = "Opponent waiting for turn.";
 			prompt = "Player bets " + bet + ".";
-			chatButton.setEnabled(true);  // +++++++++++++++++++++++++FIX TO CHAT
 			betButton.setEnabled(false);
 			betTextField.setEnabled(false);
 			checkButton.setEnabled(false);
@@ -500,7 +481,6 @@ public class PokerGame implements PlayerDelegate {
 	    else if (src == checkButton) {
 		message = "Opponent waiting to deal.";
 		prompt = "Player checks.";
-		chatButton.setEnabled(true);  // +++++++++++++++++++++++++++++++++FIX TO CHAT
 		betButton.setEnabled(false);
 		betTextField.setEnabled(false);
 		checkButton.setEnabled(false);
