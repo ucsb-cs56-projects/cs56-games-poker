@@ -54,7 +54,7 @@ public class PokerMain {
 	playButtonFrame.setSize(300, 200);
 	playButtonFrame.setResizable(false);
 	playButtonFrame.setLocation(250, 250);
-
+	
 	playButtonFrame.setVisible(true);
     }
 

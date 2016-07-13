@@ -33,8 +33,11 @@ public class PokerGame implements PlayerDelegate {
     protected JButton showdownButton;
 
     protected JButton gameOverButton;
+    protected JLabel gameOverLabel;
+    protected JPanel gameOverMessage, gameOverButtonPanel;
+
     protected JLabel playerWinsLabel, opponentWinsLabel, playerChipsLabel, opponentChipsLabel, potLabel;
-    protected JLabel gameMessage, playerPrompt, backCardLabel1, backCardLabel2, gameOverLabel;
+    protected JLabel gameMessage, playerPrompt, backCardLabel1, backCardLabel2;
     protected JPanel opponentPanel, playerPanel, centerPanel, messagePanel, gameOverPanel;
     protected JPanel oSubPane1, oSubPane2, oSubPane3, pSubPane1, pSubPane2, pSubPane3, optionArea;
     protected JPanel flopPane, turnPane, riverPane, betPane, respondPane;
@@ -106,8 +109,7 @@ public class PokerGame implements PlayerDelegate {
      * Returns an ImageIcon by using the URL class in order to make the
      * ImageIcon web compatible.
      * 
-     * @param c
-     *            card whose image is to be retrieved.
+     * @param card whose image is to be retrieved.
      */
     public ImageIcon getCardImage(Card c) {
 	String dir = "Cards/";
@@ -517,6 +519,7 @@ public class PokerGame implements PlayerDelegate {
      */
 
     public void showWinnerAlert() {
+	/*
 	if (!gameOver) {
 	    message = "";
 	    oSubPane2.remove(backCardLabel1);
@@ -538,6 +541,6 @@ public class PokerGame implements PlayerDelegate {
 	    System.exit(1);
 	} else
 	    System.exit(1);
+	*/
     }
-
 }

@@ -3,6 +3,7 @@ package edu.ucsb.cs56.projects.games.poker;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 final class PokerSinglePlayer extends PokerGame {
 
@@ -208,41 +209,66 @@ final class PokerSinglePlayer extends PokerGame {
     	    if (option == JOptionPane.YES_OPTION) {
     		// Restart
     		mainFrame.dispose();
-    		// Create new game
-    		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
+    		
+		// First check if players have enough chips
+		if(opponent.getChips() < 5) {
+		    gameOver("GAME OVER!\n\n opponent has run out of chips!");
+		}
+		else if (player.getChips() < 5) {
+		    gameOver("GAME OVER!\n\n you have run out of chips!");
+		}
+		
+		// Create new game
+		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
     		singlePlayerReplay.go();
-    	    } else {
+		
+	    }
+	    else if (option == JOptionPane.NO_OPTION) {
+		gameOver("");
+	    }
+	    else {
     		// Quit
     		System.exit(1);
     	    }
     	}
-	else{
-	    gameOverFrame = new JFrame();
-	    gameOverFrame.setLayout(new FlowLayout());
-	    gameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+	
+    /**
+     * Function that puts up a Game Over Frame that can take us back to the Main Screen
+     */
+    
+    private void gameOver(String label) {
+	gameOverFrame = new JFrame();
+	gameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	gameOverFrame.setBackground(Color.red);
 
-	    
-	    gameOverButton = new JButton("Back to Main Menu");
-	    
-	    gameOverButton.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e){
-			gameOverFrame.setVisible(false);
-			PokerMain restart = new PokerMain();
-			restart.go();
-		    }
-		});
-	    if(opponent.getChips() < 5) {
-		gameOverLabel = new JLabel("GAME OVER!\n\n opponent has run of of chips!");
-	    }
-	    else
-		gameOverLabel = new JLabel("GAME OVER!\n\n You have run of of chips!");
-	    gameOverFrame.getContentPane().add(gameOverLabel);
-	    gameOverFrame.getContentPane().add(gameOverButton);
-	    gameOverFrame.setSize(400,200);
-	    gameOverFrame.setLocation(250, 250);
-	    
-	    gameOverFrame.setVisible(true);
-	}
+	gameOverMessage = new JPanel();
+        gameOverMessage.setBackground(Color.red);
+
+	gameOverButtonPanel = new JPanel();
+	gameOverButtonPanel.setBackground(Color.red);
+
+	gameOverLabel = new JLabel(label);
+	gameOverButton = new JButton("Back to Main Menu");
+	gameOverButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e){
+		    gameOverFrame.setVisible(false);
+		    PokerMain restart = new PokerMain();
+		    restart.go();
+		}
+	    });
+	
+	
+	gameOverMessage.add(gameOverLabel);
+	gameOverButtonPanel.add(gameOverButton);
+
+	gameOverFrame.setSize(300, 200);
+	gameOverFrame.setResizable(false);
+	gameOverFrame.setLocation(250, 250);
+	gameOverFrame.getContentPane().add(BorderLayout.NORTH, gameOverMessage);
+	gameOverFrame.getContentPane().add(BorderLayout.SOUTH, gameOverButtonPanel);
+	gameOverFrame.pack();
+	gameOverFrame.setVisible(true);
     }
     
 }

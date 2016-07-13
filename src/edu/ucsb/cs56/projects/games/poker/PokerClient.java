@@ -213,7 +213,7 @@ public class PokerClient extends PokerGame {
      */
     public void showWinnerAlert() {
 	if(!gameOver){
-	    String message = "";
+	    message = "";
 	    oSubPane2.remove(backCardLabel1);
 	    oSubPane2.remove(backCardLabel2);
 	    for(int i=0;i<2;i++){
