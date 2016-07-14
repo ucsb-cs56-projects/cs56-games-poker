@@ -1,5 +1,13 @@
 package edu.ucsb.cs56.projects.games.poker;
 
+//
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.String;
+import java.lang.System;
+import java.net.URL;
+//
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -660,7 +668,138 @@ public class PokerClient extends PokerGame {
 
     public void layoutSubViews() {
         if (!gameOver) {
-	    super.layoutSubViews();
+
+	    Color pokerGreen = new Color(83, 157, 89);
+
+	    foldButton = new JButton("FOLD");
+	    foldButton.setEnabled(false);
+	    betButton = new JButton("BET");
+	    betButton.setEnabled(false);
+	    betTextField = new JTextField(4);
+	    checkButton = new JButton("CHECK");
+	    checkButton.setEnabled(false);
+	    callButton = new JButton("CALL");
+	    callButton.setEnabled(false);
+	    showdownButton = new JButton("SHOWDOWN");
+	    // addActionListeners();
+
+	    opponentPanel = new JPanel();
+	    opponentPanel.setLayout(new BorderLayout());
+	    oSubPane1 = new JPanel();
+	    oSubPane1.setLayout(new BoxLayout(oSubPane1, BoxLayout.Y_AXIS));
+	    oSubPane2 = new JPanel();
+	    oSubPane3 = new JPanel();
+	    oSubPane3.setLayout(new BorderLayout());
+
+	    opponentChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+	    opponentWinsLabel = new JLabel();
+	    opponentWinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+	    playerWinsLabel = new JLabel();
+	    playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
+	    oSubPane1.add(new JLabel("OPPONENT"));
+	    oSubPane1.add(opponentChipsLabel);
+	    oSubPane3.add(BorderLayout.NORTH, playerWinsLabel);
+	    oSubPane3.add(BorderLayout.SOUTH, opponentWinsLabel);
+	    opponentPanel.add(BorderLayout.WEST, oSubPane1);
+	    opponentPanel.add(BorderLayout.CENTER, oSubPane2);
+	    opponentPanel.add(BorderLayout.EAST, oSubPane3);
+
+	    optionArea = new JPanel();
+	    optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
+	    optionArea.add(betButton);
+	    optionArea.add(betTextField);
+	    optionArea.add(callButton);
+	    optionArea.add(checkButton);
+	    optionArea.add(foldButton);
+
+	    playerPanel = new JPanel();
+	    playerPanel.setLayout(new BorderLayout());
+	    pSubPane1 = new JPanel();
+	    pSubPane1.setLayout(new BoxLayout(pSubPane1, BoxLayout.Y_AXIS));
+	    pSubPane2 = new JPanel();
+	    pSubPane3 = new JPanel();
+
+	    playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
+	    pSubPane1.add(new JLabel("PLAYER"));
+	    pSubPane1.add(playerChipsLabel);
+	    pSubPane3.add(optionArea);
+	    playerPanel.add(BorderLayout.WEST, pSubPane1);
+	    playerPanel.add(BorderLayout.CENTER, pSubPane2);
+	    playerPanel.add(BorderLayout.EAST, pSubPane3);
+
+	    backCardLabel1 = new JLabel(backCardImage);
+	    backCardLabel2 = new JLabel(backCardImage);
+	    oSubPane2.add(backCardLabel1);
+	    oSubPane2.add(backCardLabel2);
+	    for (int i = 0; i < 2; i++) {
+		pSubPane2.add(new JLabel(getCardImage(player.getCardFromHand(i))));
+	    }
+
+	    centerPanel = new JPanel();
+	    centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+	    flopPane = new JPanel();
+	    flopPane.add(new JLabel("Flop:"));
+	    for (int i = 0; i < 3; i++) {
+		flopPane.add(new JLabel(getCardImage(flop.get(i))));
+	    }
+	    flopPane.setVisible(false);
+	    turnPane = new JPanel();
+	    turnPane.add(new JLabel("Turn:"));
+	    turnPane.add(new JLabel(getCardImage(turnCard)));
+	    turnPane.setVisible(false);
+	    riverPane = new JPanel();
+	    riverPane.add(new JLabel("River:"));
+	    riverPane.add(new JLabel(getCardImage(riverCard)));
+	    riverPane.setVisible(false);
+	    centerPanel.add(flopPane);
+	    centerPanel.add(turnPane);
+	    centerPanel.add(riverPane);
+
+	    messagePanel = new JPanel();
+	    messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+	    messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+	    potLabel = new JLabel();
+	    potLabel.setText(String.format("Pot: %d", pot));
+	    messagePanel.add(potLabel);
+	    messagePanel.add(Box.createRigidArea(new Dimension(10, 20)));
+
+	    gameMessage = new JLabel(message);
+	    messagePanel.add(Box.createRigidArea(new Dimension(10, 20)));
+	    messagePanel.add(gameMessage);
+	    playerPrompt = new JLabel(prompt);
+	    messagePanel.add(playerPrompt);
+	    messagePanel.add(Box.createRigidArea(new Dimension(10, 0)));
+			
+	    showdownButton.setVisible(false);
+	    messagePanel.add(showdownButton);
+	    messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+	    
+	    oSubPane1.setBackground(pokerGreen);
+	    oSubPane2.setBackground(pokerGreen);
+	    oSubPane3.setBackground(pokerGreen);
+	    pSubPane1.setBackground(pokerGreen);
+	    pSubPane2.setBackground(pokerGreen);
+	    pSubPane3.setBackground(pokerGreen);
+	    messagePanel.setBackground(pokerGreen);
+	    centerPanel.setBackground(pokerGreen);
+	    optionArea.setBackground(pokerGreen);
+	    flopPane.setBackground(pokerGreen);
+	    turnPane.setBackground(pokerGreen);
+	    riverPane.setBackground(pokerGreen);
+
+	    mainFrame = new JFrame("Poker Game");
+	    mainFrame.setSize(800, 500);
+	    mainFrame.setResizable(false);
+	    mainFrame.setLocation(250, 250);
+	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainFrame.getContentPane().add(BorderLayout.NORTH, opponentPanel);
+	    mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
+	    mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+	    mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
+mainFrame.setVisible(true);
+
+//////////////////////////////////////////////////////
+	    
 	    chatButton = new JButton("CHAT");
             chatButton.setEnabled(true);
             addActionListeners();
