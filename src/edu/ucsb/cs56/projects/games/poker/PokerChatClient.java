@@ -12,6 +12,7 @@ public class PokerChatClient {
 	
     JTextArea chatText;
     JTextField outgoingText;
+    JTextField usernameChooser;
     BufferedReader reader;
     PrintWriter writer;
     Socket sock;
@@ -27,7 +28,10 @@ public class PokerChatClient {
 
     public void go(){		
 	JFrame frame = new JFrame("Poker Chat Client");
+	usernameChooser = new JTextField(15);//adding on user id
+	JLabel chooseUsernameLabel = new JLabel("Pick a username"); // pick user
 	JPanel mainPanel = new JPanel();
+	
 	chatText = new JTextArea(15,50);
 	chatText.setLineWrap(true);
 	chatText.setWrapStyleWord(true);
@@ -45,6 +49,8 @@ public class PokerChatClient {
 	mainPanel.add(qScroller);
 	mainPanel.add(outgoingText);
 	mainPanel.add(sendButton);
+	mainPanel.add(chooseUsernameLabel);// username
+	mainPanel.add(usernameChooser);//username 
 	setUpNetworking();
 	Thread readerThread = new Thread(new IncomingReader());
 	readerThread.start();
@@ -68,7 +74,7 @@ public class PokerChatClient {
     public class SendListener implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 	    try{
-		writer.println(outgoingText.getText());
+		writer.println("<" + username + ">" + outgoingText.getText());//prints username
 		writer.flush();
 	    }
 	    catch(Exception ex){
@@ -78,6 +84,25 @@ public class PokerChatClient {
 	    outgoingText.requestFocus();
 	}
     }
+    /**
+    public class sendMessageButtonListener implements ActionListener{
+	{
+	    if (outgoingText.getText().length() <1) {
+
+	    }
+	    else if (outgoingText.getText().equals("clear")){
+		chatText.setText("Cleared all messages\n");
+		outgoingText.setText("");
+	    }
+	    else{
+		chatText.append("<" + username + ">: " + outgoingText.getText() + "\n");
+		outgoingText.setText("");
+	    }
+	    outgoingText.requestFocusInWindow();
+	}
+    }
+    */ //this is a test for username with the sendMessageButton Listener
+    
     public class IncomingReader implements Runnable{
 	public void run(){
 	    String message;
@@ -88,6 +113,21 @@ public class PokerChatClient {
 		}
 	    }
 	    catch(Exception ex){ex.printStackTrace();}
+	}
+    }
+
+    // this is addon to username
+    
+    String username;
+
+    
+    
+    class enterServerButtonListener implements ActionListener {
+	public void actionPerformed(ActionEvent event){
+	    username = usernameChooser.getText();
+	    if(username.length()<1) {
+		System.out.println("No!");
+	    }
 	}
     }
 		
