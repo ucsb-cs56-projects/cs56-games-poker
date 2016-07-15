@@ -9,6 +9,7 @@ final class PokerSinglePlayer extends PokerGame {
 
     Timer timer;
     int timer_value = 1500; // milliseconds
+    boolean yourTurnToBet = true;
 
     /**
      * Default no-arg constructor;
@@ -35,7 +36,9 @@ final class PokerSinglePlayer extends PokerGame {
 	layoutSubViews();
 	if(!gameOver){
 	    step = Step.BLIND;
+	    
 	    turn = Turn.OPPONENT;
+	    
 	    timer = new Timer(timer_value, new ActionListener() {
 		    public void actionPerformed(ActionEvent e){
 			opponentAI();
@@ -208,8 +211,8 @@ final class PokerSinglePlayer extends PokerGame {
     						       JOptionPane.YES_NO_OPTION);
     	    if (option == JOptionPane.YES_OPTION) {
     		// Restart
-    		mainFrame.dispose();
-    		
+		mainFrame.dispose();
+		
 		// First check if players have enough chips
 		if(opponent.getChips() < 5) {
 		    gameOver("GAME OVER!\n\n opponent has run out of chips!");
