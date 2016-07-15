@@ -29,7 +29,7 @@ public class PokerChatClient {
     public void go(){		
 	JFrame frame = new JFrame("Poker Chat Client");
 	usernameChooser = new JTextField(15);//adding on user id
-	JLabel chooseUsernameLabel = new JLabel("Pick a username"); // pick user
+	JLabel chooseUsernameLabel = new JLabel("Pick a username:"); // pick user
 	JPanel mainPanel = new JPanel();
 	
 	chatText = new JTextArea(15,50);
@@ -49,8 +49,11 @@ public class PokerChatClient {
 	mainPanel.add(qScroller);
 	mainPanel.add(outgoingText);
 	mainPanel.add(sendButton);
+
 	mainPanel.add(chooseUsernameLabel);// username
+	usernameChooser.addActionListener(new enterServerButtonListener()); // adds username listener
 	mainPanel.add(usernameChooser);//username 
+
 	setUpNetworking();
 	Thread readerThread = new Thread(new IncomingReader());
 	readerThread.start();
@@ -70,7 +73,7 @@ public class PokerChatClient {
 	    ex.printStackTrace();
 	}
     }
-	
+
     public class SendListener implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 	    try{
