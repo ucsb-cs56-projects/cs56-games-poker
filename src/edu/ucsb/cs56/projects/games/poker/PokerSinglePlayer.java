@@ -90,6 +90,8 @@ final class PokerSinglePlayer extends PokerGame {
 	}
     }
 
+
+
     /**
      *  Simple AI for the opponent in single player.
      */
@@ -185,8 +187,7 @@ final class PokerSinglePlayer extends PokerGame {
 
     /**
      * Method overridden to allow for a new single player game to start.
-     */
-    
+     */    
     public void showWinnerAlert() {
     	if(!gameOver){
     	    String message = "";
@@ -273,6 +274,19 @@ final class PokerSinglePlayer extends PokerGame {
 	gameOverFrame.getContentPane().add(BorderLayout.SOUTH, gameOverButtonPanel);
 	gameOverFrame.pack();
 	gameOverFrame.setVisible(true);
+	mainFrame.dispose();
     }
     
+    /**                                                                                                  
+     * Adds action listeners to all buttons in the main GUI.                                             
+     */
+    public void addActionListeners() {
+        ButtonHandler b = new ButtonHandler();
+        foldButton.addActionListener(b);
+        betButton.addActionListener(b);
+        checkButton.addActionListener(b);
+        callButton.addActionListener(b);
+        showdownButton.addActionListener(b);
+    }
+
 }
