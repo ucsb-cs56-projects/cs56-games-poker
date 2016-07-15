@@ -37,10 +37,13 @@ Game Options :
 
 Screenshots
 ===========
-![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/blob/master/Single%20Player)
-![Main Menu](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/blob/master/Main%20Menu)
-![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/blob/master/Chat.png)
-![Multiplayer](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/blob/master/Multiplayer%20Up%20and%20Running)
+![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/singleplayer.png)
+
+![Main Menu](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/menu.png)
+
+![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/Chat.png)
+
+![Multiplayer](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/multiplayer.png)
 
 
 Betting
