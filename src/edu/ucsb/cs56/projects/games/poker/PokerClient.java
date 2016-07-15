@@ -82,6 +82,50 @@ public class PokerClient extends PokerGame {
 	}
     }
 
+    /**                                                                                         
+     * This state is for passing the turn                                                       
+     */
+    private void checkPassTurnUpdate() {
+        state.setJustUpdate(false);
+        if(!state.getJustUpdate()){
+            changeTurn();
+            state.changeTurn();
+        }
+        state.setRespond(responding);
+        if(playerNumber == 1){
+            state.setPlayer1Chips(player.getChips());
+            state.setPlayer2Chips(opponent.getChips());
+            prompt = "Player 2 turn.";
+            message = "Player 2 is " + getRandomDescription() + ".";
+            updateFrame();
+        }
+        else{
+            state.setPlayer1Chips(opponent.getChips());
+            state.setPlayer2Chips(player.getChips());
+            if(!responding){
+                state.nextStep();
+                updateFrame();
+            }
+            if( !(state.getStep() == 4) ) {
+                prompt = "Player 1 turn.";
+                message = "Player 1 is " + getRandomDescription() + ".";
+                updateFrame();
+	    }
+	}
+	state.setBet(bet);
+        state.setPot(pot);
+        state.setServerMessage(serverMessage);
+        try {
+            System.out.println("Writing Turn: " + state.getTurn());
+            System.out.println("Writing Step: " + state.getStep());
+            clientOutput.writeObject(state);
+            clientOutput.reset();
+            System.out.println("Wrote to server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Attempt to connect to the server.
      */
@@ -135,20 +179,6 @@ public class PokerClient extends PokerGame {
 	URL url = getClass().getResource(dir + cardFile);
 	backCardImage = new ImageIcon(url);
 		
-    }
-	
-    /**
-     * Adds action listeners to the buttons on the GUI.
-     * Overridden to allow for new ActionListener class for client.
-     */
-    public void addActionListeners() {
-	ClientButtonHandler b = new ClientButtonHandler();
-	foldButton.addActionListener(b);
-	betButton.addActionListener(b);
-	checkButton.addActionListener(b);
-	callButton.addActionListener(b);
-	showdownButton.addActionListener(b);
-	chatButton.addActionListener(b);
     }
 	
     /**
@@ -407,248 +437,81 @@ public class PokerClient extends PokerGame {
      * the server on what the user has changed.
      */
     public class ClientButtonHandler implements ActionListener {
-	public void actionPerformed(ActionEvent event) {
-	    Object src = event.getSource();
-	    if(src == chatButton){ // FIXED TO CREATE CHAT SERVER SCREEN USING SAME IP ADDRESS
-		System.out.println("We're Chit Chatting");
-		PokerChatClient chitchat = new PokerChatClient();
-		if (address != null) {
-		    chitchat.setAddress(address);
-		    chitchat.go();
-		    chatButton.setEnabled(false);
-		}
-	    }
-	    else if(src == betButton) {
-		String inputText = betTextField.getText();
-		if(!inputText.equals("")){
-		    bet = Integer.parseInt(inputText);
-		    if ((player.getChips()-bet>=0) && (opponent.getChips()-bet>=0) && (bet>0)) {
-			betTextField.setText("");
-			pot += bet;
-			player.setChips(player.getChips() - player.bet(bet));
-			chatButton.setEnabled(true);
-			betButton.setEnabled(false);
-			betTextField.setEnabled(false);
-			checkButton.setEnabled(false);
-			callButton.setEnabled(false);
-			foldButton.setEnabled(false);
-			responding = true;
-			prompt = "Allow response: ";
-			message = "You bet " + bet + " chips.";
-			serverMessage = "Player " + playerNumber + " bets " + bet + " chips.";
-			updateFrame();
-		    } else {
-			prompt = "Not enough chips!";
-			updateFrame();
-		    }
-		} else {
-		    prompt = "Enter a number of chips to bet!";
-		    updateFrame();
-		}
-		
-		// This state is for passing the turn
-		state.setJustUpdate(false);
-		if(!state.getJustUpdate()){
-		    changeTurn();
-		    state.changeTurn();
-		}
-		state.setRespond(responding);
-		if(playerNumber == 1){
-		    state.setPlayer1Chips(player.getChips());
-		    state.setPlayer2Chips(opponent.getChips());
-		    prompt = "Player 2 turn.";
-		    message = "Player 2 is " + getRandomDescription() + ".";
-		    updateFrame();
-		}
-		else{
-		    state.setPlayer1Chips(opponent.getChips());
-		    state.setPlayer2Chips(player.getChips());
-		    if(!responding){
-			state.nextStep();
-			updateFrame();
-		    }
-		    if( !(state.getStep() == 4) ) {
-			prompt = "Player 1 turn.";
-			message = "Player 1 is " + getRandomDescription() + ".";
-			updateFrame();
-		    }	
-		}
-		state.setBet(bet);
-		state.setPot(pot);
-		state.setServerMessage(serverMessage);
-		try {
-		    System.out.println("Writing Turn: " + state.getTurn());
-		    System.out.println("Writing Step: " + state.getStep());
-		    clientOutput.writeObject(state);
-		    clientOutput.reset();
-		    System.out.println("Wrote to server.");
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-	    }
-	    else if(src == checkButton) {
-		bet = 0;
-		chatButton.setEnabled(true);
-		betButton.setEnabled(false);
-		betTextField.setEnabled(false);
-		checkButton.setEnabled(false);
-		callButton.setEnabled(false);
-		foldButton.setEnabled(false);
-		message = "You check.";
-		if(playerNumber == 1)
-		    prompt = "Pass turn: ";
-		else
-		    prompt = "Deal cards: ";
-		serverMessage = "Player " + playerNumber + " checks."; 
-		updateFrame();
-		
-		//This state is for passing the turn
-		state.setJustUpdate(false);
-		if(!state.getJustUpdate()){
-		    changeTurn();
-		    state.changeTurn();
-		}
-		state.setRespond(responding);
-		if(playerNumber == 1){
-		    state.setPlayer1Chips(player.getChips());
-		    state.setPlayer2Chips(opponent.getChips());
-		    prompt = "Player 2 turn.";
-		    message = "Player 2 is " + getRandomDescription() + ".";
-		    updateFrame();
-		}
-		else{
-		    state.setPlayer1Chips(opponent.getChips());
-		    state.setPlayer2Chips(player.getChips());
-		    if(!responding){
-			state.nextStep();
-			updateFrame();
-		    }
-		    if( !(state.getStep() == 4) ) {
-			prompt = "Player 1 turn.";
-			message = "Player 1 is " + getRandomDescription() + ".";
-			updateFrame();
-		    }	
-		}
-		state.setBet(bet);
-		state.setPot(pot);
-		state.setServerMessage(serverMessage);
-		try {
-		    System.out.println("Writing Turn: " + state.getTurn());
-		    System.out.println("Writing Step: " + state.getStep());
-		    clientOutput.writeObject(state);
-		    clientOutput.reset();
-		    System.out.println("Wrote to server.");
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-	    }
-	    else if(src == foldButton){
-		player.foldHand();
-	    }
-	    else if(src == callButton){
-		pot += bet;
-		player.setChips(player.getChips() - player.bet(bet));
-		responding = false;
-		callButton.setEnabled(false);
-		foldButton.setEnabled(false);
-		message = "You call.";
-		prompt = "Next turn: ";
-		serverMessage = "Player" + playerNumber + " calls.";
-		if (playerNumber == 1) {
-		    nextStep();
-		    updateFrame();
-		    controlButtons();
-		    state.nextStep();
-		    state.setRespond(responding);
-		    state.setPlayer1Chips(player.getChips());
-		    state.setPlayer2Chips(opponent.getChips());
-		    state.setBet(bet);
-		    state.setPot(pot);
-		    state.setServerMessage(serverMessage);
-		    state.setJustUpdate(true);
-		    try {
-			System.out.println("Writing Turn: " + state.getTurn());
-			System.out.println("Writing Step: " + state.getStep());
-			clientOutput.writeObject(state);
-			System.out.println("Wrote to server. (call)");
-			clientOutput.reset();
-		    } catch (IOException e) {
-			e.printStackTrace();
-		    }
-		    state.setJustUpdate(false);
-		}
-		else 
-		    chatButton.setEnabled(true);
-		
-		// This state is for passing on the turn
-		state.setJustUpdate(false);
-		if(!state.getJustUpdate()){
-		    changeTurn();
-		    state.changeTurn();
-		}
-		state.setRespond(responding);
-		if(playerNumber == 1){
-		    state.setPlayer1Chips(player.getChips());
-		    state.setPlayer2Chips(opponent.getChips());
-		    prompt = "Player 2 turn.";
-		    message = "Player 2 is " + getRandomDescription() + ".";
-		    updateFrame();
-		}
-		else{
-		    state.setPlayer1Chips(opponent.getChips());
-		    state.setPlayer2Chips(player.getChips());
-		    if(!responding){
-			state.nextStep();
-			updateFrame();
-		    }
-		    if( !(state.getStep() == 4) ) {
-			prompt = "Player 1 turn.";
-			message = "Player 1 is " + getRandomDescription() + ".";
-			updateFrame();
-		    }	
-		}
-		state.setBet(bet);
-		state.setPot(pot);
-		state.setServerMessage(serverMessage);
-		try {
-		    System.out.println("Writing Turn: " + state.getTurn());
-		    System.out.println("Writing Step: " + state.getStep());
-		    clientOutput.writeObject(state);
-		    clientOutput.reset();
-		    System.out.println("Wrote to server.");
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-
-	    }
-	    else if(src == showdownButton){
-		determineWinner();
-		collectPot();
-		if(winnerType == Winner.PLAYER) { 
-		    state.setWinner(1);
-		}
-		else if (winnerType == Winner.TIE){
-		    state.setWinner(0);
-		}
-		else
-		    state.setWinner(2);
-		state.setRoundOver(true);
-		clientRoundOver = true;
-		state.setPlayer1Chips(player.getChips());
-		state.setPlayer2Chips(opponent.getChips());
-		state.setBet(bet);
-		state.setPot(pot);
-		state.setJustUpdate(true);
-		try {
-		    System.out.println("Winner: " + state.getWinner());
-		    System.out.println("Round over: " + state.getRoundOver());
-		    clientOutput.writeObject(state);
-		    System.out.println("Wrote to server. (over)");
-		    clientOutput.reset();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-		showWinnerAlert();
+        public void actionPerformed(ActionEvent event) {
+            Object src = event.getSource();
+            if(src == chatButton){ // FIXED TO CREATE CHAT SERVER SCREEN USING SAME IP ADDRESS
+                System.out.println("We're Chit Chatting");
+                PokerChatClient chitchat = new PokerChatClient();
+                if (address != null) {
+                    chitchat.setAddress(address);
+                    chitchat.go();
+                    chatButton.setEnabled(false);
+                }
+            }
+	    else if (src == callButton) {
+                pot += bet;
+                player.setChips(player.getChips() - player.bet(bet));
+                message = "You call.";
+                prompt = "Next turn: ";
+                responding = false;
+                callButton.setEnabled(false);
+                foldButton.setEnabled(false);
+		serverMessage = "Player" + playerNumber + " calls.";                            
+                if (playerNumber == 1) {                                                        
+                    nextStep();                                                                 
+                    updateFrame();                                                              
+                    controlButtons();                                                           
+                    state.nextStep();                                                           
+                    state.setRespond(responding);                                               
+                    state.setPlayer1Chips(player.getChips());                                   
+                    state.setPlayer2Chips(opponent.getChips());                                 
+                    state.setBet(bet);                                                          
+                    state.setPot(pot);                                                          
+                    state.setServerMessage(serverMessage);                                      
+                    state.setJustUpdate(true);                                                  
+                    try {                                                                       
+                        System.out.println("Writing Turn: " + state.getTurn());                 
+                        System.out.println("Writing Step: " + state.getStep());                 
+                        clientOutput.writeObject(state);                                        
+                        System.out.println("Wrote to server. (call)");                          
+                        clientOutput.reset();                                                   
+                    } catch (IOException e) {                                                   
+                        e.printStackTrace();                                                    
+                    }                                                                           
+                    state.setJustUpdate(false);                                                 
+                }                                                                               
+		changeTurn();
+                updateFrame();
+            }
+	    else if (src == showdownButton) {
+                determineWinner();
+                deck.reShuffle();
+                collectPot();
+		if(winnerType == Winner.PLAYER) {                                               
+                   state.setWinner(1);                                                          
+                }                                                                               
+                else if (winnerType == Winner.TIE){                                             
+                    state.setWinner(0);                                                         
+                }                                                                               
+                else                                                                            
+                    state.setWinner(2);                                                         
+                state.setRoundOver(true);                                                       
+                clientRoundOver = true;                                                         
+                state.setPlayer1Chips(player.getChips());                                       
+                state.setPlayer2Chips(opponent.getChips());                                     
+                state.setBet(bet);                                                              
+                state.setPot(pot);                                                              
+                state.setJustUpdate(true);                                                      
+                try {                                                                           
+                    System.out.println("Winner: " + state.getWinner());                         
+                    System.out.println("Round over: " + state.getRoundOver());                  
+                    clientOutput.writeObject(state);                                            
+                    System.out.println("Wrote to server. (over)");                              
+                    clientOutput.reset();                                                       
+                } catch (IOException e) {                                                       
+                    e.printStackTrace();                                                        
+                }                                                                               
+                showWinnerAlert();
 	    }
 	}
     }
@@ -665,149 +528,27 @@ public class PokerClient extends PokerGame {
     /**
      * Method lays out GUI elements
      */
-
     public void layoutSubViews() {
         if (!gameOver) {
-
-	    Color pokerGreen = new Color(83, 157, 89);
-
-	    foldButton = new JButton("FOLD");
-	    foldButton.setEnabled(false);
-	    betButton = new JButton("BET");
-	    betButton.setEnabled(false);
-	    betTextField = new JTextField(4);
-	    checkButton = new JButton("CHECK");
-	    checkButton.setEnabled(false);
-	    callButton = new JButton("CALL");
-	    callButton.setEnabled(false);
-	    showdownButton = new JButton("SHOWDOWN");
-	    // addActionListeners();
-
-	    opponentPanel = new JPanel();
-	    opponentPanel.setLayout(new BorderLayout());
-	    oSubPane1 = new JPanel();
-	    oSubPane1.setLayout(new BoxLayout(oSubPane1, BoxLayout.Y_AXIS));
-	    oSubPane2 = new JPanel();
-	    oSubPane3 = new JPanel();
-	    oSubPane3.setLayout(new BorderLayout());
-
-	    opponentChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
-	    opponentWinsLabel = new JLabel();
-	    opponentWinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
-	    playerWinsLabel = new JLabel();
-	    playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
-	    oSubPane1.add(new JLabel("OPPONENT"));
-	    oSubPane1.add(opponentChipsLabel);
-	    oSubPane3.add(BorderLayout.NORTH, playerWinsLabel);
-	    oSubPane3.add(BorderLayout.SOUTH, opponentWinsLabel);
-	    opponentPanel.add(BorderLayout.WEST, oSubPane1);
-	    opponentPanel.add(BorderLayout.CENTER, oSubPane2);
-	    opponentPanel.add(BorderLayout.EAST, oSubPane3);
-
-	    optionArea = new JPanel();
-	    optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
-	    optionArea.add(betButton);
-	    optionArea.add(betTextField);
-	    optionArea.add(callButton);
-	    optionArea.add(checkButton);
-	    optionArea.add(foldButton);
-
-	    playerPanel = new JPanel();
-	    playerPanel.setLayout(new BorderLayout());
-	    pSubPane1 = new JPanel();
-	    pSubPane1.setLayout(new BoxLayout(pSubPane1, BoxLayout.Y_AXIS));
-	    pSubPane2 = new JPanel();
-	    pSubPane3 = new JPanel();
-
-	    playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
-	    pSubPane1.add(new JLabel("PLAYER"));
-	    pSubPane1.add(playerChipsLabel);
-	    pSubPane3.add(optionArea);
-	    playerPanel.add(BorderLayout.WEST, pSubPane1);
-	    playerPanel.add(BorderLayout.CENTER, pSubPane2);
-	    playerPanel.add(BorderLayout.EAST, pSubPane3);
-
-	    backCardLabel1 = new JLabel(backCardImage);
-	    backCardLabel2 = new JLabel(backCardImage);
-	    oSubPane2.add(backCardLabel1);
-	    oSubPane2.add(backCardLabel2);
-	    for (int i = 0; i < 2; i++) {
-		pSubPane2.add(new JLabel(getCardImage(player.getCardFromHand(i))));
-	    }
-
-	    centerPanel = new JPanel();
-	    centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-	    flopPane = new JPanel();
-	    flopPane.add(new JLabel("Flop:"));
-	    for (int i = 0; i < 3; i++) {
-		flopPane.add(new JLabel(getCardImage(flop.get(i))));
-	    }
-	    flopPane.setVisible(false);
-	    turnPane = new JPanel();
-	    turnPane.add(new JLabel("Turn:"));
-	    turnPane.add(new JLabel(getCardImage(turnCard)));
-	    turnPane.setVisible(false);
-	    riverPane = new JPanel();
-	    riverPane.add(new JLabel("River:"));
-	    riverPane.add(new JLabel(getCardImage(riverCard)));
-	    riverPane.setVisible(false);
-	    centerPanel.add(flopPane);
-	    centerPanel.add(turnPane);
-	    centerPanel.add(riverPane);
-
-	    messagePanel = new JPanel();
-	    messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
-	    messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
-	    potLabel = new JLabel();
-	    potLabel.setText(String.format("Pot: %d", pot));
-	    messagePanel.add(potLabel);
-	    messagePanel.add(Box.createRigidArea(new Dimension(10, 20)));
-
-	    gameMessage = new JLabel(message);
-	    messagePanel.add(Box.createRigidArea(new Dimension(10, 20)));
-	    messagePanel.add(gameMessage);
-	    playerPrompt = new JLabel(prompt);
-	    messagePanel.add(playerPrompt);
-	    messagePanel.add(Box.createRigidArea(new Dimension(10, 0)));
-			
-	    showdownButton.setVisible(false);
-	    messagePanel.add(showdownButton);
-	    messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+	    super.layoutSubViews();
 	    
-	    oSubPane1.setBackground(pokerGreen);
-	    oSubPane2.setBackground(pokerGreen);
-	    oSubPane3.setBackground(pokerGreen);
-	    pSubPane1.setBackground(pokerGreen);
-	    pSubPane2.setBackground(pokerGreen);
-	    pSubPane3.setBackground(pokerGreen);
-	    messagePanel.setBackground(pokerGreen);
-	    centerPanel.setBackground(pokerGreen);
-	    optionArea.setBackground(pokerGreen);
-	    flopPane.setBackground(pokerGreen);
-	    turnPane.setBackground(pokerGreen);
-	    riverPane.setBackground(pokerGreen);
+	    for( ActionListener call : callButton.getActionListeners() )
+		callButton.removeActionListener(call);
 
-	    mainFrame = new JFrame("Poker Game");
-	    mainFrame.setSize(800, 500);
-	    mainFrame.setResizable(false);
-	    mainFrame.setLocation(250, 250);
-	    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    mainFrame.getContentPane().add(BorderLayout.NORTH, opponentPanel);
-	    mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
-	    mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-	    mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
-mainFrame.setVisible(true);
+	    for( ActionListener showdown : callButton.getActionListeners() )
+		showdownButton.removeActionListener(showdown);
 
-//////////////////////////////////////////////////////
+	    callButton.addActionListener(new ClientButtonHandler());
+	    showdownButton.addActionListener(new ClientButtonHandler());
 	    
 	    chatButton = new JButton("CHAT");
             chatButton.setEnabled(true);
-            addActionListeners();
-
+            chatButton.addActionListener(new ClientButtonHandler());
+	    
 	    messagePanel.add(chatButton);
             messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
 	    
-	    mainFrame.validate();
+	    mainFrame.revalidate();
 	    mainFrame.repaint();
 	}
     }

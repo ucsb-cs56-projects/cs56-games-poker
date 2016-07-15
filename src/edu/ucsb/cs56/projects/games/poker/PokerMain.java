@@ -16,7 +16,7 @@ public class PokerMain {
 	PokerMain start = new PokerMain();
 	start.go();
     }
-
+    
     /**
      * Brings up option window to start game.
      */
