@@ -355,12 +355,11 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	int pair2Counter=0;
 	int pair1Int=100;
 	int pair2Int=100;
-	for(int i=0;i<this.size()-1;i++)
-	    {
-		if(sortedHand.get(i)==sortedHand.get(i+1)){
-		    if(sortedHand.get(i)==pair1Int || sortedHand.get(i)==pair2Int){
-			return false;
-		    }
+	for(int i=0;i<this.size()-1;i++) {
+	    if(sortedHand.get(i)==sortedHand.get(i+1)){
+		if(sortedHand.get(i)==pair1Int || sortedHand.get(i)==pair2Int){
+		    return false;
+		}
 		    else if(pair1Counter==1){
 			pair2Counter++;
 			pair2Int=sortedHand.get(i);
@@ -370,8 +369,8 @@ public class Hand extends ArrayList<Card> implements Serializable{
 			pair1Int=sortedHand.get(i);
 		    }
 		    
-		}
 	    }
+	}
 	return(pair1Counter==1 && pair2Counter>=1);
     }
     
@@ -382,11 +381,10 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	sortedHand=this.sortHand();
 	int pairCounter=0;
-	for(int i=0;i<this.size()-1;i++)
-	    {
-		if(sortedHand.get(i)==sortedHand.get(i+1))
-		    pairCounter++;
-	    }
+	for(int i=0;i<this.size()-1;i++) {
+	    if(sortedHand.get(i)==sortedHand.get(i+1))
+		pairCounter++;
+	}
 	if(pairCounter==1)
 	    return true;
 	else
@@ -399,47 +397,10 @@ public class Hand extends ArrayList<Card> implements Serializable{
        @param otherHand hand to be compared
     */
     public int compareHands(Hand otherHand){
-	int player1Value=0;
-	int player2Value=0;
-		
-	if(this.isStraightFlush())
-	    player1Value=8;
-	else if(this.isFourOfAKind())
-	    player1Value=7;
-	else if(this.isFullHouse())
-	    player1Value=6;
-	else if(this.isFlush())
-	    player1Value=5;
-	else if(this.isStraight())
-	    player1Value=4;
-	else if(this.isThreeOfAKind())
-	    player1Value=3;
-	else if(this.isTwoPair())
-	    player1Value=2;
-	else if(this.isOnePair())	
-	    player1Value=1;
-	else
-	    player1Value=0;
-	handValue=player1Value;
+	int player1Value=calculateValue(this);
+	int player2Value=calculateValue(otherHand);
 	
-	if(otherHand.isStraightFlush())
-	    player2Value=8;
-	else if(otherHand.isFourOfAKind())
-	    player2Value=7;
-	else if(otherHand.isFullHouse())
-	    player2Value=6;
-	else if(otherHand.isFlush())
-	    player2Value=5;
-	else if(otherHand.isStraight())
-	    player2Value=4;
-	else if(otherHand.isThreeOfAKind())
-	    player2Value=3;
-	else if(otherHand.isTwoPair())
-	    player2Value=2;
-	else if(otherHand.isOnePair())	
-	    player2Value=1;
-	else
-	    player2Value=0;
+	handValue=player1Value;
 	otherHand.setHandValue(player2Value);
 	
 	if(player1Value>player2Value)
@@ -467,154 +428,134 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	int handPairIndex=0;
 	int otherHandPairIndex=0;
 	
-	if(isOnePair())
-	    {
-		
-		for(int i=0;i<6;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1)){
-			    handValue=sortedHand.get(i);
-			    handPairIndex=i;
-			}
-			if(otherSortedHand.get(i)==otherSortedHand.get(i+1)){
-			    otherHandValue=otherSortedHand.get(i);
-			    otherHandPairIndex=i; 
-			}
-		    }
-		
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(handValue<otherHandValue)
-		    return 0;
-		else{
-		    sortedHand.remove(handPairIndex+1);
-		    sortedHand.remove(handPairIndex);
-		    otherSortedHand.remove(otherHandPairIndex+1);
-		    otherSortedHand.remove(otherHandPairIndex);
-		    int index=4; 
-		    while(sortedHand.get(index)==otherSortedHand.get(index)){
-			if(index==0)
-			    break;
-			else
-			    index--;
-		    }
+	if(isOnePair()) {
+	    for(int i=0;i<6;i++) {
+		if(sortedHand.get(i)==sortedHand.get(i+1)){
+		    handValue=sortedHand.get(i);
+		    handPairIndex=i;
+		}
+		if(otherSortedHand.get(i)==otherSortedHand.get(i+1)){
+		    otherHandValue=otherSortedHand.get(i);
+		    otherHandPairIndex=i; 
+		}
+	    }
+	    
+	    if(handValue>otherHandValue)
+		return 1;
+	    else if(handValue<otherHandValue)
+		return 0;
+	    else{
+		sortedHand.remove(handPairIndex+1);
+		sortedHand.remove(handPairIndex);
+		otherSortedHand.remove(otherHandPairIndex+1);
+		otherSortedHand.remove(otherHandPairIndex);
+		int index=4; 
+		while(sortedHand.get(index)==otherSortedHand.get(index)){
 		    if(index==0)
-			return 2;
-		    else{
-			int winner = (sortedHand.get(index) > otherSortedHand.get(index)) ? 1 : 0;
-			return winner;
-		    }
+			break;
+		    else
+			index--;
 		}
-		
+		if(index==0)
+		    return 2;
+		else{
+		    int winner = (sortedHand.get(index) > otherSortedHand.get(index)) ? 1 : 0;
+		    return winner;
+		}
 	    }
+	}
 	
-	else if(isTwoPair())
-	    {
-		Integer handCard=0; Integer otherHandCard=0;
-		int index=1; int index2=1;
-		for(int i=0;i<6;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(index))
-			    {
-				if(sortedHand.get(i)>handValue){
-				    handValue=sortedHand.get(i);
-				    handCard=handValue;
-				}
-			    }
-			index++;
+	else if(isTwoPair()) {
+	    Integer handCard=0; Integer otherHandCard=0;
+	    int index=1; int index2=1;
+	    for(int i=0;i<6;i++) {
+		if(sortedHand.get(i)==sortedHand.get(index)) {
+		    if(sortedHand.get(i)>handValue){
+			handValue=sortedHand.get(i);
+			handCard=handValue;
 		    }
-		remove(handCard);
-		
-		for(int i=0;i<6;i++){
-		    if(otherSortedHand.get(i)==otherSortedHand.get(index2))
-			{
-			    if(otherSortedHand.get(i)>otherHandValue){
-				otherHandValue=otherSortedHand.get(i);
-				otherHandCard=otherHandValue;
-			    }
-			}
-		    index2++;
 		}
-		remove(otherHandCard);
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(handValue<otherHandValue) 
-		    return 0;
-		else 
-		    return 2;
-		
+		index++;
 	    }
+	    remove(handCard);
+	    
+	    for(int i=0;i<6;i++){
+		if(otherSortedHand.get(i)==otherSortedHand.get(index2)) {
+		    if(otherSortedHand.get(i)>otherHandValue){
+			otherHandValue=otherSortedHand.get(i);
+			otherHandCard=otherHandValue;
+		    }
+		}
+		index2++;
+	    }
+	    remove(otherHandCard);
+	    if(handValue>otherHandValue)
+		return 1;
+	    else if(handValue<otherHandValue) 
+		return 0;
+	    else 
+		return 2;
+	}
 	
-	else if(isStraight() || isStraightFlush())
-	    {
-		int index=0;
-		int index2=0;
-		for(int i=0;i<4;i++){
-		    if(sortedHand.get(i)==(sortedHand.get(i+1)-1) &&
-		       sortedHand.get(i)==(sortedHand.get(i+3)-3))
-			index=i+3;
+	else if(isStraight() || isStraightFlush()) {
+	    int index=0;
+	    int index2=0;
+	    for(int i=0;i<4;i++){
+		if(sortedHand.get(i)==(sortedHand.get(i+1)-1) &&
+		   sortedHand.get(i)==(sortedHand.get(i+3)-3))
+		    index=i+3;
+	    }
+	    for(int i=0;i<4;i++){
+		if(otherSortedHand.get(i)==(otherSortedHand.get(i+1)-1) &&
+		   otherSortedHand.get(i)==(otherSortedHand.get(i+3)-3))
+		    index2=i+3;
+	    }
+	    if(sortedHand.get(index)>otherSortedHand.get(index2))
+		return 1;
+	    else if(sortedHand.get(index)<otherSortedHand.get(index2))
+		return 0;
+	    else
+		return 2;
+	}
+	else if(isFullHouse() || isThreeOfAKind()) {
+	    for(int i=0;i<5;i++) {
+		if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+2)) {
+		    if(sortedHand.get(i)>handValue)
+			handValue=sortedHand.get(i);
+		}	
+		if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+2)) {
+		    if(otherSortedHand.get(i)>otherHandValue)
+			otherHandValue=otherSortedHand.get(i);	
 		}
-		for(int i=0;i<4;i++){
-		    if(otherSortedHand.get(i)==(otherSortedHand.get(i+1)-1) &&
-		       otherSortedHand.get(i)==(otherSortedHand.get(i+3)-3))
-			index2=i+3;
+	    }
+	    if(handValue>otherHandValue)
+		return 1;
+	    else if(otherHandValue>handValue)
+		return 0;
+	    else
+		return 2;
+	}
+	
+	else if(isFourOfAKind()) {
+	    for(int i=0;i<4;i++) {
+		if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+3)) {
+		    if(sortedHand.get(i)>handValue)
+			handValue=sortedHand.get(i);
+		}	
+		if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+3)) {
+		    if(otherSortedHand.get(i)>otherHandValue)
+			otherHandValue=otherSortedHand.get(i);	
 		}
-		if(sortedHand.get(index)>otherSortedHand.get(index2))
-		    return 1;
-		else if(sortedHand.get(index)<otherSortedHand.get(index2))
-		    return 0;
-		else
-		    return 2;
 	    }
-	else if(isFullHouse() || isThreeOfAKind())
-	    {
-		for(int i=0;i<5;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+2))
-			    {
-				if(sortedHand.get(i)>handValue)
-				    handValue=sortedHand.get(i);
-			    }	
-			if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+2))
-			    {
-				if(otherSortedHand.get(i)>otherHandValue)
-				    otherHandValue=otherSortedHand.get(i);	
-			    }
-		    }
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(otherHandValue>handValue)
-		    return 0;
-		else
-		    return 2;
-	    }
-		
-	else if(isFourOfAKind())
-	    {
-		for(int i=0;i<4;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+3))
-			    {
-				if(sortedHand.get(i)>handValue)
-				    handValue=sortedHand.get(i);
-			    }	
-			if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+3))
-			    {
-				if(otherSortedHand.get(i)>otherHandValue)
-				    otherHandValue=otherSortedHand.get(i);	
-			    }
-		    }
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(handValue<otherHandValue)
-		    return 0;
-		else
-		    return 2;
-	    }
+	    if(handValue>otherHandValue)
+		return 1;
+	    else if(handValue<otherHandValue)
+		return 0;
+	    else
+		return 2;
+	}
 	else
-	    {
-		return sameHandMethod(otherHand);
-	    }
+	    return sameHandMethod(otherHand);
     }
     
     /**
@@ -623,10 +564,9 @@ public class Hand extends ArrayList<Card> implements Serializable{
        higher card is found.
        @param otherHand hand to be compared
     */
-    public int sameHandMethod(Hand otherHand){
-	
+    public int sameHandMethod(Hand otherHand){	
 	if(this.isEmpty())
-	    return 0;
+	    return 2;
 	else if(this.getHighCardValue()>otherHand.getHighCardValue())
 	    return 1;
 	else if(this.getHighCardValue()<otherHand.getHighCardValue())
@@ -638,27 +578,24 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
     }
 
-    public int calculateValue() {
-	int value = 0;
-	if(this.isStraightFlush())
-	    value=8;
-	else if(this.isFourOfAKind())
-	    value=7;
-	else if(this.isFullHouse())
-	    value=6;
-	else if(this.isFlush())
-	    value=5;
-	else if(this.isStraight())
-	    value=4;
-	else if(this.isThreeOfAKind())
-	    value=3;
-	else if(this.isTwoPair())
-	    value=2;
-	else if(this.isOnePair())	
-	    value=1;
+    public int calculateValue(Hand hand) {
+	if(hand.isStraightFlush())
+	    return 8;
+	else if(hand.isFourOfAKind())
+	    return 7;
+	else if(hand.isFullHouse())
+	    return 6;
+	else if(hand.isFlush())
+	    return 5;
+	else if(hand.isStraight())
+	    return 4;
+	else if(hand.isThreeOfAKind())
+	    return 3;
+	else if(hand.isTwoPair())
+	    return 2;
+	else if(hand.isOnePair())	
+	    return 1;
 	else
-	    value=0;
-	return value;
-	
+	    return 0;
     }   
 }
