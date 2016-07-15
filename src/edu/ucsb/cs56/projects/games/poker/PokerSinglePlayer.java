@@ -122,7 +122,7 @@ final class PokerSinglePlayer extends PokerGame {
 
 	boolean shouldBet = false;
 	boolean shouldCall = true;
-	int dValue = opponentHand.calculateValue();
+	int dValue = opponentHand.calculateValue(opponentHand);
 	int betAmount = 5 * dValue;
 	if (step == Step.BLIND) {
 	    if (dValue >= 1) {
