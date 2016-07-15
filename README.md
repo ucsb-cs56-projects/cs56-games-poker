@@ -33,18 +33,15 @@ Game Options :
 
 * Connect to Poker Chat Server : Connect to an open poker chat server. Connecting to the chat server works the exact same way as the above 'Poker Server'.
  
-
-
 Screenshots
 ===========
-![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/singleplayer.png)
-
 ![Main Menu](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/menu.png)
 
-![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/Chat.png)
+![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/singleplayer.png)
 
 ![Multiplayer](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/multiplayer.png)
 
+![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/Chat.png)
 
 Betting
 =======
