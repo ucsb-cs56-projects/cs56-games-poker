@@ -15,8 +15,8 @@ public class PokerMain {
     public static void main(String[] args) {
 	PokerMain start = new PokerMain();
 	start.go();
-    }
-    
+    }    
+
     /**
      * Brings up option window to start game.
      */
