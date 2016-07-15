@@ -27,7 +27,14 @@ public class PokerServer {
 	try {
 	    serverSock = new ServerSocket(15000);
 	    System.out.println("Poker server is running.\n Waiting for players to connect.");
-			
+	    
+	    // Print out your IP address; needed to connect with you 
+	    URL whatismyip = new URL("http://checkip.amazonaws.com");
+	    BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+	    String ip = in.readLine();
+	    System.out.println("Your IP Address is: " + ip);
+	    //
+	    
 	    state = new PokerGameState();
 	    
 	    player1Sock = serverSock.accept();
