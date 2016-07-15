@@ -143,7 +143,6 @@ public class PokerGame implements PlayerDelegate {
      */
 
     public void collectPot() {
-
 	if (winnerType == Winner.PLAYER) {
 	    // Player won
 	    System.out.println("Player");
@@ -176,9 +175,20 @@ public class PokerGame implements PlayerDelegate {
     }
 
     /**
+     * Adds action listeners to all buttons in the main GUI.
+     */
+    public void addActionListenerType() {
+	ButtonHandler b = new ButtonHandler();
+	foldButton.addActionListener(b);
+	betButton.addActionListener(b);
+	checkButton.addActionListener(b);
+	callButton.addActionListener(b);
+	showdownButton.addActionListener(b);
+    }
+
+    /**
      * Method lays out GUI elements
      */
-
     public void layoutSubViews() {
 	if (!gameOver) {
 	    Color pokerGreen = new Color(83, 157, 89);
@@ -193,8 +203,9 @@ public class PokerGame implements PlayerDelegate {
 	    callButton = new JButton("CALL");
 	    callButton.setEnabled(false);
 	    showdownButton = new JButton("SHOWDOWN");
-	    addActionListeners();
 
+	    addActionListenerType();
+	    
 	    opponentPanel = new JPanel();
 	    opponentPanel.setLayout(new BorderLayout());
 	    oSubPane1 = new JPanel();
@@ -313,21 +324,8 @@ public class PokerGame implements PlayerDelegate {
     }
 	
     /**
-     * Adds action listeners to all buttons in the main GUI.
-     */
-    public void addActionListeners() {
-	ButtonHandler b = new ButtonHandler();
-	foldButton.addActionListener(b);
-	betButton.addActionListener(b);
-	checkButton.addActionListener(b);
-	callButton.addActionListener(b);
-	showdownButton.addActionListener(b);
-    }
-    
-    /**
      * Method to determine the winner of the game
      */
-
     public void determineWinner() {
 	if (player.getHand().compareHands(opponent.getHand()) == 1) {
 	    player.win();
@@ -443,6 +441,14 @@ public class PokerGame implements PlayerDelegate {
 	    controlButtons();
 	}
     }
+
+    /**
+     * This state is for passing the turn                                                    
+     * Overriden in PokerClient
+     */
+    private void checkPassTurnUpdate() {
+	changeTurn();
+    }
 	
     /**
      * Inner class that handles all buttons in the GUI.
@@ -455,12 +461,10 @@ public class PokerGame implements PlayerDelegate {
 		String inputText = betTextField.getText();
 		if (!inputText.equals("")) {
 		    bet = Integer.parseInt(inputText);
-
-		    if (bet <= 0) {
+		    if (bet<=0) {
 			prompt = "Enter a valid bet!";
 			updateFrame();
 		    }
-
 		    else if ((player.getChips()-bet>=0) && (opponent.getChips()-bet>=0)) {
 			betTextField.setText("");
 			pot += bet;
@@ -473,7 +477,7 @@ public class PokerGame implements PlayerDelegate {
 			callButton.setEnabled(false);
 			foldButton.setEnabled(false);
 			responding = true;
-			changeTurn();
+			checkPassTurnUpdate();
 			updateFrame();
 		    }
 		    else {
@@ -487,6 +491,7 @@ public class PokerGame implements PlayerDelegate {
 		}
 	    }
 	    else if (src == checkButton) {
+		bet = 0;
 		message = "Opponent waiting to deal.";
 		prompt = "Player checks.";
 		betButton.setEnabled(false);
@@ -494,16 +499,19 @@ public class PokerGame implements PlayerDelegate {
 		checkButton.setEnabled(false);
 		callButton.setEnabled(false);
 		foldButton.setEnabled(false);
-		changeTurn();
+		checkPassTurnUpdate();
 		updateFrame();
-	    } else if (src == foldButton) {
+	    }
+	    else if (src == foldButton) {
 		message = "Opponent waiting for turn.";
 		prompt = "You fold.";
 		player.foldHand();
-	    } else if (src == callButton) {
+	    }
+	    else if (src == callButton) {
 		pot += bet;
 		player.setChips(player.getChips() - player.bet(bet));
-		prompt = "You call.";
+		message = "You call.";
+                prompt = "Next turn: ";
 		responding = false;
 		callButton.setEnabled(false);
 		foldButton.setEnabled(false);
@@ -523,7 +531,6 @@ public class PokerGame implements PlayerDelegate {
     /**
      * Method shows winner and exits game.
      */
-
     public void showWinnerAlert() {
 	/*
 	if (!gameOver) {

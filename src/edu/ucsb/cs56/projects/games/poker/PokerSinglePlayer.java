@@ -9,6 +9,7 @@ final class PokerSinglePlayer extends PokerGame {
 
     Timer timer;
     int timer_value = 1500; // milliseconds
+    boolean yourTurnToBet = true;
 
     /**
      * Default no-arg constructor;
@@ -35,7 +36,9 @@ final class PokerSinglePlayer extends PokerGame {
 	layoutSubViews();
 	if(!gameOver){
 	    step = Step.BLIND;
+	    
 	    turn = Turn.OPPONENT;
+	    
 	    timer = new Timer(timer_value, new ActionListener() {
 		    public void actionPerformed(ActionEvent e){
 			opponentAI();
@@ -86,6 +89,8 @@ final class PokerSinglePlayer extends PokerGame {
 	    }
 	}
     }
+
+
 
     /**
      *  Simple AI for the opponent in single player.
@@ -182,8 +187,7 @@ final class PokerSinglePlayer extends PokerGame {
 
     /**
      * Method overridden to allow for a new single player game to start.
-     */
-    
+     */    
     public void showWinnerAlert() {
     	if(!gameOver){
     	    String message = "";
@@ -208,8 +212,8 @@ final class PokerSinglePlayer extends PokerGame {
     						       JOptionPane.YES_NO_OPTION);
     	    if (option == JOptionPane.YES_OPTION) {
     		// Restart
-    		mainFrame.dispose();
-    		
+		mainFrame.dispose();
+		
 		// First check if players have enough chips
 		if(opponent.getChips() < 5) {
 		    gameOver("GAME OVER!\n\n opponent has run out of chips!");
@@ -270,6 +274,19 @@ final class PokerSinglePlayer extends PokerGame {
 	gameOverFrame.getContentPane().add(BorderLayout.SOUTH, gameOverButtonPanel);
 	gameOverFrame.pack();
 	gameOverFrame.setVisible(true);
+	mainFrame.dispose();
     }
     
+    /**                                                                                                  
+     * Adds action listeners to all buttons in the main GUI.                                             
+     */
+    public void addActionListeners() {
+        ButtonHandler b = new ButtonHandler();
+        foldButton.addActionListener(b);
+        betButton.addActionListener(b);
+        checkButton.addActionListener(b);
+        callButton.addActionListener(b);
+        showdownButton.addActionListener(b);
+    }
+
 }
