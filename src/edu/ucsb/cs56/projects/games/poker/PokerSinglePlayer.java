@@ -225,6 +225,7 @@ final class PokerSinglePlayer extends PokerGame {
 	    }
 	    else if (option == JOptionPane.NO_OPTION) {
 		gameOver("");
+		mainFrame.dispose();
 	    }
 	    else {
     		// Quit

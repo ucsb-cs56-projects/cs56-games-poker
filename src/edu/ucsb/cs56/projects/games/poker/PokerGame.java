@@ -455,7 +455,13 @@ public class PokerGame implements PlayerDelegate {
 		String inputText = betTextField.getText();
 		if (!inputText.equals("")) {
 		    bet = Integer.parseInt(inputText);
-		    if ((player.getChips()-bet>=0) && (opponent.getChips()-bet>=0) && (bet>0)) {
+
+		    if (bet <= 0) {
+			prompt = "Enter a valid bet!";
+			updateFrame();
+		    }
+
+		    else if ((player.getChips()-bet>=0) && (opponent.getChips()-bet>=0)) {
 			betTextField.setText("");
 			pot += bet;
 			player.setChips(player.getChips() - player.bet(bet));
