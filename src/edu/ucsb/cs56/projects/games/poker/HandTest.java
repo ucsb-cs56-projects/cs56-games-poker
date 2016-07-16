@@ -193,7 +193,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),1);
     }
 	
     /**
@@ -219,7 +219,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 	
     /**
@@ -245,7 +245,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),1);
     }
 	
     /**
@@ -271,7 +271,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 		
     /**
@@ -297,7 +297,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 	
     /**
@@ -323,7 +323,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 	
     /**
@@ -349,7 +349,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),1);
     }
 
     /**
@@ -375,7 +375,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 	
     /**
@@ -401,7 +401,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 	
     /**
@@ -427,7 +427,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),1);
     }
 	
     /**
@@ -453,7 +453,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),1);
     }
 	
     /**
@@ -479,7 +479,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 
     /**
@@ -505,7 +505,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),0);
+	assertEquals(hand.compareHands(otherHand),0);
     }
 	
     /**
@@ -531,7 +531,7 @@ public class HandTest
 	Card card77=new Card(2,"H");
 	Hand hand=new Hand(card1,card2,card3,card4,card5,card6,card7);
 	Hand otherHand=new Hand(card11,card22,card33,card44,card55,card66,card77);
-	assertEquals(hand.sameHand(otherHand),1);
+	assertEquals(hand.compareHands(otherHand),1);
     }
 
 }

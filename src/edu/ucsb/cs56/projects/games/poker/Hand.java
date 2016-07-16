@@ -392,9 +392,10 @@ public class Hand extends ArrayList<Card> implements Serializable{
     }
     
     /**
-       Returns 1 if "this" hand is better than "otherHand" or returns 0
-       if the opposite.
-       @param otherHand hand to be compared
+     * Returns 1 if "this" hand is better than "otherHand"
+     * Returns 0 if the opposite.
+     * Returns 2 if exact tie
+     * @param otherHand hand to be compared
     */
     public int compareHands(Hand otherHand){
 	int player1Value=calculateValue(this);
@@ -405,157 +406,83 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	
 	if(player1Value>player2Value)
 	    return 1;
-	else if(player2Value>player1Value)
+	else if(player1Value<player2Value)
 	    return 0;
-	else
-	    return this.sameHand(otherHand);
+	else {
+	    int yourHandValue = sameHandUpdated(this, 1);
+	    int otherHandValue = sameHandUpdated(otherHand, 1);
+	    if(yourHandValue>otherHandValue)
+		return 1;
+	    else if (yourHandValue<otherHandValue)
+		return 0;
+	    else {
+		Card yourmaxCard = this.get(0);
+		Card othermaxCard = otherHand.get(0);
+		if (yourmaxCard.getValue()<this.get(1).getValue())
+		    yourmaxCard = this.get(1);
+		if (othermaxCard.getValue()<otherHand.get(1).getValue())
+		    othermaxCard = otherHand.get(1);
+
+		if (yourmaxCard.getValue()>othermaxCard.getValue())
+		    return 1;
+		else if (yourmaxCard.getValue()<othermaxCard.getValue())
+		    return 0;
+		
+		else {
+		    yourHandValue = sameHandUpdated(this, 2);
+		    otherHandValue = sameHandUpdated(otherHand, 2);
+		    if(yourHandValue>otherHandValue)
+			return 1;
+		    else if (yourHandValue<otherHandValue)
+			return 0;
+		    else {
+			Card yourminCard = this.get(0);
+			Card otherminCard = otherHand.get(0);
+			if (yourminCard.getValue()>this.get(1).getValue())
+			    yourminCard = this.get(1);
+			if (otherminCard.getValue()>otherHand.get(1).getValue())
+			    otherminCard = otherHand.get(1);
+			
+			if (yourminCard.getValue()>otherminCard.getValue())
+			    return 1;
+			else if (yourminCard.getValue()<otherminCard.getValue())
+			    return 0;
+			else
+			    return 2;// Only arrives here if cards are exactly the same		
+		    }
+		}
+	    }		
+	}
     }
-    
+	
     /**
-       This method is used if both hands are of the same type(two pairs,
-       full house, etc.) Returns 1 if "this" hand is better or 0 if otherwise.
-       @param otherHand hand to be compared
-    */	
-    public int sameHand(Hand otherHand){
-	
-	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
-	sortedHand=this.sortHand();
-	ArrayList<Integer> otherSortedHand=new ArrayList<Integer>();
-	otherSortedHand=otherHand.sortHand();
-	
-	int handValue=0;
-	int otherHandValue=0;
-	int handPairIndex=0;
-	int otherHandPairIndex=0;
-	
-	if(isOnePair()) {
-	    for(int i=0;i<6;i++) {
-		if(sortedHand.get(i)==sortedHand.get(i+1)){
-		    handValue=sortedHand.get(i);
-		    handPairIndex=i;
-		}
-		if(otherSortedHand.get(i)==otherSortedHand.get(i+1)){
-		    otherHandValue=otherSortedHand.get(i);
-		    otherHandPairIndex=i; 
-		}
-	    }
-	    
-	    if(handValue>otherHandValue)
-		return 1;
-	    else if(handValue<otherHandValue)
-		return 0;
-	    else{
-		sortedHand.remove(handPairIndex+1);
-		sortedHand.remove(handPairIndex);
-		otherSortedHand.remove(otherHandPairIndex+1);
-		otherSortedHand.remove(otherHandPairIndex);
-		int index=4; 
-		while(sortedHand.get(index)==otherSortedHand.get(index)){
-		    if(index==0)
-			break;
-		    else
-			index--;
-		}
-		if(index==0)
-		    return 2;
-		else{
-		    int winner = (sortedHand.get(index) > otherSortedHand.get(index)) ? 1 : 0;
-		    return winner;
-		}
-	    }
+     * This method is used if both hands are the same type
+     * Note that the first two Cards in Hand are the player's cards
+     * while the last five Cards in Hand are table's cards
+     * @param Hand: hand is either this or the otherhand
+     * @param recursion: Either 1 if called 1st, 2 if called 2nd
+     * func won't work as intended if given a different number
+     */
+    private int sameHandUpdated(Hand hand, int recursion) {
+	Hand hand_tmp = new Hand();
+	Card yourCard = hand.get(0);
+	if (recursion==1) {
+	    if (hand.get(1).getValue()>yourCard.getValue())
+	     	yourCard = hand.get(1);
+	    hand_tmp.add(yourCard);
+	    for (int i=2; i<hand.size(); i++)
+		hand_tmp.add(hand.get(i));
+	    return calculateValue(hand_tmp);
 	}
-	
-	else if(isTwoPair()) {
-	    Integer handCard=0; Integer otherHandCard=0;
-	    int index=1; int index2=1;
-	    for(int i=0;i<6;i++) {
-		if(sortedHand.get(i)==sortedHand.get(index)) {
-		    if(sortedHand.get(i)>handValue){
-			handValue=sortedHand.get(i);
-			handCard=handValue;
-		    }
-		}
-		index++;
-	    }
-	    remove(handCard);
-	    
-	    for(int i=0;i<6;i++){
-		if(otherSortedHand.get(i)==otherSortedHand.get(index2)) {
-		    if(otherSortedHand.get(i)>otherHandValue){
-			otherHandValue=otherSortedHand.get(i);
-			otherHandCard=otherHandValue;
-		    }
-		}
-		index2++;
-	    }
-	    remove(otherHandCard);
-	    if(handValue>otherHandValue)
-		return 1;
-	    else if(handValue<otherHandValue) 
-		return 0;
-	    else 
-		return 2;
+	if (recursion==2) {
+	    if (hand.get(1).getValue()<yourCard.getValue())
+		yourCard = hand.get(1);
+	    hand_tmp.add(yourCard);
+	    for(int i=2; i<hand.size(); i++)
+		hand_tmp.add(hand.get(i));
+	    return calculateValue(hand_tmp);
 	}
-	
-	else if(isStraight() || isStraightFlush()) {
-	    int index=0;
-	    int index2=0;
-	    for(int i=0;i<4;i++){
-		if(sortedHand.get(i)==(sortedHand.get(i+1)-1) &&
-		   sortedHand.get(i)==(sortedHand.get(i+3)-3))
-		    index=i+3;
-	    }
-	    for(int i=0;i<4;i++){
-		if(otherSortedHand.get(i)==(otherSortedHand.get(i+1)-1) &&
-		   otherSortedHand.get(i)==(otherSortedHand.get(i+3)-3))
-		    index2=i+3;
-	    }
-	    if(sortedHand.get(index)>otherSortedHand.get(index2))
-		return 1;
-	    else if(sortedHand.get(index)<otherSortedHand.get(index2))
-		return 0;
-	    else
-		return 2;
-	}
-	else if(isFullHouse() || isThreeOfAKind()) {
-	    for(int i=0;i<5;i++) {
-		if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+2)) {
-		    if(sortedHand.get(i)>handValue)
-			handValue=sortedHand.get(i);
-		}	
-		if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+2)) {
-		    if(otherSortedHand.get(i)>otherHandValue)
-			otherHandValue=otherSortedHand.get(i);	
-		}
-	    }
-	    if(handValue>otherHandValue)
-		return 1;
-	    else if(otherHandValue>handValue)
-		return 0;
-	    else
-		return 2;
-	}
-	
-	else if(isFourOfAKind()) {
-	    for(int i=0;i<4;i++) {
-		if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+3)) {
-		    if(sortedHand.get(i)>handValue)
-			handValue=sortedHand.get(i);
-		}	
-		if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+3)) {
-		    if(otherSortedHand.get(i)>otherHandValue)
-			otherHandValue=otherSortedHand.get(i);	
-		}
-	    }
-	    if(handValue>otherHandValue)
-		return 1;
-	    else if(handValue<otherHandValue)
-		return 0;
-	    else
-		return 2;
-	}
-	else
-	    return sameHandMethod(otherHand);
+	return -1; // Should only pass in 1 or 2 in parameter
     }
     
     /**
