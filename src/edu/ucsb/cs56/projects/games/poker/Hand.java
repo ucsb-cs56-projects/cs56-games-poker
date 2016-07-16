@@ -5,7 +5,7 @@ import java.util.*;
 
 
 /**
-	Class that represents a hand of 5 Cards.
+   Class that represents a hand of 5 Cards.
 */
 public class Hand extends ArrayList<Card> implements Serializable{
 
@@ -32,7 +32,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	super(7);
 	this.add(a); this.add(b); this.add(c); this.add(d); this.add(e);
 	this.add(f); this.add(g);
-	}
+    }
     
     /**
        Constructor that sets a hand given 5 Cards as arguments.
@@ -42,10 +42,10 @@ public class Hand extends ArrayList<Card> implements Serializable{
        @param d Card d
        @param e Card e
     */	
-	public Hand(Card a, Card b, Card c, Card d, Card e){
-	    super(5);
-	    this.add(a); this.add(b); this.add(c); this.add(d); this.add(e);
-	}
+    public Hand(Card a, Card b, Card c, Card d, Card e){
+	super(5);
+	this.add(a); this.add(b); this.add(c); this.add(d); this.add(e);
+    }
     
     /**
        Constructor that sets a 5 Card hand based on the deck passed in.
@@ -55,16 +55,16 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	super(7);
 	for(Card c:deck.dealCards())
 	    this.add(c);
-		handValue=100;
+	handValue=100;
     }
     /**
-	Sets the Hand value.
+       Sets the Hand value.
     */	
     public void setHandValue(int handValue){
 	this.handValue=handValue;
     }
     /**
-   Gets the Hand value.
+       Gets the Hand value.
     */
     public int getHandValue(){
 	return handValue;
@@ -84,8 +84,8 @@ public class Hand extends ArrayList<Card> implements Serializable{
        @param deck deck of Cards
     */	
     public void draw(Deck deck){
-		for(Card c:deck.dealCards())
-		    this.add(c);
+	for(Card c:deck.dealCards())
+	    this.add(c);
     }
     
     /**
@@ -100,18 +100,18 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	return max; 
     }
     
-/**
-   Returns the int value of the highest Card.
-*/
-	public int getHighCardValue(){
-	    int max=0;
-	    for(Card c:this)
-		{
-		    if(c.getValue()>max)
-			max=c.getValue();
-		}
-	    return max;
-	}
+    /**
+       Returns the int value of the highest Card.
+    */
+    public int getHighCardValue(){
+	int max=0;
+	for(Card c:this)
+	    {
+		if(c.getValue()>max)
+		    max=c.getValue();
+	    }
+	return max;
+    }
     
     /**
        Returns an ArrayList of Card int values in a numerical order.
@@ -119,9 +119,9 @@ public class Hand extends ArrayList<Card> implements Serializable{
     public ArrayList<Integer> sortHand(){
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	for(int i=0;i<this.size();i++)
-		{
-		    sortedHand.add(this.get(i).getValue());
-		}
+	    {
+		sortedHand.add(this.get(i).getValue());
+	    }
 	Collections.sort(sortedHand);
 	return sortedHand;
     }
@@ -129,147 +129,147 @@ public class Hand extends ArrayList<Card> implements Serializable{
     /**
        Returns boolean for if the hand is a straight flush
     */	
-	public boolean isStraightFlush(){
-	    int straightFlushCounter=0;
-	    int spadeCounter=0;
-	    int cloverCounter=0;
-	    int heartCounter=0;
-	    int diamondCounter=0;
-	    ArrayList<Integer> spades=new ArrayList<Integer>();
-	    ArrayList<Integer> clovers=new ArrayList<Integer>();
-	    ArrayList<Integer> diamonds=new ArrayList<Integer>();
-	    ArrayList<Integer> hearts=new ArrayList<Integer>();
-	    for(Card c: this){
-		if(c.getSuit()=="S"){
-		    spadeCounter++;
-		    spades.add(c.getValue());
-		}
-		else if(c.getSuit()=="C"){
-		    cloverCounter++;
-					clovers.add(c.getValue());
-		}
-		else if(c.getSuit()=="D"){
-		    diamondCounter++;
-		    diamonds.add(c.getValue());
-		}
-		else if(c.getSuit()=="H"){
-		    heartCounter++;
-		    hearts.add(c.getValue());
-		}
+    public boolean isStraightFlush(){
+	int straightFlushCounter=0;
+	int spadeCounter=0;
+	int cloverCounter=0;
+	int heartCounter=0;
+	int diamondCounter=0;
+	ArrayList<Integer> spades=new ArrayList<Integer>();
+	ArrayList<Integer> clovers=new ArrayList<Integer>();
+	ArrayList<Integer> diamonds=new ArrayList<Integer>();
+	ArrayList<Integer> hearts=new ArrayList<Integer>();
+	for(Card c: this){
+	    if(c.getSuit()=="S"){
+		spadeCounter++;
+		spades.add(c.getValue());
 	    }
-	    int i=0;
-	    if(spadeCounter>=5){
-		Collections.sort(spades);
-		if(spades.get(i)==(spades.get(i+1)-1) && 
-		   spades.get(i)==(spades.get(i+2)-2) &&
-		   spades.get(i)==(spades.get(i+3)-3)	&&
-		   spades.get(i)==(spades.get(i+4)-4))
-		    straightFlushCounter=4;
+	    else if(c.getSuit()=="C"){
+		cloverCounter++;
+		clovers.add(c.getValue());
 	    }
-	    else if(cloverCounter>=5){
-		Collections.sort(clovers);
-		if(clovers.get(i)==(clovers.get(i+1)-1) && 
-		   clovers.get(i)==(clovers.get(i+2)-2) &&
-		   clovers.get(i)==(clovers.get(i+3)-3)	&&
-		   clovers.get(i)==(clovers.get(i+4)-4))
-		    straightFlushCounter=4;
+	    else if(c.getSuit()=="D"){
+		diamondCounter++;
+		diamonds.add(c.getValue());
 	    }
-	    else if(heartCounter>=5){
-		Collections.sort(hearts);
-		if(spades.get(i)==(hearts.get(i+1)-1) && 
-		   hearts.get(i)==(hearts.get(i+2)-2) &&
-		   hearts.get(i)==(hearts.get(i+3)-3)	&&
-		   hearts.get(i)==(hearts.get(i+4)-4))
-		    straightFlushCounter=4;
+	    else if(c.getSuit()=="H"){
+		heartCounter++;
+		hearts.add(c.getValue());
 	    }
-	    else if(diamondCounter>=5){
-		Collections.sort(diamonds);
-		if(diamonds.get(i)==(diamonds.get(i+1)-1) && 
-		   diamonds.get(i)==(diamonds.get(i+2)-2) &&
-				diamonds.get(i)==(diamonds.get(i+3)-3)	&&
-		   diamonds.get(i)==(diamonds.get(i+4)-4))
-		    straightFlushCounter=4;
-	    }
-	    else
-				return false;
-	    
-	    if(straightFlushCounter==4)
-		return true;
-		else
-		    return false;
 	}
+	int i=0;
+	if(spadeCounter>=5){
+	    Collections.sort(spades);
+	    if(spades.get(i)==(spades.get(i+1)-1) && 
+	       spades.get(i)==(spades.get(i+2)-2) &&
+	       spades.get(i)==(spades.get(i+3)-3)	&&
+	       spades.get(i)==(spades.get(i+4)-4))
+		straightFlushCounter=4;
+	}
+	else if(cloverCounter>=5){
+	    Collections.sort(clovers);
+	    if(clovers.get(i)==(clovers.get(i+1)-1) && 
+	       clovers.get(i)==(clovers.get(i+2)-2) &&
+	       clovers.get(i)==(clovers.get(i+3)-3)	&&
+	       clovers.get(i)==(clovers.get(i+4)-4))
+		straightFlushCounter=4;
+	}
+	else if(heartCounter>=5){
+	    Collections.sort(hearts);
+	    if(spades.get(i)==(hearts.get(i+1)-1) && 
+	       hearts.get(i)==(hearts.get(i+2)-2) &&
+	       hearts.get(i)==(hearts.get(i+3)-3)	&&
+	       hearts.get(i)==(hearts.get(i+4)-4))
+		straightFlushCounter=4;
+	}
+	else if(diamondCounter>=5){
+	    Collections.sort(diamonds);
+	    if(diamonds.get(i)==(diamonds.get(i+1)-1) && 
+	       diamonds.get(i)==(diamonds.get(i+2)-2) &&
+	       diamonds.get(i)==(diamonds.get(i+3)-3)	&&
+	       diamonds.get(i)==(diamonds.get(i+4)-4))
+		straightFlushCounter=4;
+	}
+	else
+	    return false;
+	    
+	if(straightFlushCounter==4)
+	    return true;
+	else
+	    return false;
+    }
     
     /**
        Returns boolean for if the hand has a four of a kind.
     */		
-	public boolean isFourOfAKind(){
-	    ArrayList<Integer> sortedHand=this.sortHand();
-	    int quadCounter=0;
-	    for(int i=0;i<this.size()-3;i++)
-		{
-		    if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i+1)
-		       ==sortedHand.get(i+2) && sortedHand.get(i+2)==sortedHand.get(i+3))
-			{
-			    quadCounter=3;
-			}
-		}
-	    int i=0;
-	    if(quadCounter==3)
-		return true;
-	    else
-		return false;
-	}
+    public boolean isFourOfAKind(){
+	ArrayList<Integer> sortedHand=this.sortHand();
+	int quadCounter=0;
+	for(int i=0;i<this.size()-3;i++)
+	    {
+		if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i+1)
+		   ==sortedHand.get(i+2) && sortedHand.get(i+2)==sortedHand.get(i+3))
+		    {
+			quadCounter=3;
+		    }
+	    }
+	int i=0;
+	if(quadCounter==3)
+	    return true;
+	else
+	    return false;
+    }
 
     /**
        Returns boolean for if the hand is a full house.
     */			
     public boolean isFullHouse(){
 	ArrayList<Integer> sortedHand=this.sortHand();
-		int doubleCounter=0;
-		int tripleCounter=0;
-		for(int i=0;i<this.size()-1;i++)
+	int doubleCounter=0;
+	int tripleCounter=0;
+	for(int i=0;i<this.size()-1;i++)
+	    {
+		if(sortedHand.get(i)==sortedHand.get(i+1))
+		    {
+			if(tripleCounter==1)
+			    {
+				sortedHand.remove(i+1);
+				sortedHand.remove(i);
+				tripleCounter++;
+				break;
+			    }
+			else
+			    {
+				if(i==1)
+				    tripleCounter=0;
+				else
+				    tripleCounter++;
+			    }
+				
+		    }
+		else
+		    tripleCounter=0;
+			
+			
+	    }
+	if(tripleCounter==2)
+	    {
+		sortedHand.trimToSize();
+		int size=sortedHand.size();
+		for(int i=0;i<(size-1);i++)
 		    {
 			if(sortedHand.get(i)==sortedHand.get(i+1))
 			    {
-				if(tripleCounter==1)
-				    {
-					sortedHand.remove(i+1);
-					sortedHand.remove(i);
-					tripleCounter++;
-					break;
-				    }
-				else
-				{
-				    if(i==1)
-					tripleCounter=0;
-				    else
-					tripleCounter++;
-				}
-				
-			}
-			else
-			    tripleCounter=0;
-			
-			
-		    }
-		if(tripleCounter==2)
-		    {
-			sortedHand.trimToSize();
-			int size=sortedHand.size();
-			for(int i=0;i<(size-1);i++)
-			    {
-				if(sortedHand.get(i)==sortedHand.get(i+1))
-				    {
-					doubleCounter++;
-				}
+				doubleCounter++;
 			    }
 		    }
-		else
-		    return false;
-		if(doubleCounter>=1)
-		    return true;
-		else
-		    return false;
+	    }
+	else
+	    return false;
+	if(doubleCounter>=1)
+	    return true;
+	else
+	    return false;
     }
     
     /**
@@ -280,22 +280,22 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	int spadeCounter=0;
 	int cloverCounter=0;
 	int heartCounter=0;
-		int diamondCounter=0;
-		for(Card c: this){
-		    if(c.getSuit()=="S")
-			spadeCounter++;
-		    else if(c.getSuit()=="C")
-			cloverCounter++;
-		    else if(c.getSuit()=="D")
-			diamondCounter++;
-		    else
-			heartCounter++;
-		}
-		if(spadeCounter>=5 || cloverCounter>=5 || diamondCounter>=5 
-		   || heartCounter>=5)
-		    return true;
-		else
-		    return false;
+	int diamondCounter=0;
+	for(Card c: this){
+	    if(c.getSuit()=="S")
+		spadeCounter++;
+	    else if(c.getSuit()=="C")
+		cloverCounter++;
+	    else if(c.getSuit()=="D")
+		diamondCounter++;
+	    else
+		heartCounter++;
+	}
+	if(spadeCounter>=5 || cloverCounter>=5 || diamondCounter>=5 
+	   || heartCounter>=5)
+	    return true;
+	else
+	    return false;
     }
     
     
@@ -310,7 +310,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
 		if(sortedHand.get(i)==(sortedHand.get(i+1)-1) && 
 		   sortedHand.get(i)==(sortedHand.get(i+2)-2) &&
 		   sortedHand.get(i)==(sortedHand.get(i+3)-3)	&&
-				sortedHand.get(i)==(sortedHand.get(i+4)-4)) 
+		   sortedHand.get(i)==(sortedHand.get(i+4)-4)) 
 		    {
 			straightCounter=4;
 		    }
@@ -327,21 +327,21 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
 	
 	ArrayList<Integer> sortedHand=this.sortHand();
-		int tripleCounter=0;
-		for(int i=0;i<this.size()-1;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1))
-			    tripleCounter++;
-			else
-			    {
-				if(tripleCounter==1)
-				    tripleCounter=0;
-			    }
-		    }
-		if(tripleCounter==2)
-		    return true;
+	int tripleCounter=0;
+	for(int i=0;i<this.size()-1;i++)
+	    {
+		if(sortedHand.get(i)==sortedHand.get(i+1))
+		    tripleCounter++;
 		else
-		    return false;
+		    {
+			if(tripleCounter==1)
+			    tripleCounter=0;
+		    }
+	    }
+	if(tripleCounter==2)
+	    return true;
+	else
+	    return false;
 		
     }
     
@@ -355,25 +355,24 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	int pair2Counter=0;
 	int pair1Int=100;
 	int pair2Int=100;
-	for(int i=0;i<this.size()-1;i++)
-	    {
-		if(sortedHand.get(i)==sortedHand.get(i+1)){
-		    if(sortedHand.get(i)==pair1Int || sortedHand.get(i)==pair2Int){
-			return false;
-		    }
+	for(int i=0;i<this.size()-1;i++) {
+	    if(sortedHand.get(i)==sortedHand.get(i+1)){
+		if(sortedHand.get(i)==pair1Int || sortedHand.get(i)==pair2Int){
+		    return false;
+		}
 		    else if(pair1Counter==1){
-					pair2Counter++;
-					pair2Int=sortedHand.get(i);
+			pair2Counter++;
+			pair2Int=sortedHand.get(i);
 		    }
 		    else{
 			pair1Counter++;
 			pair1Int=sortedHand.get(i);
 		    }
 		    
-		}
 	    }
-	return(pair1Counter==1 && pair2Counter>=1);
 	}
+	return(pair1Counter==1 && pair2Counter>=1);
+    }
     
     /**
        Returns boolean for if the hand has only one pair.
@@ -382,11 +381,10 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	sortedHand=this.sortHand();
 	int pairCounter=0;
-	for(int i=0;i<this.size()-1;i++)
-	    {
-		if(sortedHand.get(i)==sortedHand.get(i+1))
-		    pairCounter++;
-	    }
+	for(int i=0;i<this.size()-1;i++) {
+	    if(sortedHand.get(i)==sortedHand.get(i+1))
+		pairCounter++;
+	}
 	if(pairCounter==1)
 	    return true;
 	else
@@ -394,239 +392,108 @@ public class Hand extends ArrayList<Card> implements Serializable{
     }
     
     /**
-       Returns 1 if "this" hand is better than "otherHand" or returns 0
-       if the opposite.
-       @param otherHand hand to be compared
+     * Returns 1 if "this" hand is better than "otherHand"
+     * Returns 0 if the opposite.
+     * Returns 2 if exact tie
+     * @param otherHand hand to be compared
     */
     public int compareHands(Hand otherHand){
-	int player1Value=0;
-	int player2Value=0;
-		
-	if(this.isStraightFlush())
-	    player1Value=8;
-	else if(this.isFourOfAKind())
-	    player1Value=7;
-	else if(this.isFullHouse())
-	    player1Value=6;
-	else if(this.isFlush())
-	    player1Value=5;
-	else if(this.isStraight())
-	    player1Value=4;
-	else if(this.isThreeOfAKind())
-	    player1Value=3;
-	else if(this.isTwoPair())
-	    player1Value=2;
-	else if(this.isOnePair())	
-	    player1Value=1;
-		else
-		    player1Value=0;
-	handValue=player1Value;
+	int player1Value=calculateValue(this);
+	int player2Value=calculateValue(otherHand);
 	
-	if(otherHand.isStraightFlush())
-	    player2Value=8;
-	else if(otherHand.isFourOfAKind())
-	    player2Value=7;
-	else if(otherHand.isFullHouse())
-	    player2Value=6;
-	else if(otherHand.isFlush())
-	    player2Value=5;
-	else if(otherHand.isStraight())
-	    player2Value=4;
-	else if(otherHand.isThreeOfAKind())
-	    player2Value=3;
-	else if(otherHand.isTwoPair())
-	    player2Value=2;
-	else if(otherHand.isOnePair())	
-			player2Value=1;
-	else
-	    player2Value=0;
+	handValue=player1Value;
 	otherHand.setHandValue(player2Value);
 	
 	if(player1Value>player2Value)
 	    return 1;
-	else if(player2Value>player1Value)
+	else if(player1Value<player2Value)
 	    return 0;
-	else
-	    return this.sameHand(otherHand);
-    }
-    
-    /**
-       This method is used if both hands are of the same type(two pairs,
-       full house, etc.) Returns 1 if "this" hand is better or 0 if otherwise.
-       @param otherHand hand to be compared
-    */	
-    public int sameHand(Hand otherHand){
-	
-	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
-	sortedHand=this.sortHand();
-	ArrayList<Integer> otherSortedHand=new ArrayList<Integer>();
-	otherSortedHand=otherHand.sortHand();
-	
-	int handValue=0;
-	int otherHandValue=0;
-	int handPairIndex=0;
-	int otherHandPairIndex=0;
-	
-	if(isOnePair())
-	    {
-		
-		for(int i=0;i<6;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1)){
-			    handValue=sortedHand.get(i);
-			    handPairIndex=i;
-			}
-			if(otherSortedHand.get(i)==otherSortedHand.get(i+1)){
-			    otherHandValue=otherSortedHand.get(i);
-			    otherHandPairIndex=i; 
-			}
-		    }
-		
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(handValue<otherHandValue)
-		    return 0;
-		else{
-		    sortedHand.remove(handPairIndex+1);
-		    sortedHand.remove(handPairIndex);
-		    otherSortedHand.remove(otherHandPairIndex+1);
-		    otherSortedHand.remove(otherHandPairIndex);
-		    int index=4; 
-		while(sortedHand.get(index)==otherSortedHand.get(index)){
-		    if(index==0)
-			break;
-		    else
-			index--;
-		}
-		if(index==0)
-		    return 2;
-		else{
-		    int winner = (sortedHand.get(index) > otherSortedHand.get(index)) ? 1 : 0;
-		    return winner;
-		}
-		}
-		
-	    }
-	
-	else if(isTwoPair())
-	    {
-		Integer handCard=0; Integer otherHandCard=0;
-		int index=1; int index2=1;
-		for(int i=0;i<6;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(index))
-			    {
-				if(sortedHand.get(i)>handValue){
-				    handValue=sortedHand.get(i);
-				    handCard=handValue;
-				}
-			    }
-			index++;
-		    }
-		remove(handCard);
-		
-		for(int i=0;i<6;i++){
-		    if(otherSortedHand.get(i)==otherSortedHand.get(index2))
-			{
-			    if(otherSortedHand.get(i)>otherHandValue){
-				otherHandValue=otherSortedHand.get(i);
-				otherHandCard=otherHandValue;
-			    }
-			}
-		    index2++;
-	    }
-		remove(otherHandCard);
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(handValue<otherHandValue) 
-		    return 0;
-		else 
-		    return 2;
-		
-	    }
-	
-	else if(isStraight() || isStraightFlush())
-	    {
-		int index=0;
-		int index2=0;
-		for(int i=0;i<4;i++){
-		    if(sortedHand.get(i)==(sortedHand.get(i+1)-1) &&
-		       sortedHand.get(i)==(sortedHand.get(i+3)-3))
-			index=i+3;
-		}
-		for(int i=0;i<4;i++){
-		    if(otherSortedHand.get(i)==(otherSortedHand.get(i+1)-1) &&
-		       otherSortedHand.get(i)==(otherSortedHand.get(i+3)-3))
-			index2=i+3;
-		}
-		if(sortedHand.get(index)>otherSortedHand.get(index2))
-		    return 1;
-		else if(sortedHand.get(index)<otherSortedHand.get(index2))
-		    return 0;
-		else
-		    return 2;
-	    }
-	else if(isFullHouse() || isThreeOfAKind())
-	    {
-		for(int i=0;i<5;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+2))
-			    {
-				if(sortedHand.get(i)>handValue)
-				    handValue=sortedHand.get(i);
-			    }	
-			if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+2))
-			    {
-				if(otherSortedHand.get(i)>otherHandValue)
-				otherHandValue=otherSortedHand.get(i);	
-			    }
-		    }
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(otherHandValue>handValue)
-		    return 0;
-		else
-		    return 2;
-	    }
-		
-	else if(isFourOfAKind())
-	    {
-		for(int i=0;i<4;i++)
-		    {
-			if(sortedHand.get(i)==sortedHand.get(i+1) && sortedHand.get(i)==sortedHand.get(i+3))
-			    {
-				if(sortedHand.get(i)>handValue)
-				    handValue=sortedHand.get(i);
-			    }	
-			if(otherSortedHand.get(i)==otherSortedHand.get(i+1) && otherSortedHand.get(i)==otherSortedHand.get(i+3))
-			    {
-			    if(otherSortedHand.get(i)>otherHandValue)
-				otherHandValue=otherSortedHand.get(i);	
-			    }
-		    }
-		if(handValue>otherHandValue)
-		    return 1;
-		else if(handValue<otherHandValue)
+	else {
+	    int yourHandValue = sameHandUpdated(this, 1);
+	    int otherHandValue = sameHandUpdated(otherHand, 1);
+	    if(yourHandValue>otherHandValue)
+		return 1;
+	    else if (yourHandValue<otherHandValue)
 		return 0;
-		else
-		    return 2;
-	    }
-	else
-	    {
-		return sameHandMethod(otherHand);
-	    }
+	    else {
+		Card yourmaxCard = this.get(0);
+		Card othermaxCard = otherHand.get(0);
+		if (yourmaxCard.getValue()<this.get(1).getValue())
+		    yourmaxCard = this.get(1);
+		if (othermaxCard.getValue()<otherHand.get(1).getValue())
+		    othermaxCard = otherHand.get(1);
+
+		if (yourmaxCard.getValue()>othermaxCard.getValue())
+		    return 1;
+		else if (yourmaxCard.getValue()<othermaxCard.getValue())
+		    return 0;
+		
+		else {
+		    yourHandValue = sameHandUpdated(this, 2);
+		    otherHandValue = sameHandUpdated(otherHand, 2);
+		    if(yourHandValue>otherHandValue)
+			return 1;
+		    else if (yourHandValue<otherHandValue)
+			return 0;
+		    else {
+			Card yourminCard = this.get(0);
+			Card otherminCard = otherHand.get(0);
+			if (yourminCard.getValue()>this.get(1).getValue())
+			    yourminCard = this.get(1);
+			if (otherminCard.getValue()>otherHand.get(1).getValue())
+			    otherminCard = otherHand.get(1);
+			
+			if (yourminCard.getValue()>otherminCard.getValue())
+			    return 1;
+			else if (yourminCard.getValue()<otherminCard.getValue())
+			    return 0;
+			else
+			    return 2;// Only arrives here if cards are exactly the same		
+		    }
+		}
+	    }		
+	}
+    }
+	
+    /**
+     * This method is used if both hands are the same type
+     * Note that the first two Cards in Hand are the player's cards
+     * while the last five Cards in Hand are table's cards
+     * @param Hand: hand is either this or the otherhand
+     * @param recursion: Either 1 if called 1st, 2 if called 2nd
+     * func won't work as intended if given a different number
+     */
+    private int sameHandUpdated(Hand hand, int recursion) {
+	Hand hand_tmp = new Hand();
+	Card yourCard = hand.get(0);
+	if (recursion==1) {
+	    if (hand.get(1).getValue()>yourCard.getValue())
+	     	yourCard = hand.get(1);
+	    hand_tmp.add(yourCard);
+	    for (int i=2; i<hand.size(); i++)
+		hand_tmp.add(hand.get(i));
+	    return calculateValue(hand_tmp);
+	}
+	if (recursion==2) {
+	    if (hand.get(1).getValue()<yourCard.getValue())
+		yourCard = hand.get(1);
+	    hand_tmp.add(yourCard);
+	    for(int i=2; i<hand.size(); i++)
+		hand_tmp.add(hand.get(i));
+	    return calculateValue(hand_tmp);
+	}
+	return -1; // Should only pass in 1 or 2 in parameter
     }
     
     /**
        Method used to determine which hand has the higher high card. If high
-	cards are the same, continuously checks for next high card until a 
-	higher card is found.
-	@param otherHand hand to be compared
+       cards are the same, continuously checks for next high card until a 
+       higher card is found.
+       @param otherHand hand to be compared
     */
-    public int sameHandMethod(Hand otherHand){
-	
+    public int sameHandMethod(Hand otherHand){	
 	if(this.isEmpty())
-	    return 0;
+	    return 2;
 	else if(this.getHighCardValue()>otherHand.getHighCardValue())
 	    return 1;
 	else if(this.getHighCardValue()<otherHand.getHighCardValue())
@@ -638,50 +505,24 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
     }
 
-    public int calculateValue() {
-	int value = 0;
-	if(this.isStraightFlush())
-	    value=8;
-	else if(this.isFourOfAKind())
-	    value=7;
-	else if(this.isFullHouse())
-	    value=6;
-	else if(this.isFlush())
-	    value=5;
-	else if(this.isStraight())
-	    value=4;
-	else if(this.isThreeOfAKind())
-	    value=3;
-	else if(this.isTwoPair())
-	    value=2;
-	else if(this.isOnePair())	
-	    value=1;
-		else
-		    value=0;
-	return value;
-	
-    }
-
-    
+    public int calculateValue(Hand hand) {
+	if(hand.isStraightFlush())
+	    return 8;
+	else if(hand.isFourOfAKind())
+	    return 7;
+	else if(hand.isFullHouse())
+	    return 6;
+	else if(hand.isFlush())
+	    return 5;
+	else if(hand.isStraight())
+	    return 4;
+	else if(hand.isThreeOfAKind())
+	    return 3;
+	else if(hand.isTwoPair())
+	    return 2;
+	else if(hand.isOnePair())	
+	    return 1;
+	else
+	    return 0;
+    }   
 }
-	
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

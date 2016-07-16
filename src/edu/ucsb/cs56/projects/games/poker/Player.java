@@ -1,7 +1,7 @@
 package edu.ucsb.cs56.projects.games.poker;
 
 /**
-	Class that represents a poker player
+   Class that represents a poker player
 */
 
 
