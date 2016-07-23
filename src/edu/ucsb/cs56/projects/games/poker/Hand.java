@@ -5,130 +5,109 @@ import java.util.*;
 
 
 /**
-   Class that represents a hand of 5 Cards.
-*/
+ * Class that represents a hand of 2 Cards.
+ * The ONLY object that should have a Hand object is Player
+ */
 public class Hand extends ArrayList<Card> implements Serializable{
 
     private int handValue;
     
     /**
-       No arg constructor for Hand
-    */
-    public Hand(){
-	super(1);
+     * Constructor creates a Hand of Cards by calling the Deck to give Hand these cards
+     * Creates a 2 Card Hand for the player
+     * @param Deck
+     */
+    public Hand(Deck deck) {
+	handValue = 0;
+	for (int i=0; i<2; i++)
+	    this.add(deck.obtainRandomCardFromDeck());
     }
     
     /**
-       Constructor that sets a hand given 7 Cards as arguments.
-       @param a Card a
-       @param b Card b
-       @param c Card c
-       @param d Card d
-       @param e Card e
-       @param f Card f
-       @param g Card g
-    */	
-    public Hand(Card a, Card b, Card c, Card d, Card e, Card f, Card g){
-	super(7);
-	this.add(a); this.add(b); this.add(c); this.add(d); this.add(e);
-	this.add(f); this.add(g);
-    }
-    
-    /**
-       Constructor that sets a hand given 5 Cards as arguments.
-       @param a Card a
-       @param b Card b
-       @param c Card c
-       @param d Card d
-       @param e Card e
-    */	
-    public Hand(Card a, Card b, Card c, Card d, Card e){
-	super(5);
-	this.add(a); this.add(b); this.add(c); this.add(d); this.add(e);
-    }
-    
-    /**
-       Constructor that sets a 5 Card hand based on the deck passed in.
-       @param deck deck of Cards
-    */
-    public Hand(Deck deck){
-	super(7);
-	for(Card c:deck.dealCards())
-	    this.add(c);
-	handValue=100;
-    }
-    /**
-       Sets the Hand value.
-    */	
+     * Sets the Hand value.
+     * NOTE: we may never need this for now, good to have it here for accessibility
+     */	
     public void setHandValue(int handValue){
 	this.handValue=handValue;
     }
+    
     /**
-       Gets the Hand value.
+     * Gets the Hand value.
+     * NOTE: we may never need this for now, good to have it here for accessibility
     */
     public int getHandValue(){
 	return handValue;
     }
     
-    
     /**
-       Discards the hand into the discardPile of the deck.
-       @param deck deck of Cards
-    */	
-    public void discardHand(Deck deck){
-	deck.addToDiscardPile(this);
-    }
-    
-    /**
-       Adds Cards from the deck to the Hand.
-       @param deck deck of Cards
-    */	
-    public void draw(Deck deck){
-	for(Card c:deck.dealCards())
-	    this.add(c);
-    }
-    
-    /**
-       Returns the Card with the highest value.
+     * Returns the Card in your Hand with the higher value.
     */
     public Card getHighCard(){
 	Card max=this.get(0);
-	for(Card c:this){
+	for(Card c:this) {
 	    if(c.getValue()>max.getValue())
 		max=c;
 	}
-	return max; 
-    }
-    
-    /**
-       Returns the int value of the highest Card.
-    */
-    public int getHighCardValue(){
-	int max=0;
-	for(Card c:this)
-	    {
-		if(c.getValue()>max)
-		    max=c.getValue();
-	    }
 	return max;
     }
     
     /**
-       Returns an ArrayList of Card int values in a numerical order.
+     *  Returns the int value of the higher Card.
     */
-    public ArrayList<Integer> sortHand(){
-	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
-	for(int i=0;i<this.size();i++)
-	    {
-		sortedHand.add(this.get(i).getValue());
-	    }
-	Collections.sort(sortedHand);
-	return sortedHand;
+    public int getHighCardValue(){
+	int max=0;
+	for(Card c:this) {
+	    if(c.getValue()>max)
+		max=c.getValue();
+	}
+	return max;
+    }
+
+    /**
+     * Returns the Card in your Hand with the lower value.
+    */
+    public Card getLowCard(){
+	Card min=this.get(0);
+	for(Card c:this) {
+	    if(c.getValue()<min.getValue())
+		min=c;
+	}
+	return min;
     }
     
     /**
+     *  Returns the int value of the lower Card.
+    */
+    public int getLowCardValue(){
+	int min=0;
+	for(Card c:this) {
+	    if(c.getValue()<min)
+		min=c.getValue();
+	}
+	return min;
+    }
+    
+    
+    /**
+       Returns an ArrayList of Card int values in a numerical order.
+    */
+    /* WHY?!?!?
+    public ArrayList<Integer> sortHand(){
+	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
+	for(int i=0;i<this.size();i++) {
+	    sortedHand.add(this.get(i).getValue());
+	}
+	Collections.sort(sortedHand);
+	return sortedHand;
+    }
+    */
+    
+    // *******************************I STOPPED EDITING HERE**********************************
+
+    /**
        Returns boolean for if the hand is a straight flush
     */	
+    /*
     public boolean isStraightFlush(){
 	int straightFlushCounter=0;
 	int spadeCounter=0;
@@ -198,10 +177,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	else
 	    return false;
     }
-    
+    */
+
     /**
        Returns boolean for if the hand has a four of a kind.
     */		
+    /*
     public boolean isFourOfAKind(){
 	ArrayList<Integer> sortedHand=this.sortHand();
 	int quadCounter=0;
@@ -219,10 +200,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	else
 	    return false;
     }
+    */
 
     /**
        Returns boolean for if the hand is a full house.
-    */			
+    */
+    /*			
     public boolean isFullHouse(){
 	ArrayList<Integer> sortedHand=this.sortHand();
 	int doubleCounter=0;
@@ -271,10 +254,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	else
 	    return false;
     }
+    */
     
     /**
        Returns boolean for if the hand is a flush.
-    */		
+    */
+    /*		
     public boolean isFlush(){
 	
 	int spadeCounter=0;
@@ -297,11 +282,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	else
 	    return false;
     }
-    
+    */
     
     /**
        Returns boolean for if the hand is a straight.
-    */		
+    */
+    /*		
     public boolean isStraight(){
 	ArrayList<Integer> sortedHand=this.sortHand();
 	int straightCounter=0;
@@ -317,10 +303,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	    }
 	return(straightCounter==4);
     }
+    */
     
     /**
        Returns boolean for if the hand has three of a kind.
-    */			
+    */
+    /*			
     public boolean isThreeOfAKind(){
 	if(this.isFullHouse()){
 	    return false;
@@ -344,10 +332,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	    return false;
 		
     }
+    */
     
     /**
        Returns boolean for if the hand has two pairs.
-    */		
+    */
+    /*		
     public boolean isTwoPair(){
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	sortedHand=this.sortHand();
@@ -373,10 +363,12 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
 	return(pair1Counter==1 && pair2Counter>=1);
     }
+    */
     
     /**
        Returns boolean for if the hand has only one pair.
-    */			
+    */
+    /*
     public boolean isOnePair(){
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	sortedHand=this.sortHand();
@@ -390,13 +382,15 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	else
 	    return false;
     }
-    
+    */
+
     /**
      * Returns 1 if "this" hand is better than "otherHand"
      * Returns 0 if the opposite.
      * Returns 2 if exact tie
      * @param otherHand hand to be compared
     */
+    /*
     public int compareHands(Hand otherHand){
 	int player1Value=calculateValue(this);
 	int player2Value=calculateValue(otherHand);
@@ -454,7 +448,8 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	    }		
 	}
     }
-	
+    */
+
     /**
      * This method is used if both hands are the same type
      * Note that the first two Cards in Hand are the player's cards
@@ -463,6 +458,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
      * @param recursion: Either 1 if called 1st, 2 if called 2nd
      * func won't work as intended if given a different number
      */
+    /*
     private int sameHandUpdated(Hand hand, int recursion) {
 	Hand hand_tmp = new Hand();
 	Card yourCard = hand.get(0);
@@ -484,6 +480,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
 	return -1; // Should only pass in 1 or 2 in parameter
     }
+    */
     
     /**
        Method used to determine which hand has the higher high card. If high
@@ -491,6 +488,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
        higher card is found.
        @param otherHand hand to be compared
     */
+    /*
     public int sameHandMethod(Hand otherHand){	
 	if(this.isEmpty())
 	    return 2;
@@ -504,7 +502,9 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	    return sameHandMethod(otherHand);
 	}
     }
+    */
 
+    /*
     public int calculateValue(Hand hand) {
 	if(hand.isStraightFlush())
 	    return 8;
@@ -524,5 +524,6 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	    return 1;
 	else
 	    return 0;
-    }   
+    }
+    */
 }

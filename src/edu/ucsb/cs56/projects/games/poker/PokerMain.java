@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
+/**
+ * The Poker Game Main Page (Start-Up) screen
+ */
 public class PokerMain {
 
     JFrame playButtonFrame;
@@ -34,6 +37,7 @@ public class PokerMain {
 	singlePlayerButton.addActionListener(listener);
 	panel.add(singlePlayerButton);
 
+	/*
 	serverButton = new JButton("Create Poker Server");
 	serverButton.addActionListener(listener);
 	panel.add(serverButton);
@@ -49,6 +53,7 @@ public class PokerMain {
 	clientChatButton = new JButton("Connect to Poker Chat Server");
 	clientChatButton.addActionListener(listener);
 	panel.add(clientChatButton);
+	*/
 
 	playButtonFrame.add(BorderLayout.CENTER, panel);
 	playButtonFrame.setSize(300, 200);
@@ -68,6 +73,7 @@ public class PokerMain {
 		PokerSinglePlayer singlePlayer = new PokerSinglePlayer(500, 500);
 		singlePlayer.go();
 	    }
+	    /*
 	    else if (src == serverButton) {
 		PokerServer server = new PokerServer();
 		server.go();
@@ -96,6 +102,7 @@ public class PokerMain {
 		    client2.go();
 		}
 	    }
+	    */
 	    playButtonFrame.setVisible(false);
 	}
     }	

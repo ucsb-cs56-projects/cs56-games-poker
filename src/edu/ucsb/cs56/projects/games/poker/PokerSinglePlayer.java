@@ -12,55 +12,48 @@ final class PokerSinglePlayer extends PokerGame {
     boolean yourTurnToBet = true;
 
     /**
-     * Default no-arg constructor;
-     */
-    public PokerSinglePlayer() {
-    }
-    
-    /**
      * Constructor to set the player and opponent's initial chips. 
+     * This is used when we continue playing the game
      * @param dChips
      * @param pChips
      */
-    public PokerSinglePlayer(int oChips, int pChips){
-	opponent.setChips(oChips);
+    public PokerSinglePlayer(int pChips, int oChips){
 	player.setChips(pChips);
+	opponent.setChips(oChips);
     }
     
     /**
-     * Starts the game.
+     * Starts between you game and AI
      */
     public void go() {
-	pot = 0;
-	playerSetUp();
+	super.setUp();
 	layoutSubViews();
+	controlButtons();
+
+	pot = 0;
 	if(!gameOver){
 	    step = Step.BLIND;
-	    
 	    turn = Turn.OPPONENT;
-	    
-	    timer = new Timer(timer_value, new ActionListener() {
-		    public void actionPerformed(ActionEvent e){
-			opponentAI();
-		    }
-		});
+
+	    timer = new Timer(timer_value, e -> opponentAI()); // Java 8 Lambda function Cool!!!
 	    timer.setRepeats(false);
-	    message = "opponent is thinking...";
 	    prompt = "opponent goes first!";
+	    message = "opponent is thinking...";
 	    timer.restart();
 	}
     }
 
     /**
      * Method to activate the opponent AI on turn change.
+     * Changes between you and the AI
      */
     public void changeTurn() {
 	if (turn == Turn.PLAYER) {
 	    if (responding == true) {
 		turn = Turn.OPPONENT;
 		controlButtons();
-		updateFrame();
 		message = "opponent is thinking...";
+		updateFrame();		
 		timer.restart();
 	    } else {
 		updateFrame();
@@ -95,95 +88,12 @@ final class PokerSinglePlayer extends PokerGame {
     /**
      *  Simple AI for the opponent in single player.
      */
+    // TODO: Make AI much more complex and less predictable, rewrite existing later
     public void opponentAI() {
-	Hand opponentHand = new Hand();
-	if (step == Step.BLIND) {
-	    if (opponentHand.size() != 2) {
-		for (int i = 0; i < 2; i++) {
-		    opponentHand.add(opponent.getHand().get(i));
-		}
-	    }
-	} else if (step == Step.FLOP) {
-	    if (opponentHand.size() < 5) {
-		for (Card c : flop) {
-		    opponentHand.add(c);
-		}
-	    }
-	} else if (step == Step.TURN) {
-	    if (opponentHand.size() < 6) {
-		opponentHand.add(turnCard);
-	    }
-	} else if (step == Step.RIVER) {
-	    if (opponentHand.size() < 7) {
-		opponentHand.add(riverCard);
-	    }
-	} else {
-	}
-
 	boolean shouldBet = false;
 	boolean shouldCall = true;
-	int dValue = opponentHand.calculateValue(opponentHand);
-	int betAmount = 5 * dValue;
-	if (step == Step.BLIND) {
-	    if (dValue >= 1) {
-		shouldBet = true;
-	    }
-	} else if (step == Step.FLOP) {
-	    if (dValue >= 3) {
-		shouldBet = true;
-	    }
-	    if ((dValue == 0 && bet >= 20)) {
-		shouldCall = false;
-	    }
-	} else if (step == Step.TURN) {
-	    if (dValue >= 4) {
-		shouldBet = true;
-	    }
-	    if ((dValue < 2 && bet > 20)) {
-		shouldCall = false;
-	    }
-	} else if (step == Step.RIVER) {
-	    if (dValue >= 4) {
-		shouldBet = true;
-	    }
-	    if ((dValue < 2 && bet > 20))
-		shouldCall = false;
-	}
-
-	if (responding == true) {
-	    if (shouldCall) {
-		message = "opponent calls.";
-		pot += bet;
-		opponent.setChips(opponent.getChips() - opponent.bet(bet));
-		bet = 0;
-		responding = false;
-		nextStep();
-		updateFrame();
-		timer.restart();
-	    } else {
-		message = "opponent folds.";
-		opponent.foldHand();
-	    }
-	} else if (shouldBet && step != Step.SHOWDOWN) {
-	    if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
-		bet = betAmount;
-		pot += bet;
-		opponent.setChips(opponent.getChips() - opponent.bet(bet));
-		responding = true;
-		message = "opponent bets " + bet + " chips.";
-		updateFrame();
-		changeTurn();
-	    } else {
-		message = "opponent checks.";
-		updateFrame();
-		changeTurn();
-	    }
-	} else if (step != Step.SHOWDOWN) {
-	    message = "opponent checks.";
-	    updateFrame();
-	    changeTurn();
-	}
     }
+	
 
     /**
      * Method overridden to allow for a new single player game to start.
@@ -194,7 +104,7 @@ final class PokerSinglePlayer extends PokerGame {
     	    oSubPane2.remove(backCardLabel1);
     	    oSubPane2.remove(backCardLabel2);
     	    for(int i=0;i<2;i++){
-    		oSubPane2.add(new JLabel(getCardImage(opponent.getCardFromHand(i))));
+    		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
     	    }
     	    updateFrame();
     	    if (winnerType == Winner.PLAYER) {
@@ -217,21 +127,18 @@ final class PokerSinglePlayer extends PokerGame {
 		// First check if players have enough chips
 		if(opponent.getChips() < 5) {
 		    gameOver("GAME OVER!\n\n opponent has run out of chips!");
-		}
-		else if (player.getChips() < 5) {
+		} else if (player.getChips() < 5) {
 		    gameOver("GAME OVER!\n\n you have run out of chips!");
 		}
 		
 		// Create new game
-		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
+		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer(player.getChips(),
+									     opponent.getChips());
     		singlePlayerReplay.go();
-		
-	    }
-	    else if (option == JOptionPane.NO_OPTION) {
+	    } else if (option == JOptionPane.NO_OPTION) {
 		gameOver("");
 		mainFrame.dispose();
-	    }
-	    else {
+	    } else {
     		// Quit
     		System.exit(1);
     	    }
@@ -275,18 +182,5 @@ final class PokerSinglePlayer extends PokerGame {
 	gameOverFrame.pack();
 	gameOverFrame.setVisible(true);
 	mainFrame.dispose();
-    }
-    
-    /**                                                                                                  
-     * Adds action listeners to all buttons in the main GUI.                                             
-     */
-    public void addActionListeners() {
-        ButtonHandler b = new ButtonHandler();
-        foldButton.addActionListener(b);
-        betButton.addActionListener(b);
-        checkButton.addActionListener(b);
-        callButton.addActionListener(b);
-        showdownButton.addActionListener(b);
-    }
-
+    }    
 }
