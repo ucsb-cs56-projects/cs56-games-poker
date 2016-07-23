@@ -546,4 +546,43 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
 	    showWinnerAlert();
 	}
     }
+
+    /**
+     * Function that puts up a Game Over Frame that can take us back to the Main Screen
+     */
+    protected void gameOver(String label) {
+        gameOverFrame = new JFrame();
+        gameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameOverFrame.setBackground(Color.red);
+
+        gameOverMessage = new JPanel();
+        gameOverMessage.setBackground(Color.red);
+
+        gameOverButtonPanel = new JPanel();
+        gameOverButtonPanel.setBackground(Color.red);
+
+        gameOverLabel = new JLabel(label);
+        gameOverButton = new JButton("Back to Main Menu");
+        gameOverButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    gameOverFrame.setVisible(false);
+                    PokerMain restart = new PokerMain();
+                    restart.go();
+                }
+            });
+
+
+        gameOverMessage.add(gameOverLabel);
+        gameOverButtonPanel.add(gameOverButton);
+
+        gameOverFrame.setSize(300, 200);
+        gameOverFrame.setResizable(false);
+        gameOverFrame.setLocation(250, 250);
+        gameOverFrame.getContentPane().add(BorderLayout.NORTH, gameOverMessage);
+        gameOverFrame.getContentPane().add(BorderLayout.SOUTH, gameOverButtonPanel);
+        gameOverFrame.pack();
+        gameOverFrame.setVisible(true);
+        mainFrame.dispose();
+    }
+
 }

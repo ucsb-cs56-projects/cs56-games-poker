@@ -30,7 +30,6 @@ final class PokerSinglePlayer extends PokerGame {
 	layoutSubViews();
 	controlButtons();
 
-	pot = 0;
 	if(!gameOver){
 	    step = Step.BLIND;
 	    turn = Turn.OPPONENT;
@@ -89,9 +88,70 @@ final class PokerSinglePlayer extends PokerGame {
      *  Simple AI for the opponent in single player.
      */
     // TODO: Make AI much more complex and less predictable, rewrite existing later
-    public void opponentAI() {
+    private void opponentAI() {
 	boolean shouldBet = false;
 	boolean shouldCall = true;
+	int dValue = 0;
+	int betAmount = 5 * dValue;
+	if (step == Step.BLIND) {
+	    if (dValue >= 1) {
+		shouldBet = true;
+	    }
+	} else if (step == Step.FLOP) {
+	    if (dValue >= 3) {
+		shouldBet = true;
+	    }
+	    if ((dValue == 0 && bet >= 20)) {
+		shouldCall = false;
+	    }
+	} else if (step == Step.TURN) {
+	    if (dValue >= 4) {
+		shouldBet = true;
+	    }
+	    if ((dValue < 2 && bet > 20)) {
+		shouldCall = false;
+	    }
+	} else if (step == Step.RIVER) {
+	    if (dValue >= 4) {
+		shouldBet = true;
+	    }
+	    if ((dValue < 2 && bet > 20))
+		shouldCall = false;
+	}
+
+	if (responding == true) {
+	    if (shouldCall) {
+		message = "opponent calls.";
+		pot += bet;
+		opponent.bet(bet);
+		bet = 0;
+		responding = false;
+		nextStep();
+		updateFrame();
+		timer.restart();
+	    } else {
+		message = "opponent folds.";
+		opponent.foldHand();
+	    }
+	} else if (shouldBet && step != Step.SHOWDOWN) {
+	    if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
+		bet = betAmount;
+		pot += bet;
+		opponent.bet(bet);
+		responding = true;
+		message = "opponent bets " + bet + " chips.";
+		updateFrame();
+		changeTurn();
+	    } else {
+		message = "opponent checks.";
+		updateFrame();
+		changeTurn();
+	    }
+	} else if (step != Step.SHOWDOWN) {
+	    message = "opponent checks.";
+	    updateFrame();
+	    changeTurn();
+	}
     }
 	
 
@@ -134,10 +194,9 @@ final class PokerSinglePlayer extends PokerGame {
 		// Create new game
 		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer(player.getChips(),
 									     opponent.getChips());
-    		singlePlayerReplay.go();
+		singlePlayerReplay.go();
 	    } else if (option == JOptionPane.NO_OPTION) {
 		gameOver("");
-		mainFrame.dispose();
 	    } else {
     		// Quit
     		System.exit(1);
@@ -145,42 +204,4 @@ final class PokerSinglePlayer extends PokerGame {
     	}
     }
 	
-    /**
-     * Function that puts up a Game Over Frame that can take us back to the Main Screen
-     */
-    
-    private void gameOver(String label) {
-	gameOverFrame = new JFrame();
-	gameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	gameOverFrame.setBackground(Color.red);
-
-	gameOverMessage = new JPanel();
-        gameOverMessage.setBackground(Color.red);
-
-	gameOverButtonPanel = new JPanel();
-	gameOverButtonPanel.setBackground(Color.red);
-
-	gameOverLabel = new JLabel(label);
-	gameOverButton = new JButton("Back to Main Menu");
-	gameOverButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e){
-		    gameOverFrame.setVisible(false);
-		    PokerMain restart = new PokerMain();
-		    restart.go();
-		}
-	    });
-	
-	
-	gameOverMessage.add(gameOverLabel);
-	gameOverButtonPanel.add(gameOverButton);
-
-	gameOverFrame.setSize(300, 200);
-	gameOverFrame.setResizable(false);
-	gameOverFrame.setLocation(250, 250);
-	gameOverFrame.getContentPane().add(BorderLayout.NORTH, gameOverMessage);
-	gameOverFrame.getContentPane().add(BorderLayout.SOUTH, gameOverButtonPanel);
-	gameOverFrame.pack();
-	gameOverFrame.setVisible(true);
-	mainFrame.dispose();
-    }    
 }

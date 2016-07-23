@@ -16,11 +16,13 @@ public class CompareHands implements Serializable{
     private int player2Value = 0;    
     
     public CompareHands(Player player1, Player player2, TableCards table) {
+	cardHand1 = new ArrayList<Card>();
 	cardHand1.addAll(player1.getHand());
 	cardHand1.addAll(table.getFlopCards());
 	cardHand1.add(table.getTurnCard());
 	cardHand1.add(table.getRiverCard());
 
+	cardHand2 = new ArrayList<Card>();
 	cardHand2.addAll(player2.getHand());
 	cardHand2.addAll(table.getFlopCards());
 	cardHand2.add(table.getTurnCard());
