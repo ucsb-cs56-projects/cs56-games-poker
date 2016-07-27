@@ -34,7 +34,7 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
         betTextField;
 
     protected JButton
-        foldButton, betButton, checkButton, callButton, showdownButton, // mainFrame
+        foldButton, betButton, checkButton, callButton, showdownButton, rulesButton, // mainFrame
 	gameOverButton; // gameOverFrame
 
     protected JLabel
@@ -275,6 +275,9 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
 	    callButton.addActionListener(new callButtonHandler());
             showdownButton = new JButton("SHOWDOWN");
 	    showdownButton.addActionListener(new showdownButtonHandler());
+	    rulesButton = new JButton("RULES");
+	    rulesButton.setEnabled(true);
+	    rulesButton.addActionListener(new rulesButtonHandler());
 	    
             opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
@@ -304,6 +307,7 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
             optionArea.add(callButton);
             optionArea.add(checkButton);
             optionArea.add(foldButton);
+	    optionArea.add(rulesButton);
 
             playerPanel = new JPanel();
             playerPanel.setLayout(new BorderLayout());
@@ -427,6 +431,7 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
             callButton.setEnabled(false);
             foldButton.setEnabled(false);
             showdownButton.setVisible(true);
+	    rulesButton.setEnabled(true);
         }
         else if (turn == Turn.PLAYER && responding) {
             betButton.setEnabled(false);
@@ -434,18 +439,21 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
             checkButton.setEnabled(false);
             callButton.setEnabled(true);
             foldButton.setEnabled(true);
+	    rulesButton.setEnabled(true);
         } else if (turn == Turn.PLAYER) {
             betButton.setEnabled(true);
             betTextField.setEnabled(true);
             checkButton.setEnabled(true);
             callButton.setEnabled(false);
             foldButton.setEnabled(true);
+	    rulesButton.setEnabled(true);
         } else {
             betButton.setEnabled(false);
             betTextField.setEnabled(false);
             checkButton.setEnabled(false);
             callButton.setEnabled(false);
             foldButton.setEnabled(false);
+	    rulesButton.setEnabled(true);
         }
 	updateFrame();
     }
@@ -503,6 +511,7 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
 	    checkButton.setEnabled(false);
 	    callButton.setEnabled(false);
 	    foldButton.setEnabled(false);
+	    rulesButton.setEnabled(true);
 	    checkPassTurnUpdate();
 	    updateFrame();
 	}
@@ -547,6 +556,28 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
 	}
     }
 
+    protected class rulesButtonHandler implements ActionListener {// rules
+	public void actionPerformed(ActionEvent e) {
+	    JFrame rulesFrame = new JFrame("RULES");
+	    rulesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	    rulesFrame.setVisible(true);
+	    rulesFrame.setSize(454,600);
+	    JPanel jp = new JPanel();
+	    JLabel jl = new JLabel();
+	    jl.setIcon(new ImageIcon("/cs/student/ttsherpa/cs56/cs56pokerfix/cs56-games-poker/src/edu/ucsb/cs56/projects/games/poker/rules.png"));
+	    jp.add(jl);
+	    rulesFrame.add(jp);
+	    JScrollPane scrollPane = new JScrollPane(jp);
+	    scrollPane.setPreferredSize(new Dimension(454, 979));
+	    rulesFrame.getContentPane().add(scrollPane);
+	    rulesFrame.pack();
+	    rulesFrame.setLocationByPlatform(true);
+	    rulesFrame.setVisible(true);
+	    
+	    
+	}
+	    
+    }
     /**
      * Function that puts up a Game Over Frame that can take us back to the Main Screen
      */
@@ -585,4 +616,4 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
         mainFrame.dispose();
     }
 
-}
+    }
