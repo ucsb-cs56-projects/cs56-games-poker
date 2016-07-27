@@ -45,7 +45,8 @@ public class PokerMain {
 	clientButton = new JButton("Connect to Poker Server");
 	clientButton.addActionListener(listener);
 	panel.add(clientButton);
-		
+	*/
+	
 	serverChatButton = new JButton("Create Poker Chat Server");
 	serverChatButton.addActionListener(listener);
 	panel.add(serverChatButton);
@@ -53,7 +54,7 @@ public class PokerMain {
 	clientChatButton = new JButton("Connect to Poker Chat Server");
 	clientChatButton.addActionListener(listener);
 	panel.add(clientChatButton);
-	*/
+	
 
 	playButtonFrame.add(BorderLayout.CENTER, panel);
 	playButtonFrame.setSize(300, 200);
@@ -88,7 +89,7 @@ public class PokerMain {
 		    } catch (IOException ex){ex.printStackTrace();
 		    }
 		}
-	    }
+	    }*/
 	    
 	    else if(src == serverChatButton){
 		PokerChatServer server2 = new PokerChatServer();
@@ -102,7 +103,7 @@ public class PokerMain {
 		    client2.go();
 		}
 	    }
-	    */
+	    
 	    playButtonFrame.setVisible(false);
 	}
     }	
