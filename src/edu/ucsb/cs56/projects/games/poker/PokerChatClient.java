@@ -75,7 +75,7 @@ public class PokerChatClient {
     public class SendListener implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 	    try{
-		writer.println(username + ": "+ outgoingText.getText());//prints username
+		writer.println("<" + username + ">: "+ outgoingText.getText());//prints username
 		writer.flush();
 	    }
 	    catch(Exception ex){

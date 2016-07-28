@@ -21,21 +21,24 @@ public class Card implements Serializable{
     }
 	
     /**
-       Returns the value of the card
-    */
+     * Returns the Value of the Card
+     * @return int int value of Card
+     */
     public int getValue(){
 	return this.value;
     }
 	
     /**
-       Returns the suit of the card
-    */
+     * Returns the suit of the card
+     * @return String The Card's Suit
+     */
     public String getSuit(){
 	return this.suit;
     }
 	
     /**
-       Returns the string representation of the card
+     * Returns the string representation of the card
+     * @return String of the Card as valuesuit
     */
     public String toString(){
 	String s=""+value+suit;

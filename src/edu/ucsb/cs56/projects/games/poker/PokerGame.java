@@ -561,23 +561,23 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
 	    JFrame rulesFrame = new JFrame("RULES");
 	    rulesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    rulesFrame.setVisible(true);
-	    rulesFrame.setSize(454,600);
+	    rulesFrame.setSize(485,600);
+	    rulesFrame.setBackground(new Color(204, 0, 0));
 	    JPanel jp = new JPanel();
 	    JLabel jl = new JLabel();
-	    jl.setIcon(new ImageIcon("/cs/student/ttsherpa/cs56/cs56pokerfix/cs56-games-poker/src/edu/ucsb/cs56/projects/games/poker/rules.png"));
+	    
+	    jl.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules.png"));
+	    
 	    jp.add(jl);
 	    rulesFrame.add(jp);
 	    JScrollPane scrollPane = new JScrollPane(jp);
-	    scrollPane.setPreferredSize(new Dimension(454, 979));
+	    scrollPane.setPreferredSize(new Dimension(485, 600));
 	    rulesFrame.getContentPane().add(scrollPane);
-	    rulesFrame.pack();
-	    rulesFrame.setLocationByPlatform(true);
 	    rulesFrame.setVisible(true);
-	    
-	    
+
 	}
-	    
     }
+
     /**
      * Function that puts up a Game Over Frame that can take us back to the Main Screen
      */

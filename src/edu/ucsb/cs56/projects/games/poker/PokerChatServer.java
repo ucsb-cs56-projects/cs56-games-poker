@@ -57,7 +57,7 @@ public class PokerChatServer {
 	while(iter.hasNext()){
 	    try{
 		PrintWriter writer = (PrintWriter) iter.next();
-		writer.println( message);
+		writer.println(message);
 		writer.flush();
 	    }catch(Exception ex){ex.printStackTrace();}
 	}

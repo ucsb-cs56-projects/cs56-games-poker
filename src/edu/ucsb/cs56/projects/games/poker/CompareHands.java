@@ -14,7 +14,13 @@ public class CompareHands implements Serializable{
     
     private int player1Value = 0;
     private int player2Value = 0;    
-    
+
+    /**
+     * Compare Hands Constructor
+     * @param Player player1
+     * @param Player player2
+     * @param TableCards table
+     */    
     public CompareHands(Player player1, Player player2, TableCards table) {
 	cardHand1 = new ArrayList<Card>();
 	cardHand1.addAll(player1.getHand());
