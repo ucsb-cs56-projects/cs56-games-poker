@@ -5,7 +5,7 @@ GUI application that simulates a Texas Holdem style Poker Game using 2 decks.
 project history
 ===============
 ```
- W14 | TBD | TBD | (pconrad) Poker Game
+ (pconrad) Poker Game | W14 | W16 | M16
 ```
 
 Playing the Game
