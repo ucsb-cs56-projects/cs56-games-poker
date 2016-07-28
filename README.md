@@ -1,7 +1,5 @@
 cs56-games-poker
 ================
-Original Programmer: Joey Dewan
-        
 GUI application that simulates a Texas Holdem style Poker Game using 2 decks.
 
 project history
