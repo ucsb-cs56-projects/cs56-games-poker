@@ -38,8 +38,6 @@ Screenshots
 
 ![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/Chat.png)
 
-![Rules](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/src/edu/ucsb/cs56/projects/games/poker/rules.png)
-
 Betting
 =======
 * If you choose to bet, enter the amount in the betting field and press bet or enter
