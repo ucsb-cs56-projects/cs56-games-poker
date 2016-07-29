@@ -28,15 +28,16 @@ Game Options :
 
 Screenshots
 ===========
-PLEASE UPDATE THESE PICTURES!
 
-![Main Menu](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/menu.png)
+![Main Menu](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/menu.png)
 
-![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/singleplayer.png)
+![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/singleplayer.png)
 
-![Multiplayer](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/multiplayer.png)
+![Creating Chat Server](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/createchatserver.png)
 
-![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/Chat.png)
+![Enter Username for Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/chatusername.png)
+
+![Chat](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/chat.png)
 
 Rules
 =====
