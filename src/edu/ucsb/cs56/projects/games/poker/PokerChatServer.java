@@ -40,6 +40,14 @@ public class PokerChatServer {
 	System.out.println("Poker chat server created");
 	try{
 	    ServerSocket serverSock = new ServerSocket(14040);
+
+	    // Print out your IP address; needed to connect with you 
+	    URL whatismyip = new URL("http://checkip.amazonaws.com");
+	    BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+	    String ip = in.readLine();
+	    System.out.println("Your IP Address is: " + ip);
+	    //
+    
 	    while(true){
 		Socket clientSocket = serverSock.accept();
 		PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
