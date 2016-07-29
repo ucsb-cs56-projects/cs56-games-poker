@@ -31,6 +31,8 @@ Screenshots
 
 ![Main Menu](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/menu.png)
 
+![Rules](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/src/edu/ucsb/cs56/projects/games/poker/rules.png)
+
 ![Single Player](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/singleplayer.png)
 
 ![Creating Chat Server](https://raw.githubusercontent.com/dvanmali/cs56-games-poker/master/pictures/createchatserver.png)
