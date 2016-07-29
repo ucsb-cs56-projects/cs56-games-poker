@@ -124,28 +124,6 @@ public class CompareHands implements Serializable{
 	return -1; // Should only pass in 1 or 2 in parameter
     }
     
-    /**
-       Method used to determine which hand has the higher high card. If high
-       cards are the same, continuously checks for next high card until a 
-       higher card is found.
-       @param otherHand hand to be compared
-    */
-    /*
-    public int sameHandMethod(Hand otherHand){	
-	if(cardHand1.isEmpty())
-	    return 2;
-	else if(cardHand1.getHighCardValue()>otherHand.getHighCardValue())
-	    return 1;
-	else if(cardHand1.getHighCardValue()<otherHand.getHighCardValue())
-	    return 0;
-	else{
-	    cardHand1.remove(this.getHighCard()); 
-	    otherHand.remove(otherHand.getHighCard());
-	    return sameHandMethod(otherHand);
-	}
-    }
-    */
-
     public int calculateValue(ArrayList<Card> player) {
 	if(isStraightFlush(player))
 	    return 8;

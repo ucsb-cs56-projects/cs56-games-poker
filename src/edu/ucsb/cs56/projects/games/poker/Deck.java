@@ -71,31 +71,5 @@ public class Deck implements Serializable{
 	moveToDiscardPile(card);
 	return card;
     }
-
-    /**
-     * Deals 2 Cards to both the dealer and player.
-     * Returns a hand of Two Cards for Player's Hand
-     */
-    /* Now handled by Hand class
-    public Hand dealPlayer() {
-	Hand hand = new Hand();
-	for (int i=0; i<2; i++)
-	    hand.add(obtainRandomCardFromDeck());
-	return hand;
-    }
-    */
-
-    /**
-     * Contains 5 Cards to be displayed on the table
-     * Returns a Cards on the Table
-     */
-    /* Now handled by TableCards class
-    public TableCards dealTable() {
-	TableCards table = new TableCards();
-	for (int i=0; i<5; i++)
-	    table.add(obtainRandomCardFromDeck());
-	return table;
-    }
-    */
     
 }

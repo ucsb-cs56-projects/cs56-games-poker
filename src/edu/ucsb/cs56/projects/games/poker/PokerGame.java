@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Class that represents a Texas Holdem' Style Poker Game.
  */
-public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
+public class PokerGame {
     // PokerGame States
     public enum Winner {
         PLAYER, OPPONENT, TIE, NEW_GAME
@@ -49,7 +49,7 @@ public class PokerGame { // implements PlayerDelegate {  <<<<<<< For Multiplayer
         centerPanel, messagePanel, optionArea,
         oSubPane1, oSubPane2, oSubPane3,
 	pSubPane1, pSubPane2, pSubPane3,
-        flopPane, turnPane, riverPane, betPane, respondPane, // What is respondPane?
+        flopPane, turnPane, riverPane, betPane,
 	gameOverMessage, gameOverPanel, gameOverButtonPanel; // gameOverFrame
 
     // Properties of Poker Game

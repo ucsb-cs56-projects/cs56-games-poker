@@ -46,7 +46,6 @@ public class PokerChatServer {
 	    BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
 	    String ip = in.readLine();
 	    System.out.println("Your IP Address is: " + ip);
-	    //
     
 	    while(true){
 		Socket clientSocket = serverSock.accept();
