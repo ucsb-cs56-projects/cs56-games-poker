@@ -64,7 +64,10 @@ End Of Game
 
 JavaDoc
 =======
-Note that ant javadoc works but links do not!
+To see JavaDoc and overall structure of the game, type the command:
+```
+ant javadoc
+```
 
 M16 final remarks
 =================
