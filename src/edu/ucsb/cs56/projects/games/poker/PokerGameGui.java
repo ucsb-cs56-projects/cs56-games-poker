@@ -394,6 +394,7 @@ public class PokerGameGui extends PokerGame{
 			rulesPart1.setVisible(true);
 			rulesPanel = rulesPart1;
 		}
+	}
     }
 
     protected class overviewButtonHandler implements ActionListener {// rules
