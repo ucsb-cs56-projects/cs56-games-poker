@@ -100,7 +100,7 @@ public class PokerGameGui extends PokerGame{
 	    	rulesPart2.add(exampleRulesButton);
 		rulesPart3.add(overviewRulesButton);
 		rulesPart3.add(gameplayRulesButton);
-	    	rulesPart1.setVisible(true);
+	    	rulesPart1.setVisible(false);
 		rulesPanel = rulesPart1;
 		
 	        opponentPanel = new JPanel();
