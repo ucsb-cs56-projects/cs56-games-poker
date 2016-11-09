@@ -100,7 +100,8 @@ public class PokerGameGui extends PokerGame{
 	    	rulesPart2.add(exampleRulesButton);
 		rulesPart3.add(overviewRulesButton);
 		rulesPart3.add(gameplayRulesButton);
-	    	rulesPanel = rulesPart1;
+	    	rulesPart1.setVisible(true);
+		rulesPanel = rulesPart1;
 		
 	        opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
@@ -396,34 +397,20 @@ public class PokerGameGui extends PokerGame{
     protected class overviewButtonHandler implements ActionListener {// rules
 	public void actionPerformed(ActionEvent e) {
 	    rulesPart1.setVisible(true);
-	    rulesPart2.setVisible(false);
-	    rulesPart3.setVisible(false);
-		
-	    rulesPanel = rulesPart1;
-	   
+	    rulesPanel = rulesPart1;	   
 	}
     }
 
       protected class gameplayButtonHandler implements ActionListener {// rules
-	public void actionPerformed(ActionEvent e) {
-	    
-	    rulesPart1.setVisible(false);
+	public void actionPerformed(ActionEvent e) {	    
 	    rulesPart2.setVisible(true);
-	    rulesPart3.setVisible(false);
-		
-	    rulesPanel = rulesPart2;
-	    
+	    rulesPanel = rulesPart2;	    
 	}
     }
 
       protected class exampleButtonHandler implements ActionListener {// rules
-	public void actionPerformed(ActionEvent e) {
-	    //  mainFrame.setSize(1000, 1000);
-	    
-	    rulesPart1.setVisible(false);
-	    rulesPart2.setVisible(false);
+	public void actionPerformed(ActionEvent e) {	 
 	    rulesPart3.setVisible(true);
-	    
 	    rulesPanel = rulesPart3;
 	    }
     }
