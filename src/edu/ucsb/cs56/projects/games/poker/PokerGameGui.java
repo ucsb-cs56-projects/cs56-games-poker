@@ -74,8 +74,8 @@ public class PokerGameGui extends PokerGame{
 		rulesPart2 = new JPanel();
 		rulesPart3 = new JPanel();
 		rulesPart1.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
-		rulesPart2.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
-		rulesPart3.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
+		rulesPart2.setLayout(new BoxLayout(rulesPart2, BoxLayout.Y_AXIS));
+		rulesPart3.setLayout(new BoxLayout(rulesPart2, BoxLayout.Y_AXIS));
 	    rulesOverviewImg = new JLabel();
 		rulesGameplayImg = new JLabel();
 		rulesExampleImg = new JLabel();
