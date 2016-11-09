@@ -13,34 +13,36 @@ public class PokerGameGui extends PokerGame{
    
 	
 	
-	protected JFrame
-        mainFrame, gameOverFrame;
+   protected JFrame
+       mainFrame, gameOverFrame;
 
     protected JTextField
         betTextField;
 
     protected JButton
-        foldButton, betButton, checkButton, callButton, showdownButton, rulesButton, // mainFrame
+        foldButton, betButton, checkButton, callButton, showdownButton, rulesButton,  // mainFrame
+	overviewRulesButton, gameplayRulesButton, exampleRulesButton, //Rules Panel
 	gameOverButton; // gameOverFrame
 
     protected JLabel
+	rulesExampleImg, rulesOverviewImg, rulesGameplayImg,
         playerWinsLabel, opponentWinsLabel, // Possibly don't need these
 	playerChipsLabel, opponentChipsLabel, 
 	potLabel, gameMessage, playerPrompt,  // Possibly don't need these
 	backCardLabel1, backCardLabel2, // Not sure what these are used for
 	gameOverLabel; // gameOverFrame
 
-    protected JPanel        
+    protected JPanel
+    rulesPanel, rulesPart1, rulesPart2, rulesPart3,
 	opponentPanel, playerPanel,
-        centerPanel, messagePanel, optionArea,
-        oSubPane1, oSubPane2, oSubPane3,
+    centerPanel, messagePanel, optionArea,
+    oSubPane1, oSubPane2, oSubPane3,
 	pSubPane1, pSubPane2, pSubPane3,
         flopPane, turnPane, riverPane, betPane,
 	gameOverMessage, gameOverPanel, gameOverButtonPanel; // gameOverFrame
 	
 	public PokerGameGui(){
-		super();
-		 
+		super();		 
 	 }
 	 
     public void layoutSubViews() {
@@ -62,11 +64,42 @@ public class PokerGameGui extends PokerGame{
 	    callButton.addActionListener(new callButtonHandler());
             showdownButton = new JButton("SHOWDOWN");
 	    showdownButton.addActionListener(new showdownButtonHandler());
-	    rulesButton = new JButton("RULES");
+	    
+		/*putting the rules pictures into the game without adding a new window */
+		
+		rulesButton = new JButton("RULES");
 	    rulesButton.setEnabled(true);
 	    rulesButton.addActionListener(new rulesButtonHandler());
+	   	rulesPart1 = new JPanel();
+		rulesPart2 = new JPanel();
+		rulesPart3 = new JPanel();
+		rulesPart1.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
+		rulesPart2.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
+		rulesPart3.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
+	    rulesOverviewImg = new JLabel();
+		rulesGameplayImg = new JLabel();
+		rulesExampleImg = new JLabel();
+	    rulesOverviewImg.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesOverview.png"));
+		rulesGameplayImg.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay.png"));
+		rulesExampleImg.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesExamples.png"));
+		rulesPart1.add(rulesOverviewImg);
+		rulesPart2.add(rulesGameplayImg);
+		rulesPart3.add(rulesExampleImg);
+		overviewRulesButton = new JButton("Overview");
+	    overviewRulesButton.setEnabled(true);
+	    overviewRulesButton.addActionListener(new overviewButtonHandler() );
+	    gameplayRulesButton = new JButton("Gameplay");
+	    gameplayRulesButton.setEnabled(true);
+	    gameplayRulesButton.addActionListener(new gameplayButtonHandler() );
+	    exampleRulesButton = new JButton("Example Hands");
+	    exampleRulesButton.setEnabled(true);
+	    exampleRulesButton.addActionListener(new exampleButtonHandler() );
+	    rulesPart1.add(overviewRulesButton);
+	    rulesPart2.add(gameplayRulesButton);
+	    rulesPart3.add(exampleRulesButton);
 	    
-            opponentPanel = new JPanel();
+		
+	        opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
             oSubPane1 = new JPanel();
             oSubPane1.setLayout(new BoxLayout(oSubPane1, BoxLayout.Y_AXIS));
@@ -173,8 +206,10 @@ public class PokerGameGui extends PokerGame{
             turnPane.setBackground(pokerGreen);
             riverPane.setBackground(pokerGreen);
 
+
             mainFrame = new JFrame("Poker Game");
-            mainFrame.setSize(800, 500);
+            mainFrame.setSize(new Dimension(1000, 600));
+	    mainFrame.setLayout(new BorderLayout() );
             mainFrame.setResizable(false);
             mainFrame.setLocation(250, 250);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,7 +217,14 @@ public class PokerGameGui extends PokerGame{
             mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
             mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
             mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
+			mainFrame.getContentPane().add(BorderLayout.WEST, rulesPart1);
+			mainFrame.getContentPane().add(BorderLayout.WEST, rulesPart2);
+			mainFrame.getContentPane().add(BorderLayout.WEST, rulesPart3);
             mainFrame.setVisible(true);
+	    
+
+	    //  mainFramee.add(BorderLayout.CENTER, mainFrame);
+	    // mainFramee.getContentPane().add(BorderLayout.WEST, rulesPanel);
 	}
     }
 
@@ -345,24 +387,47 @@ public class PokerGameGui extends PokerGame{
 
     protected class rulesButtonHandler implements ActionListener {// rules
 	public void actionPerformed(ActionEvent e) {
-	    JFrame rulesFrame = new JFrame("RULES");
-	    rulesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    rulesFrame.setVisible(true);
-	    rulesFrame.setSize(400,600);
-	    rulesFrame.setBackground(new Color(204, 0, 0));
-	    JPanel jp = new JPanel();
-	    JLabel jl = new JLabel();
-	    
-	    jl.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules.png"));
-	    
-	    jp.add(jl);
-	    rulesFrame.add(jp);
-	    JScrollPane scrollPane = new JScrollPane(jp);
-	    scrollPane.setPreferredSize(new Dimension(485, 600));
-	    rulesFrame.getContentPane().add(scrollPane);
-	    rulesFrame.setVisible(true);
-
+	    //  mainFrame.setSize(1000, 1000);
+	   // rulesPanel.setVisible(!rulesPanel.isVisible() );
+	    if(rulesPart1.isVisible() || rulesPart2.isVisible() || rulesPart3.isVisible()){
+			rulesPart1.setVisible(false);
+			rulesPart2.setVisible(false);
+			rulesPart3.setVisible(false);
+		}
+		else
+			rulesPart1.setVisible(true);
 	}
+    }
+
+    protected class overviewButtonHandler implements ActionListener {// rules
+	public void actionPerformed(ActionEvent e) {
+	    
+	    rulesPart1.setVisible(true);
+	    rulesPart2.setVisible(false);
+	    rulesPart3.setVisible(false);
+	    
+	}
+    }
+
+      protected class gameplayButtonHandler implements ActionListener {// rules
+	public void actionPerformed(ActionEvent e) {
+	    
+	    rulesPart1.setVisible(false);
+	    rulesPart2.setVisible(true);
+	    rulesPart3.setVisible(false);
+	    
+	}
+    }
+
+      protected class exampleButtonHandler implements ActionListener {// rules
+	public void actionPerformed(ActionEvent e) {
+	    //  mainFrame.setSize(1000, 1000);
+	    
+	    rulesPart1.setVisible(false);
+	    rulesPart2.setVisible(false);
+	    rulesPart3.setVisible(true);
+	    
+	    }
     }
 
     /**
