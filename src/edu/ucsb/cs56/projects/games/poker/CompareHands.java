@@ -146,7 +146,7 @@ public class CompareHands implements Serializable{
     }
 
 
-    private ArrayList<Integer> sortHand(ArrayList<Card> player) {
+    public ArrayList<Integer> sortHand(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	for(int i=0;i<player.size();i++) {
 	    sortedHand.add(player.get(i).getValue());

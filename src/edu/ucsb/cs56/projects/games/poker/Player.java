@@ -13,6 +13,12 @@ public class Player implements Serializable {
     private int wins;
     public PokerGame delegate;
 
+	/** Creates a Poker player with a set hand */
+	public Player(Hand hand){
+		pokerHand = hand;
+		chips = 100;
+		wins = 0;
+	}
     /**
      * Creates a Poker player with a designated number of chips
      * @param int number of chips, the Deck of Cards
@@ -30,7 +36,8 @@ public class Player implements Serializable {
     public Hand getHand() {
         return pokerHand;
     }
-
+	
+	
     /**
      * Get Player's Chips
      * @return int
