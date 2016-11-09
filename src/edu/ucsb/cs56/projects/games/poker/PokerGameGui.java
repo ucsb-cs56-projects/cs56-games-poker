@@ -391,7 +391,7 @@ public class PokerGameGui extends PokerGame{
 	    //  mainFrame.setSize(1000, 1000);	
 	   	//rulesPanel.setVisible(!rulesPanel.isVisible() );
 	   	if(!rulesPanel.isVisible()){
-			rulesPanel.setVisible(true)
+			rulesPanel.setVisible(true);
 			rulesPart1.setVisible(true);
 			rulesPanel = rulesPart1;
 		}
