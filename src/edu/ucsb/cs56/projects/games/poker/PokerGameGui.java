@@ -389,11 +389,14 @@ public class PokerGameGui extends PokerGame{
     protected class rulesButtonHandler implements ActionListener {// rules
 	public void actionPerformed(ActionEvent e) {
 	    //  mainFrame.setSize(1000, 1000);	
-	   	rulesPanel.setVisible(!rulesPanel.isVisible() );
-	   	if(rulesPanel.isVisible()){
+	   	//rulesPanel.setVisible(!rulesPanel.isVisible() );
+	   	if(!rulesPanel.isVisible()){
+			rulesPanel.setVisible(true)
 			rulesPart1.setVisible(true);
 			rulesPanel = rulesPart1;
 		}
+		else
+			rulesPanel.setVisible(false);
 	}
     }
 
