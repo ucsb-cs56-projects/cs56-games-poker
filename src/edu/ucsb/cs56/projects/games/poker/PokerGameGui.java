@@ -68,15 +68,15 @@ public class PokerGameGui extends PokerGame{
 		/*putting the rules pictures into the game without adding a new window */
 		
 		rulesButton = new JButton("RULES");
-	    rulesButton.setEnabled(true);
-	    rulesButton.addActionListener(new rulesButtonHandler());
+	   	rulesButton.setEnabled(true);
+	   	rulesButton.addActionListener(new rulesButtonHandler());
 	   	rulesPart1 = new JPanel();
 		rulesPart2 = new JPanel();
 		rulesPart3 = new JPanel();
 		rulesPart1.setLayout(new BoxLayout(rulesPart1, BoxLayout.Y_AXIS));
 		rulesPart2.setLayout(new BoxLayout(rulesPart2, BoxLayout.Y_AXIS));
 		rulesPart3.setLayout(new BoxLayout(rulesPart3, BoxLayout.Y_AXIS));
-	    rulesOverviewImg = new JLabel();
+	   	rulesOverviewImg = new JLabel();
 		rulesGameplayImg = new JLabel();
 		rulesExampleImg = new JLabel();
 	    rulesOverviewImg.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesOverview.png"));
@@ -86,18 +86,21 @@ public class PokerGameGui extends PokerGame{
 		rulesPart2.add(rulesGameplayImg);
 		rulesPart3.add(rulesExampleImg);
 		overviewRulesButton = new JButton("Overview");
-	    overviewRulesButton.setEnabled(true);
-	    overviewRulesButton.addActionListener(new overviewButtonHandler() );
-	    gameplayRulesButton = new JButton("Gameplay");
-	    gameplayRulesButton.setEnabled(true);
-	    gameplayRulesButton.addActionListener(new gameplayButtonHandler() );
-	    exampleRulesButton = new JButton("Example Hands");
-	    exampleRulesButton.setEnabled(true);
-	    exampleRulesButton.addActionListener(new exampleButtonHandler() );
-	    rulesPart1.add(overviewRulesButton);
-	    rulesPart2.add(gameplayRulesButton);
-	    rulesPart3.add(exampleRulesButton);
-	    
+	   	overviewRulesButton.setEnabled(true);
+	    	overviewRulesButton.addActionListener(new overviewButtonHandler() );
+	  	gameplayRulesButton = new JButton("Gameplay");
+	   	gameplayRulesButton.setEnabled(true);
+	   	gameplayRulesButton.addActionListener(new gameplayButtonHandler() );
+	    	exampleRulesButton = new JButton("Example Hands");
+	   	exampleRulesButton.setEnabled(true);
+	    	exampleRulesButton.addActionListener(new exampleButtonHandler() );
+	    	rulesPart1.add(gameplayRulesButton);
+		rulesPart1.add(exampleRulesButton);
+	    	rulesPart2.add(overviewRulesButton);
+	    	rulesPart2.add(exampleRulesButton);
+		rulesPart3.add(overviewRulesButton);
+		rulesPart3.add(gameplayRulesButton);
+	    	rulesPanel = rulesPart1;
 		
 	        opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
@@ -217,10 +220,8 @@ public class PokerGameGui extends PokerGame{
             mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
             mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
             mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
-			mainFrame.getContentPane().add(BorderLayout.WEST, rulesPart1);
-			mainFrame.getContentPane().add(BorderLayout.WEST, rulesPart2);
-			mainFrame.getContentPane().add(BorderLayout.WEST, rulesPart3);
-            mainFrame.setVisible(true);
+	    mainFrame.getContentPane().add(BorderLayout.WEST, rulesPanel);
+	    mainFrame.setVisible(true);
 	    
 
 	    //  mainFramee.add(BorderLayout.CENTER, mainFrame);
@@ -387,25 +388,22 @@ public class PokerGameGui extends PokerGame{
 
     protected class rulesButtonHandler implements ActionListener {// rules
 	public void actionPerformed(ActionEvent e) {
-	    //  mainFrame.setSize(1000, 1000);
-	   // rulesPanel.setVisible(!rulesPanel.isVisible() );
-	    if(rulesPart1.isVisible() || rulesPart2.isVisible() || rulesPart3.isVisible()){
-			rulesPart1.setVisible(false);
-			rulesPart2.setVisible(false);
-			rulesPart3.setVisible(false);
-		}
-		else
+	    //  mainFrame.setSize(1000, 1000);	
+	   	rulesPanel.setVisible(!rulesPanel.isVisible() );
+	   	if(rulesPanel.isVisible()){
 			rulesPart1.setVisible(true);
-	}
+			rulesPanel = rulesPart1;
+		}
     }
 
     protected class overviewButtonHandler implements ActionListener {// rules
 	public void actionPerformed(ActionEvent e) {
-	    
 	    rulesPart1.setVisible(true);
 	    rulesPart2.setVisible(false);
 	    rulesPart3.setVisible(false);
-	    
+		
+	    rulesPanel = rulesPart1;
+	   
 	}
     }
 
@@ -415,6 +413,8 @@ public class PokerGameGui extends PokerGame{
 	    rulesPart1.setVisible(false);
 	    rulesPart2.setVisible(true);
 	    rulesPart3.setVisible(false);
+		
+	    rulesPanel = rulesPart2;
 	    
 	}
     }
@@ -427,6 +427,7 @@ public class PokerGameGui extends PokerGame{
 	    rulesPart2.setVisible(false);
 	    rulesPart3.setVisible(true);
 	    
+	    rulesPanel = rulesPart3;
 	    }
     }
 
