@@ -5,10 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-final class PokerSinglePlayer extends PokerGame {
+final class PokerSinglePlayer extends PokerGameGui {
 
     Timer timer;
-    int timer_value = 1500; // milliseconds
+    int timer_value = 2000; // milliseconds
     boolean yourTurnToBet = true;
 
     /**
@@ -28,25 +28,45 @@ final class PokerSinglePlayer extends PokerGame {
     }
     
     /**
-     * Starts between you game and AI
+     * Starts game between you and AI
      */
     public void go() {
-	super.setUp();
-	layoutSubViews();
-	controlButtons();
+	super.setUp(); 
+	layoutSubViews(); //sets up all of the buttons and panels and GUI
+	controlButtons(); //disables buttons on the screen while the game sets up
 
-	if(!gameOver){
-	    step = Step.BLIND;
+	if(!gameOver){ 
+	    step = Step.BLIND; //This is the first step in the game.
 	    turn = Turn.OPPONENT;
-
-	    timer = new Timer(timer_value, e -> opponentAI()); // Java 8 Lambda function Cool!!!
-	    timer.setRepeats(false);
-	    prompt = "opponent goes first!";
-	    message = "opponent is thinking...";
+	    
+	    int rng = (Math.random() < 0.5) ? 0:1; //generate a random 0 or 1 
+	    if (rng == 1) { //1 = player 1 goes first.
+		    turn = Turn.PLAYER;
+		    message = "player goes first!";
+		    prompt = "what will you do?";
+		  
+	    }
+	    //Here, we are using a timer to control how the turns work
+	    //The timer comes from the swing class if you want to read up on it
+	    //Another thing to note is we used a lambda function deal with the thread in timer.
+	    timer = new Timer(timer_value, e -> turnDecider() );
+	    timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
+	    updateFrame(); //function is inside of PokerGameGui
 	    timer.restart();
 	}
     }
 
+    //Method that directs the turn to who it needs to go to.
+    //In the future, this can be changed to allow for multiplayer.
+    public void turnDecider () {
+	if (turn == Turn.PLAYER) {
+	    playerTurn();
+	}
+	else
+	    opponentAI();
+    }
+
+    
     /**
      * Method to activate the opponent AI on turn change.
      * Changes between you and the AI
@@ -87,12 +107,36 @@ final class PokerSinglePlayer extends PokerGame {
 	}
     }
 
+    public void playerTurn() {
+	controlButtons();
+	updateFrame();
+    }
+
+    /**
+     * Method that moves the game to the next phase
+     */
+	public void nextStep() {
+        if (step == Step.BLIND) { // Most like able to skip/remove this step
+            step = Step.FLOP;
+        } else if (step == Step.FLOP) {
+            step = Step.TURN;
+        } else if (step == Step.TURN) {
+            step = Step.RIVER;
+        } else {
+            step = Step.SHOWDOWN;
+            message = "All bets are in.";
+            prompt = "Determine Winner: ";
+	    controlButtons();
+	}
+    }
+
 
 
     /**
      *  Simple AI for the opponent in single player.
      */
-    // TODO: Make AI much more complex and less predictable, rewrite existing later
+    // TODO: Make AI much more complex and less predictable
+    //Move Opponent AI into its own class
     private void opponentAI() {
 	boolean shouldBet = false;
 	boolean shouldCall = true;
