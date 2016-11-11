@@ -31,15 +31,16 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Starts game between you and AI
      */
     public void go() {
-	super.setUp(); 
+	super.setUp();
 	layoutSubViews(); //sets up all of the buttons and panels and GUI
-	controlButtons(); //disables buttons on the screen while the game sets up
+	controlButtons(); //this function is in PokerGameGui.
 
 	if(!gameOver){ 
 	    step = Step.BLIND; //This is the first step in the game.
 	    turn = Turn.OPPONENT;
+	    prompt = "opponent goes first!";
 	    
-	    int rng = (Math.random() < 0.5) ? 0:1; //generate a random 0 or 1 
+	    int rng = (int) (Math.random()*2); //generate a random 0 or 1 
 	    if (rng == 1) { //1 = player 1 goes first.
 		    turn = Turn.PLAYER;
 		    message = "player goes first!";
@@ -62,8 +63,9 @@ final class PokerSinglePlayer extends PokerGameGui {
 	if (turn == Turn.PLAYER) {
 	    playerTurn();
 	}
-	else
+	else {
 	    opponentAI();
+	}
     }
 
     
@@ -104,20 +106,6 @@ final class PokerSinglePlayer extends PokerGameGui {
 		controlButtons();
 		updateFrame();
 	    }
-	}
-    }
-	public void nextStep() {
-        if (step == Step.BLIND) { // Most like able to skip/remove this step
-            step = Step.FLOP;
-        } else if (step == Step.FLOP) {
-            step = Step.TURN;
-        } else if (step == Step.TURN) {
-            step = Step.RIVER;
-        } else {
-            step = Step.SHOWDOWN;
-            message = "All bets are in.";
-            prompt = "Determine Winner: ";
-	    controlButtons();
 	}
     }
 
