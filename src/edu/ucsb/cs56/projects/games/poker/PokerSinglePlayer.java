@@ -106,6 +106,20 @@ final class PokerSinglePlayer extends PokerGameGui {
 	    }
 	}
     }
+	public void nextStep() {
+        if (step == Step.BLIND) { // Most like able to skip/remove this step
+            step = Step.FLOP;
+        } else if (step == Step.FLOP) {
+            step = Step.TURN;
+        } else if (step == Step.TURN) {
+            step = Step.RIVER;
+        } else {
+            step = Step.SHOWDOWN;
+            message = "All bets are in.";
+            prompt = "Determine Winner: ";
+	    controlButtons();
+	}
+    }
 
     public void playerTurn() {
 	controlButtons();

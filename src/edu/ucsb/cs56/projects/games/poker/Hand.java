@@ -11,7 +11,11 @@ import java.util.*;
 public class Hand extends ArrayList<Card> implements Serializable{
 
     private int handValue;
-    
+	/** Constructor to set specific hands */
+    public Hand(Card card1, Card card2){
+		this.add(card1);
+		this.add(card2);
+	}
     /**
      * Constructor creates a Hand of Cards by calling the Deck to give Hand these cards
      * Creates a 2 Card Hand for the player
@@ -86,4 +90,5 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
 	return min;
     }   
+	
 }
