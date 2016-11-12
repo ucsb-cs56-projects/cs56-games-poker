@@ -13,15 +13,19 @@ public class Player implements Serializable {
     private int wins;
     public PokerGame delegate;
 
-	/** Creates a Poker player with a set hand */
-	public Player(Hand hand){
-		pokerHand = hand;
-		chips = 100;
-		wins = 0;
-	}
+    /** 
+     *Creates a Poker player with a set hand 
+     * @param hand the hand you have
+     */
+    public Player(Hand hand){
+	pokerHand = hand;
+	chips = 100;
+	wins = 0;
+    }
     /**
      * Creates a Poker player with a designated number of chips
-     * @param int number of chips, the Deck of Cards
+     * @param chips number of chips
+     * @param deck of Cards
      */
     public Player(int chips, Deck deck) {
 	this.pokerHand = new Hand(deck);
@@ -57,7 +61,7 @@ public class Player implements Serializable {
 
     /**
      * Get number of player wins
-     * @return int type
+     * @return int
      */
     public int getWins() {
         return wins;
@@ -72,8 +76,7 @@ public class Player implements Serializable {
 
     /**
      * Bet chips
-     * @param _chips number of chips to bet
-     * @return int type: number of chips bet
+     * @param chipsBet number of chips to bet
      */
     public void bet(int chipsBet) {
         if (chipsBet <= 0)

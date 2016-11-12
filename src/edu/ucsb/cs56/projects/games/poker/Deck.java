@@ -64,6 +64,7 @@ public class Deck implements Serializable{
      * Returns a Random Card from activeDeck
      * Transfers the Card from activeDeck to the discardPile
      * Only public function! Every card obtained from the deck MUST go through this function
+     * @return Card 
      */
     public Card obtainRandomCardFromDeck() {
 	int randomNum = (int)(Math.random() * activeDeck.size());

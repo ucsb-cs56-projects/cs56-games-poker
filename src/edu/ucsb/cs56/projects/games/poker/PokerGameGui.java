@@ -10,9 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PokerGameGui extends PokerGame{
-    
-    
-    
+        
     protected JFrame
 	mainFrame, gameOverFrame;
     
@@ -297,6 +295,9 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the betButton using ActionListener
      */
     protected class betButtonHandler implements ActionListener {
+	/**
+	 * @param e action event
+	 */
 	public void actionPerformed(ActionEvent e) {
 	    String inputText = betTextField.getText();
 	    if (!inputText.equals("")) {
@@ -336,7 +337,10 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the checkButton using ActionListener
      */
     protected class checkButtonHandler implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+	/**
+         * @param e action event
+         */
+	public void actionPerformed(ActionEvent e) {
 	    bet = 0;
 	    message = "Opponent waiting to deal.";
 	    prompt = "Player checks.";
@@ -355,7 +359,10 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the foldButton using ActionListener
      */
     protected class foldButtonHandler implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        /**
+         * @param e action event
+         */
+	public void actionPerformed(ActionEvent e) {
 	    message = "Opponent waiting for turn.";
 	    prompt = "You fold.";
 	    player.foldHand();
@@ -366,7 +373,10 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the callButton using ActionListener
      */
     protected class callButtonHandler implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+	/**
+         * @param e action event
+         */
+	public void actionPerformed(ActionEvent e) {
 	    pot += bet;
 	    player.bet(bet);
 	    message = "You call.";
@@ -383,6 +393,9 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the showdownButton using ActionListener
      */
     protected class showdownButtonHandler implements ActionListener {
+	/**
+         * @param e action event
+         */
 	public void actionPerformed(ActionEvent e) {
 	    determineWinner();
 	    collectPot();
@@ -391,12 +404,18 @@ public class PokerGameGui extends PokerGame{
     }
 
     protected class rulesButtonHandler implements ActionListener {// rules
+        /**
+         * @param e action event
+         */
 	public void actionPerformed(ActionEvent e) {
 	    rulesPanel.setVisible(!rulesPanel.isVisible() );
 	}
     }
 
     protected class overviewButtonHandler implements ActionListener {// rules
+	/**
+         * @param e action event
+         */
 	public void actionPerformed(ActionEvent e) {
 	 
 	    rulesPanel.remove(rulesGameplay1Label);
@@ -410,7 +429,10 @@ public class PokerGameGui extends PokerGame{
     }
 
       protected class gameplayButton1Handler implements ActionListener {// rules
-	public void actionPerformed(ActionEvent e) {	    
+	  /**
+	   * @param e action event
+	   */
+	  public void actionPerformed(ActionEvent e) {	    
 	 
 	    rulesPanel.remove(rulesGameplay1Label);
 	    rulesPanel.remove(rulesGameplay2Label);
@@ -422,6 +444,9 @@ public class PokerGameGui extends PokerGame{
 	}
     }
     protected class gameplayButton2Handler implements ActionListener {// rules
+	/**
+         * @param e action event
+         */
 	public void actionPerformed(ActionEvent e) {	    
 	 
 	    rulesPanel.remove(rulesGameplay1Label);
@@ -434,7 +459,10 @@ public class PokerGameGui extends PokerGame{
 	}
     }
 
-      protected class exampleButtonHandler implements ActionListener {// rules
+    protected class exampleButtonHandler implements ActionListener {// rules
+	/**
+	 * @param e action event
+	 */
 	public void actionPerformed(ActionEvent e) {	 
 	    
 	    rulesPanel.remove(rulesGameplay1Label);
@@ -449,6 +477,7 @@ public class PokerGameGui extends PokerGame{
 
     /**
      * Function that puts up a Game Over Frame that can take us back to the Main Screen
+     * @param label a label on the GUI
      */
     protected void gameOver(String label) {
         gameOverFrame = new JFrame();

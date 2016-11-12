@@ -90,7 +90,7 @@ public class PokerGame {
     /**
      * Returns an ImageIcon by using the URL class in order to make the
      * ImageIcon web compatible
-     * @param Card whose image is to be retrieved
+     * @param c whose image is to be retrieved
      * @return ImageIcon
      */
     public ImageIcon getCardImage(Card c) {
@@ -216,18 +216,5 @@ public class PokerGame {
     public void showWinnerAlert() {
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // ****************************** GUI STUFF IN OTHER CLASS *****************************
 
 }
