@@ -14,7 +14,7 @@ import org.junit.Test;
  *@see CompareHands
  */
  
- public class TestCompareHands{
+ public class CompareHandsTest{
 	Card twoDiamond = new Card(2,"D"); 
 	Card twoHeart = new Card(2,"H");
 	Card twoClub = new Card(2,"C"); 
