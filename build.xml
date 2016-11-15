@@ -76,7 +76,7 @@ copy everything you just made to the javadoc destination, and then make it reada
     <batchtest fork="yes">
       <fileset dir="src">
         <!-- this will pick up every class with a name ending in Test -->
-        <include name="*Test.java"/>
+        <include name="**/*Test.java"/>
       </fileset>
     </batchtest>
     <formatter type="plain" usefile="false" /> 

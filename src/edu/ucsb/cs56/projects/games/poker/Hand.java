@@ -11,11 +11,19 @@ import java.util.*;
 public class Hand extends ArrayList<Card> implements Serializable{
 
     private int handValue;
-    
+    /** 
+     * Constructor to set specific hands 
+     * @param card1 first set of cards
+     * @param card2 second set of cards
+     */
+    public Hand(Card card1, Card card2){
+		this.add(card1);
+		this.add(card2);
+	}
     /**
      * Constructor creates a Hand of Cards by calling the Deck to give Hand these cards
      * Creates a 2 Card Hand for the player
-     * @param Deck
+     * @param deck a deck of cards
      */
     public Hand(Deck deck) {
 	handValue = 0;
@@ -26,6 +34,7 @@ public class Hand extends ArrayList<Card> implements Serializable{
     /**
      * Sets the Hand value.
      * NOTE: we may never need this for now, good to have it here for accessibility
+     * @param handValue int that represents the value of the hand
      */	
     public void setHandValue(int handValue){
 	this.handValue=handValue;
@@ -34,14 +43,16 @@ public class Hand extends ArrayList<Card> implements Serializable{
     /**
      * Gets the Hand value.
      * NOTE: we may never need this for now, good to have it here for accessibility
-    */
+     * @return int
+     */
     public int getHandValue(){
 	return handValue;
     }
     
     /**
      * Returns the Card in your Hand with the higher value.
-    */
+     * @return Card
+     */
     public Card getHighCard(){
 	Card max=this.get(0);
 	for(Card c:this) {
@@ -53,7 +64,8 @@ public class Hand extends ArrayList<Card> implements Serializable{
     
     /**
      *  Returns the int value of the higher Card.
-    */
+     * @return int
+     */
     public int getHighCardValue(){
 	int max=0;
 	for(Card c:this) {
@@ -65,7 +77,8 @@ public class Hand extends ArrayList<Card> implements Serializable{
 
     /**
      * Returns the Card in your Hand with the lower value.
-    */
+     * @return Card
+     */
     public Card getLowCard(){
 	Card min=this.get(0);
 	for(Card c:this) {
@@ -77,7 +90,8 @@ public class Hand extends ArrayList<Card> implements Serializable{
     
     /**
      *  Returns the int value of the lower Card.
-    */
+     * @return int 
+     */
     public int getLowCardValue(){
 	int min=0;
 	for(Card c:this) {
@@ -86,4 +100,5 @@ public class Hand extends ArrayList<Card> implements Serializable{
 	}
 	return min;
     }   
+	
 }

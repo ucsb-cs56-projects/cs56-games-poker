@@ -17,9 +17,10 @@ public class CompareHands implements Serializable{
 
     /**
      * Compare Hands Constructor
-     * @param Player player1
-     * @param Player player2
-     * @param TableCards table
+     * @param player1 first player
+     * @param player2 second player
+     * @param table the cards that are on the table
+     * 
      */    
     public CompareHands(Player player1, Player player2, TableCards table) {
 	cardHand1 = new ArrayList<Card>();
@@ -39,7 +40,7 @@ public class CompareHands implements Serializable{
      * Returns 1 if "Player 1" hand is better than "Player 2" hand
      * Returns 0 if the opposite.
      * Returns 2 if exact tie
-     * @param otherHand hand to be compared
+     * @return int 
      */
     public int compareHands(){
 	player1Value = calculateValue(cardHand1);
@@ -98,9 +99,12 @@ public class CompareHands implements Serializable{
 
     /**
      * This method is used if both hands are the same type
-     * @param Hand: hand is either this or the otherhand
-     * @param recursion: Either 1 if called 1st, 2 if called 2nd
+     * Hand is either this or the otherhand
+     * recursion: Either 1 if called 1st, 2 if called 2nd
      * func won't work as intended if given a different number
+     * @param c this is the array of cards
+     * @param recursion MUST BE A 1 OR A 0 IF YOU WANT THIS TO WORK 
+     * @return int returns an integer
      */
     private int sameHandUpdated(ArrayList<Card> c, int recursion) {
 	ArrayList<Card> cards_tmp = new ArrayList<Card>();
@@ -123,6 +127,12 @@ public class CompareHands implements Serializable{
 	}
 	return -1; // Should only pass in 1 or 2 in parameter
     }
+
+    /**
+     * Method that finds the type of hand the player has
+     * @param player the cards that belong to the players
+     * @return int
+     */
     
     public int calculateValue(ArrayList<Card> player) {
 	if(isStraightFlush(player))
@@ -145,8 +155,11 @@ public class CompareHands implements Serializable{
 	    return 0;
     }
 
-
-    private ArrayList<Integer> sortHand(ArrayList<Card> player) {
+    /**
+     * @param player the cards belonging to the player
+     * @return sortedHand
+    */
+    public ArrayList<Integer> sortHand(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
 	for(int i=0;i<player.size();i++) {
 	    sortedHand.add(player.get(i).getValue());
@@ -157,6 +170,8 @@ public class CompareHands implements Serializable{
 
     /**
        Returns boolean for if the hand is a straight flush
+       * @param player Cards belonging to the player
+       * @return boolean
     */
     private boolean isStraightFlush(ArrayList<Card> player){
 	int straightFlushCounter=0;
@@ -230,6 +245,8 @@ public class CompareHands implements Serializable{
 
     /**
        Returns boolean for if the hand has a four of a kind.
+       * @param player the cards belonging to the player
+       * @return boolean
     */
     private boolean isFourOfAKind(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=sortHand(player);
@@ -248,6 +265,8 @@ public class CompareHands implements Serializable{
 
     /**
        Returns boolean for if the hand is a full house.
+       * @param player the cards belonging to the player
+       * @return boolean
     */
     private boolean isFullHouse(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=sortHand(player);
@@ -290,6 +309,8 @@ public class CompareHands implements Serializable{
     
     /**
        Returns boolean for if the hand is a flush.
+       * @param player the cards belonging to the player
+       * @return boolean
     */
     private boolean isFlush(ArrayList<Card> player) {
 	int spadeCounter=0;
@@ -315,6 +336,8 @@ public class CompareHands implements Serializable{
     
     /**
        Returns boolean for if the hand is a straight.
+       * @param player the card belonging to the player
+       * @return boolean
     */
     private boolean isStraight(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=sortHand(player);
@@ -333,6 +356,8 @@ public class CompareHands implements Serializable{
     
     /**
        Returns boolean for if the hand has three of a kind.
+       * @param player the cards belonging to the player
+       * @return boolean
     */
     private boolean isThreeOfAKind(ArrayList<Card> player) {
 	if(isFullHouse(player)){
@@ -357,6 +382,8 @@ public class CompareHands implements Serializable{
     
     /**
        Returns boolean for if the hand has two pairs.
+       * @param player the cards that belong to the player
+       * @return boolean
     */
     private boolean isTwoPair(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
@@ -385,6 +412,8 @@ public class CompareHands implements Serializable{
     
     /**
        Returns boolean for if the hand has only one pair.
+       * @param player cards that belong to the player
+       * @return boolean
     */
     private boolean isOnePair(ArrayList<Card> player) {
 	ArrayList<Integer> sortedHand=new ArrayList<Integer>();
