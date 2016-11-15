@@ -147,7 +147,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	
 	 /** test straight wins against three of a kind */ 
@@ -222,7 +222,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	 
 	 /** test four of a kind wins against three of a kind */
