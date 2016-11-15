@@ -160,7 +160,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(comparingHands.compareHands(), 0);
 	 }
 	 /** test straight loses against flush */
 	 @Test
@@ -197,7 +197,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(comparingHands.compareHands(), 1);
 	 }
 	 
 	 /** test full house wins against flush */
@@ -247,7 +247,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(comparingHands.compareHands(), 1);
 	 }
 	
 	 /** test straight flush wins against full house */
@@ -260,7 +260,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(comparingHands.compareHands(), 0);
 	 }
 	 /** test close case of two pair of 3's and 10's beats two pair of 3's and 5's */
 	 @Test
