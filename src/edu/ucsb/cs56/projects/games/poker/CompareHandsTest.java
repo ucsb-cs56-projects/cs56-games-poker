@@ -85,7 +85,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(1, comparingHands.compareHands());
 	 }	 
 	 /** test hand with one pair loses to hand with straight */
 	 @Test
@@ -97,7 +97,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	
 	 /** test two pair wins against one pair */
@@ -110,7 +110,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test two pair loses against straight */
 	 @Test
@@ -122,7 +122,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	
 	 /** test three of a kind wins against one pair */
@@ -135,7 +135,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test three of a kind loses against flush */
 	 @Test
@@ -147,7 +147,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	
 	 /** test straight wins against three of a kind */ 
@@ -160,7 +160,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test straight loses against flush */
 	 @Test
@@ -172,7 +172,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	
 	 /** test flush wins against straight */
@@ -185,7 +185,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test flush loses to straight flush */
 	 @Test
@@ -197,7 +197,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	 
 	 /** test full house wins against flush */
@@ -210,7 +210,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test full house loses against four of a kind */
 	 @Test
@@ -222,7 +222,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 
 	 /** test four of a kind wins against three of a kind */
@@ -235,7 +235,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test four of a kind loses to straight flush */
 	 @Test
@@ -247,7 +247,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	
 	 /** test straight flush wins against full house */
@@ -260,7 +260,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 0);
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test close case of two pair of 3's and 10's beats two pair of 3's and 5's */
 	 @Test
@@ -272,7 +272,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 1);
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	 /** test case where players have the same hand */
 	 @Test
@@ -284,7 +284,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(comparingHands.compareHands(), 2);
+		assertEquals(2, comparingHands.compareHands());
 	 }
 	 
  }
