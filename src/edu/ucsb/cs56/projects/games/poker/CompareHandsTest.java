@@ -272,7 +272,7 @@ import org.junit.Test;
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 	 /** test case where players have the same hand */
 	 @Test
