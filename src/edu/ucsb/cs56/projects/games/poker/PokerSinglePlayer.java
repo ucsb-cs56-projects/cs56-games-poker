@@ -238,7 +238,10 @@ final class PokerSinglePlayer extends PokerGameGui {
 		// First check if players have enough chips
 		
 		// Create new game
-		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
+		if(player.getChips() == 0)
+		    PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
+		else
+		    PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer(player.getChips(), opponent.getChips());
 
 		singlePlayerReplay.go();
 	    } else if (option == JOptionPane.NO_OPTION) {

@@ -187,7 +187,8 @@ public class PokerGame {
      * Specifically, in the order Blind-Flop-Turn-River-Showdown
      */
     public void nextStep() {
-     /*   if (step == Step.BLIND) { // Most like able to skip/remove this step
+	//Now implemented in PokerSinglePlayer
+	/*   if (step == Step.BLIND) { // Most like able to skip/remove this step
             step = Step.FLOP;
         } else if (step == Step.FLOP) {
             step = Step.TURN;
