@@ -52,7 +52,9 @@
     </classpath>
 	<link href="https://docs.oracle.com/javase/8/docs/api/" />
   </javadoc>
-  <echo> or if not on CSIL, try file:///${javadocDest}/index.html</echo>
+<echo> Javadoc in file:///${javadocDest}/index.html</echo>
+<echo> Can also be found on gh-pages at https://UCSB-CS56-PROJECTS.github.io/cs56-games-poker/javadoc/index.html </echo>
+
 </target>
 
 <target name="test" depends="compile" description="test the Hand class">
