@@ -52,21 +52,8 @@
     </classpath>
 	<link href="https://docs.oracle.com/javase/8/docs/api/" />
   </javadoc>
-  
-<!--
-*copy everything you just made to the javadoc destination, and then make it readable
-
-<copy todir="${javadocDest}">
-  <fileset dir="javadoc"/>
-</copy>
-
-    Note: this only does the chmod command on the javadoc subdirectory and its contents. You MIGHT have to MANUALLY do the chmod on the parent directories. However, you should only need to do that once.
-
-<chmod dir="${javadocDest}" perm="755" type="dir" includes="**"/>
-<chmod dir="${javadocDest}" perm="755" type="file" includes="**/*"/>
-
-<echo>Javadoc deployed to ${javadocURL} if on CSIL</echo> -->
-<echo> or if not on CSIL, try file:///${javadocDest}/index.html</echo>
+<echo> Javadoc in file:///${javadocDest}/index.html</echo>
+<echo> Can also be found on gh-pages at https://UCSB-CS56-PROJECTS.github.io/cs56-games-poker/javadoc/index.html </echo>
 
 </target>
 
