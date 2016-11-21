@@ -69,7 +69,7 @@ public class PokerGame {
     public void setUp() {
         player.delegate = this;
         opponent.delegate = this;
-	if (player.getChips() > 5 && opponent.getChips() > 5) {
+	if (player.getChips() >= 5 && opponent.getChips() >= 5) {
 	    player.bet(5);
 	    opponent.bet(5);
             pot += 10;
