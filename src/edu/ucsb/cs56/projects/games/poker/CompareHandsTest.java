@@ -153,10 +153,10 @@ import org.junit.Test;
 	 /** test straight wins against three of a kind */ 
 	 @Test
 	 public void testisStraightWins(){
-		table = new TableCards(fiveSpade, twoHeart, threeHeart, threeDiamond, jackHeart);
-		hand1 = new Hand(fourDiamond, aceSpade);
+		table = new TableCards(aceSpade, twoHeart, sevenHeart, threeDiamond, jackHeart);
+		hand1 = new Hand(fourSpade, fiveSpade);
 		player1 = new Player(hand1);
-		hand2 = new Hand(sevenHeart, threeClub);
+		hand2 = new Hand(sevenDiamond, sevenClub);
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
@@ -178,8 +178,8 @@ import org.junit.Test;
 	 /** test flush wins against straight */
 	 @Test
 	 public void testisFlushWins(){
-		table = new TableCards(fiveSpade, twoHeart, eightHeart, nineDiamond, jackHeart);
-		hand1 = new Hand(fourHeart, kingHeart);
+		table = new TableCards(fiveDiamond, twoHeart, eightSpade, nineSpade, jackSpade);
+		hand1 = new Hand(fourSpade, kingSpade);
 		player1 = new Player(hand1);
 		hand2 = new Hand(tenSpade, queenDiamond);
 		player2 = new Player(hand2);
@@ -190,10 +190,10 @@ import org.junit.Test;
 	 /** test flush loses to straight flush */
 	 @Test
 	 public void testisFlushLoses(){
-		table = new TableCards(fiveSpade, twoDiamond, eightHeart, nineHeart, jackHeart);
-		hand1 = new Hand(fourHeart, kingHeart);
+		table = new TableCards(twoDiamond, fiveSpade, threeSpade, fourSpade, jackSpade);
+		hand1 = new Hand(fourSpade, kingSpade);
 		player1 = new Player(hand1);
-		hand2 = new Hand(tenHeart, queenHeart);
+		hand2 = new Hand(aceSpade, twoSpade);
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
@@ -240,10 +240,10 @@ import org.junit.Test;
 	 /** test four of a kind loses to straight flush */
 	 @Test
 	 public void testisFourOfAKindLoses(){
-		table = new TableCards(aceSpade, aceHeart, threeHeart, fourHeart, jackDiamond);
+		table = new TableCards(aceSpade, aceHeart, threeSpade, fourSpade, jackDiamond);
 		hand1 = new Hand(aceDiamond, aceClub);
 		player1 = new Player(hand1);
-		hand2 = new Hand(twoHeart, fiveHeart);
+		hand2 = new Hand(twoSpade, fiveSpade);
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
@@ -253,14 +253,14 @@ import org.junit.Test;
 	 /** test straight flush wins against full house */
 	 @Test
 	 public void testisStraightFlushWins(){
-		table = new TableCards(aceSpade, aceHeart, threeHeart, fourHeart, jackDiamond);
-		hand1 = new Hand(twoHeart, fiveHeart);
+		table = new TableCards(jackClub, threeDiamond, fourDiamond, fiveDiamond, jackHeart);
+		hand1 = new Hand(aceClub, twoClub);
 		player1 = new Player(hand1);
-		hand2 = new Hand(aceDiamond, jackClub);
+		hand2 = new Hand(fourDiamond, jackSpade);
 		player2 = new Player(hand2);
 		comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	 /** test close case of two pair of 3's and 10's beats two pair of 3's and 5's */
 	 @Test
@@ -286,5 +286,48 @@ import org.junit.Test;
 		
 		assertEquals(2, comparingHands.compareHands());
 	 }
+     
+
+     /** test lowest ranking straightflush wins against straight */
+              @Test
+	      public void testStraightFlushWinsAgain(){
+		  table = new TableCards(aceSpade, twoSpade, threeSpade, fourSpade, jackHeart);
+		  hand1 = new Hand(fiveSpade, kingHeart);
+		  player1 = new Player(hand1);
+		  hand2 = new Hand(fiveHeart, kingDiamond);
+		  player2 = new Player(hand2);
+		  comparingHands = new CompareHands(player1, player2, table);
+
+		  assertEquals(1, comparingHands.compareHands());
+	      }
+     
+
+     /** test straight wins against two pairs */
+                   @Test
+		   public void testStraightWinsAgain(){
+		       table = new TableCards(fiveSpade, fourSpade, threeSpade, twoSpade, jackHeart);
+		       hand1 = new Hand(aceHeart, kingHeart);
+		       player1 = new Player(hand1);
+		       hand2 = new Hand(fourHeart, jackDiamond);
+		       player2 = new Player(hand2);
+		       comparingHands = new CompareHands(player1, player2, table);
+
+		       assertEquals(1, comparingHands.compareHands());
+		   }
+
+     /** test straight wins against pair when table has duplicate values */
+     @Test
+     public void testStraightDuplicateWins() {
+	 table = new TableCards(aceSpade, fourSpade, threeSpade, twoSpade, jackHeart);
+	 hand1 = new Hand(aceHeart, kingHeart);
+	 player1 = new Player(hand1);
+	 hand2 = new Hand(fourHeart, sevenDiamond);
+	 player2 = new Player(hand2);
+	 comparingHands = new CompareHands(player1, player2, table);
+
+	 assertEquals(1, comparingHands.compareHands());
 	 
+     }
+
+
  }
