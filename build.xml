@@ -9,8 +9,6 @@
   <property name="webRoot" value="${env.HOME}/public_html/"/>
   <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}"/>
   <property name="project" value="cs56-games-poker" />
-  <property name="javadocDest" value="${webRoot}/${project}/javadoc" /> 
-  <property name="javadocURL" value="${webBaseURL}/${project}/javadoc" /> 
   <property name="mainClass" value="edu/ucsb/cs56/projects/games/poker/PokerMain"/>
   
   <path id="project.class.path">
@@ -43,30 +41,17 @@
 </target>
 
 
-<target name="javadoc" depends="compile" description="deploys the javadoc onto the web">
+<target name="javadoc" depends="compile" description="deploys the javadoc onto gh-pages">
   <delete dir="javadoc" quiet="true"/>
   <javadoc destdir="javadoc" author="true" version="true" use="true">
     <fileset dir="src" includes="**/*.java"/>
     <classpath>
       <pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar"/>
     </classpath>
+	<link href="https://docs.oracle.com/javase/8/docs/api/" />
   </javadoc>
-  <!-- delete the old javadoc -->
-  <delete quiet="true" dir="${javadocDest}"/>
-<!--
-copy everything you just made to the javadoc destination, and then make it readable
--->
-<copy todir="${javadocDest}">
-  <fileset dir="javadoc"/>
-</copy>
-<!--
-    Note: this only does the chmod command on the javadoc subdirectory and its contents. You MIGHT have to MANUALLY do the chmod on the parent directories. However, you should only need to do that once.
--->
-<chmod dir="${javadocDest}" perm="755" type="dir" includes="**"/>
-<chmod dir="${javadocDest}" perm="755" type="file" includes="**/*"/>
 
-<echo>Javadoc deployed to ${javadocURL} if on CSIL</echo>
-<echo> or if not on CSIL, try file:///${javadocDest}/index.html</echo>
+  <echo>Javadoc written to javadoc/index.html</echo>
 
 </target>
 

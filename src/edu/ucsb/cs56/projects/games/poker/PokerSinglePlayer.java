@@ -19,7 +19,6 @@ final class PokerSinglePlayer extends PokerGameGui {
      */
 
     public PokerSinglePlayer(){
-
     }
     
     public PokerSinglePlayer(int pChips, int oChips){
@@ -234,13 +233,23 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    if (option == JOptionPane.YES_OPTION) {
     		// Restart
 		mainFrame.dispose();
-		
+		PokerSinglePlayer singlePlayerReplay;
 		// First check if players have enough chips
 		
 		// Create new game
-		PokerSinglePlayer singlePlayerReplay = new PokerSinglePlayer();
-
-		singlePlayerReplay.go();
+		if(player.getChips() < 5){
+		    singlePlayerReplay = new PokerSinglePlayer();
+		    singlePlayerReplay.go();
+		}
+		else if(opponent.getChips() < 5){
+		    singlePlayerReplay = new PokerSinglePlayer();
+		    singlePlayerReplay.go();
+		}
+		else {
+		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
+		    singlePlayerReplay.go();
+		}
+	       
 	    } else if (option == JOptionPane.NO_OPTION) {
 		if(opponent.getChips() < 5) {
 		    gameOver("GAME OVER!\n\n opponent has run out of chips!");

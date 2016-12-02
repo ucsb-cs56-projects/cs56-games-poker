@@ -69,7 +69,7 @@ public class PokerGame {
     public void setUp() {
         player.delegate = this;
         opponent.delegate = this;
-	if (player.getChips() > 5 && opponent.getChips() > 5) {
+	if (player.getChips() >= 5 && opponent.getChips() >= 5) {
 	    player.bet(5);
 	    opponent.bet(5);
             pot += 10;
@@ -187,7 +187,8 @@ public class PokerGame {
      * Specifically, in the order Blind-Flop-Turn-River-Showdown
      */
     public void nextStep() {
-     /*   if (step == Step.BLIND) { // Most like able to skip/remove this step
+	//Now implemented in PokerSinglePlayer
+	/*   if (step == Step.BLIND) { // Most like able to skip/remove this step
             step = Step.FLOP;
         } else if (step == Step.FLOP) {
             step = Step.TURN;
