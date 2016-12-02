@@ -9,8 +9,6 @@
   <property name="webRoot" value="${env.HOME}/public_html/"/>
   <property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}"/>
   <property name="project" value="cs56-games-poker" />
-  <property name="javadocDest" value="${webRoot}/${project}/javadoc" /> 
-  <property name="javadocURL" value="${webBaseURL}/${project}/javadoc" /> 
   <property name="mainClass" value="edu/ucsb/cs56/projects/games/poker/PokerMain"/>
   
   <path id="project.class.path">
@@ -52,8 +50,8 @@
     </classpath>
 	<link href="https://docs.oracle.com/javase/8/docs/api/" />
   </javadoc>
-<echo> Javadoc in file:///${javadocDest}/index.html</echo>
-<echo> Can also be found on gh-pages at https://UCSB-CS56-PROJECTS.github.io/cs56-games-poker/javadoc/index.html </echo>
+
+  <echo>Javadoc written to javadoc/index.html</echo>
 
 </target>
 
