@@ -50,6 +50,7 @@ public class PokerGame {
     protected boolean gameOver = false;
     protected boolean youFold = false;
     protected boolean opponentFold = false;
+    protected boolean allIn = false;
     
     /**
      * No arg constructor that initializes a new deck.

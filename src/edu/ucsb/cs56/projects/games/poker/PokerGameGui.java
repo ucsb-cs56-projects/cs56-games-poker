@@ -295,42 +295,73 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the betButton using ActionListener
      */
     protected class betButtonHandler implements ActionListener {
-	/**
-	 * @param e action event
-	 */
-	public void actionPerformed(ActionEvent e) {
-	    String inputText = betTextField.getText();
-	    if (!inputText.equals("")) {
-		bet = Integer.parseInt(inputText);
-		if (bet<=0) {
-		    prompt = "Enter a valid bet!";
-		    updateFrame();
-		}
-		else if ((player.getChips()-bet>=0) && (opponent.getChips()-bet>=0)) {
-		    betTextField.setText("");
-		    pot += bet;
-		    player.bet(bet);
-		    message = "Opponent waiting for turn.";
-		    prompt = "Player bets " + bet + ".";
-		    betButton.setEnabled(false);
-		    betTextField.setEnabled(false);
-		    checkButton.setEnabled(false);
-		    callButton.setEnabled(false);
-		    foldButton.setEnabled(false);
-		    responding = true;
-		    checkPassTurnUpdate();
-		    updateFrame();
-		}
-		else {
-		    prompt = "Not enough chips!";
-		    updateFrame();
-		}
-	    }
-	    else {
-		prompt = "Enter a number of chips to bet!";
-		updateFrame();
-	    }
-	}
+        /**
+         * @param e action event
+         */
+        public void actionPerformed(ActionEvent e) {
+            String inputText = betTextField.getText();
+            if (!inputText.equals("")) {
+                bet = Integer.parseInt(inputText);
+                if (bet<=0) {
+                    prompt = "Enter a valid bet!";
+                    //updateFrame();
+                }
+                else if ((player.getChips() - bet >= 0) && (opponent.getChips() - bet >= 0)) {
+                    pot += bet;
+                    player.bet(bet);
+                    prompt = "Player bets " + bet + ".";
+                    /*betTextField.setText("");
+                    message = "Opponent waiting for turn.";
+                    betButton.setEnabled(false);
+                    betTextField.setEnabled(false);
+                    checkButton.setEnabled(false);
+                    callButton.setEnabled(false);
+                    foldButton.setEnabled(false);
+                    responding = true;*/
+                    updateBetGUIElements();
+                    checkPassTurnUpdate();
+                    //updateFrame();
+                }
+                else if (((turn == Turn.PLAYER) && (player.getChips() < bet)) || ((turn == Turn.OPPONENT) && (opponent.getChips() < bet))) {
+                    prompt = "Not enough chips!";
+                    //updateFrame();
+                }
+                else {
+                    allIn = true;
+                    allInBet();
+                    updateBetGUIElements();
+                    checkPassTurnUpdate();
+                    //updateFrame();
+                }
+                updateFrame();
+            }
+            else {
+                prompt = "Enter a number of chips to bet!";
+                updateFrame();
+            }
+        }
+
+        private void allInBet() {
+            prompt = "Opponent only has " + opponent.getChips() + " chips. Your bet is limited to ";
+            prompt += opponent.getChips() + " chips.If this bet is called, it will be an all in.";
+            pot += opponent.getChips();
+            player.bet(opponent.getChips());
+        }
+        
+        /**
+         * Updates the GUI elements that are affected by the
+         * bet action.
+        */
+        private void updateBetGUIElements() {
+            betTextField.setText("");
+            message = "Opponent waiting for turn.";
+            betButton.setEnabled(false);
+            betTextField.setEnabled(false);
+            checkButton.setEnabled(false);
+            callButton.setEnabled(false);
+            foldButton.setEnabled(false);
+            responding = true;
+        }
     }
 
     /**

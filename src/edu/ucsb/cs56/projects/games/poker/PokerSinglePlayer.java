@@ -139,69 +139,75 @@ final class PokerSinglePlayer extends PokerGameGui {
     // TODO: Make AI much more complex and less predictable
     //Move Opponent AI into its own class
     private void opponentAI() {
-	boolean shouldBet = false;
-	boolean shouldCall = true;
-	int dValue = 0;
-	int betAmount = 5 * dValue;
-	if (step == Step.BLIND) {
-	    if (dValue >= 1) {
-		shouldBet = true;
-	    }
-	} else if (step == Step.FLOP) {
-	    if (dValue >= 3) {
-		shouldBet = true;
-	    }
-	    if ((dValue == 0 && bet >= 20)) {
-		shouldCall = false;
-	    }
-	} else if (step == Step.TURN) {
-	    if (dValue >= 4) {
-		shouldBet = true;
-	    }
-	    if ((dValue < 2 && bet > 20)) {
-		shouldCall = false;
-	    }
-	} else if (step == Step.RIVER) {
-	    if (dValue >= 4) {
-		shouldBet = true;
-	    }
-	    if ((dValue < 2 && bet > 20))
-		shouldCall = false;
-	}
+        boolean shouldBet = false;
+        boolean shouldCall = true;
+        int dValue = 0;
+        int betAmount = 5 * dValue;
+        if (step == Step.BLIND) {
+            if (dValue >= 1) {
+                shouldBet = true;
+            }
+        } else if (step == Step.FLOP) {
+            if (dValue >= 3) {
+                shouldBet = true;
+            }
+            if ((dValue == 0 && bet >= 20)) {
+                shouldCall = false;
+            }
+        } else if (step == Step.TURN) {
+            if (dValue >= 4) {
+                shouldBet = true;
+            }
+            if ((dValue < 2 && bet > 20)) {
+                shouldCall = false;
+            }
+        } else if (step == Step.RIVER) {
+            if (dValue >= 4) {
+                shouldBet = true;
+            }
+            if ((dValue < 2 && bet > 20))
+                shouldCall = false;
+        }
 
-	if (responding == true) {
-	    if (shouldCall) {
-		message = "opponent calls.";
-		pot += bet;
-		opponent.bet(bet);
-		bet = 0;
-		responding = false;
-		nextStep();
-		updateFrame();
-		timer.restart();
-	    } else {
-		message = "opponent folds.";
-		opponent.foldHand();
-	    }
-	} else if (shouldBet && step != Step.SHOWDOWN) {
-	    if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
-		bet = betAmount;
-		pot += bet;
-		opponent.bet(bet);
-		responding = true;
-		message = "opponent bets " + bet + " chips.";
-		updateFrame();
-		changeTurn();
-	    } else {
-		message = "opponent checks.";
-		updateFrame();
-		changeTurn();
-	    }
-	} else if (step != Step.SHOWDOWN) {
-	    message = "opponent checks.";
-	    updateFrame();
-	    changeTurn();
-	}
+        if (responding == true) {
+            if (shouldCall) {
+                if (allIn) {
+                    message = "opponent goes all in";
+                    bet = opponent.getChips();
+                }
+                else {
+                    message = "opponent calls.";
+                }
+                pot += bet;
+                opponent.bet(bet);
+                bet = 0;
+                responding = false;
+                nextStep();
+                updateFrame();
+                timer.restart();
+            } else {
+                message = "opponent folds.";
+                opponent.foldHand();
+            }
+        } else if (shouldBet && step != Step.SHOWDOWN) {
+            if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
+                bet = betAmount;
+                pot += bet;
+                opponent.bet(bet);
+                responding = true;
+                message = "opponent bets " + bet + " chips.";
+                updateFrame();
+                changeTurn();
+            } else {
+                message = "opponent checks.";
+                updateFrame();
+                changeTurn();
+            }
+        } else if (step != Step.SHOWDOWN) {
+            message = "opponent checks.";
+            updateFrame();
+            changeTurn();
+        }
     }
 	
 
