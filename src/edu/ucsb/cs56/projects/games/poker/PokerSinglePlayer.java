@@ -7,57 +7,72 @@ import java.io.IOException;
 
 final class PokerSinglePlayer extends PokerGameGui {
 
+    /**
+     * Timer for calling turnDecider()
+     */
     Timer timer;
-    int timer_value = 2000; // milliseconds
-    boolean yourTurnToBet = true;
 
     /**
-     * Constructor to set the player and opponent's initial chips. 
-     * This is used when we continue playing the game
-     * @param dChips
-     * @param pChips
+     * The milliseconds for timer
      */
+    int timer_value = 2000; // milliseconds
 
+    /**
+     * Whether or not it's your turn to bet
+     */
+    boolean yourTurnToBet = true;
+
+
+    /**
+     * No arg constructor to create instance of PokerSinglePlayer to begin game
+     */
     public PokerSinglePlayer(){
     }
     
+    /**
+     * Constructor to set the player and opponent's initial chips. 
+     * This is used when we continue playing the game
+     * @param pChips the player's chips
+     * @param oChips the opponent's chips
+     */
     public PokerSinglePlayer(int pChips, int oChips){
-	player.setChips(pChips);
-	opponent.setChips(oChips);
+        player.setChips(pChips);
+        opponent.setChips(oChips);
     }
     
     /**
      * Starts game between you and AI
      */
     public void go() {
-	super.setUp();
-	layoutSubViews(); //sets up all of the buttons and panels and GUI
-	controlButtons(); //this function is in PokerGameGui.
+        super.setUp();
+        layoutSubViews(); //sets up all of the buttons and panels and GUI
+        controlButtons(); //this function is in PokerGameGui.
 
-	if(!gameOver){ 
-	    step = Step.BLIND; //This is the first step in the game.
-	    turn = Turn.OPPONENT;
-	    prompt = "opponent goes first!";
-	    
-	    int rng = (int) (Math.random()*2); //generate a random 0 or 1 
-	    if (rng == 1) { //1 = player 1 goes first.
-		    turn = Turn.PLAYER;
-		    message = "player goes first!";
-		    prompt = "what will you do?";
-		  
-	    }
-	    //Here, we are using a timer to control how the turns work
-	    //The timer comes from the swing class if you want to read up on it
-	    //Another thing to note is we used a lambda function deal with the thread in timer.
-	    timer = new Timer(timer_value, e -> turnDecider() );
-	    timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
-	    updateFrame(); //function is inside of PokerGameGui
-	    timer.restart();
-	}
+        if(!gameOver){ 
+            step = Step.BLIND; //This is the first step in the game.
+            turn = Turn.OPPONENT;
+            prompt = "opponent goes first!";
+            
+            int rng = (int) (Math.random()*2); //generate a random 0 or 1 
+            if (rng == 1) { //1 = player 1 goes first.
+                turn = Turn.PLAYER;
+                message = "player goes first!";
+                prompt = "what will you do?";
+              
+            }
+            //Here, we are using a timer to control how the turns work
+            //The timer comes from the swing class if you want to read up on it
+            //Another thing to note is we used a lambda function deal with the thread in timer.
+            timer = new Timer(timer_value, e -> turnDecider() );
+            timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
+            updateFrame(); //function is inside of PokerGameGui
+            timer.restart();
+        }
     }
 
-    //Method that directs the turn to who it needs to go to.
-    //In the future, this can be changed to allow for multiplayer.
+    /**
+     * Method that directs the turn to who it needs to go to
+     */
     public void turnDecider () {
         if (turn == Turn.PLAYER) {
             playerTurn();
@@ -73,41 +88,44 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Changes between you and the AI
      */
     public void changeTurn() {
-	if (turn == Turn.PLAYER) {
-	    if (responding == true) {
-		turn = Turn.OPPONENT;
-		controlButtons();
-		message = "opponent is thinking...";
-		updateFrame();		
-		timer.restart();
-	    } else {
-		updateFrame();
-		nextStep();
-		if (step != Step.SHOWDOWN) {
-		    turn = Turn.OPPONENT;
-		    controlButtons();
-		    prompt = "opponent Turn.";
-		    message = "opponent is thinking...";
-		    updateFrame();
-		    timer.restart();
-		}
-	    }
-	} else if (turn == Turn.OPPONENT) {
-	    if (responding == true) {
-		turn = Turn.PLAYER;
-		controlButtons();
-		responding = false;
-		prompt = "What will you do?";
-		updateFrame();
-	    } else {
-		prompt = "What will you do?";
-		turn = Turn.PLAYER;
-		controlButtons();
-		updateFrame();
-	    }
-	}
+        if (turn == Turn.PLAYER) {
+            if (responding == true) {
+                turn = Turn.OPPONENT;
+                controlButtons();
+                message = "opponent is thinking...";
+                updateFrame();		
+                timer.restart();
+                } else {
+                    updateFrame();
+                    nextStep();
+                    if (step != Step.SHOWDOWN) {
+                        turn = Turn.OPPONENT;
+                        controlButtons();
+                        prompt = "opponent Turn.";
+                        message = "opponent is thinking...";
+                        updateFrame();
+                        timer.restart();
+                    }
+                }
+        } else if (turn == Turn.OPPONENT) {
+            if (responding == true) {
+                turn = Turn.PLAYER;
+                controlButtons();
+                responding = false;
+                prompt = "What will you do?";
+                updateFrame();
+            } else {
+                prompt = "What will you do?";
+                turn = Turn.PLAYER;
+                controlButtons();
+                updateFrame();
+            }
+        }
     }
 
+    /**
+     * Updates GUI based on the player's decision
+     */
     public void playerTurn() {
         controlButtons();
         updateFrame();
@@ -128,7 +146,7 @@ final class PokerSinglePlayer extends PokerGameGui {
             message = "All bets are in.";
             prompt = "Determine Winner: ";
 	    controlButtons();
-	}
+        }
     }
 
 

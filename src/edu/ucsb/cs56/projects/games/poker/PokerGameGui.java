@@ -10,40 +10,252 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PokerGameGui extends PokerGame{
-        
-    protected JFrame
-	mainFrame, gameOverFrame;
+
+    /**
+     * The main frame for running the game
+     */
+    protected JFrame mainFrame;
+
+    /**
+     * The frame used for when the game is over
+     */
+    protected JFrame gameOverFrame;
+
+    // mainFrame
+
+    /**
+     * Text field for entering bet
+     */
+    protected JTextField betTextField;
+   
+    /**
+     * Button to fold
+     */
+    protected JButton foldButton;
+
+    /**
+     * Button to bet
+     */
+    protected JButton betButton;
+
+    /**
+     * Button to check
+     */
+    protected JButton checkButton;
+
+    /**
+     * Button to call
+     */
+    protected JButton callButton;
+
+    /**
+     * Button for showdown
+     */
+    protected JButton showdownButton;
+
+    /**
+     * Button to show rules
+     */
+    protected JButton rulesButton;
+
+    // Rules Panel
+
+    /**
+     * Button to view general overview of Texas Holdem
+     */
+	protected JButton overviewRulesButton;
+
+    /**
+     * Button to view information about basic gameplay in each round
+     * Ex: bet, call raise, etc
+     */
+    protected JButton gameplayRulesButton1;
+
+    /**
+     * Button to view information about each round of the game (flop, turn, showdown)
+     */
+    protected JButton gameplayRulesButton2;
+
+    /**
+     * Button to view example hands
+     */
+    protected JButton exampleRulesButton;
+
+    // gameOverFrame
     
-    protected JTextField
-        betTextField;
-    
-    protected JButton
-        foldButton, betButton, checkButton, callButton, showdownButton, rulesButton,  // mainFrame
-	overviewRulesButton, gameplayRulesButton1, gameplayRulesButton2, exampleRulesButton, //Rules Panel
-	gameOverButton; // gameOverFrame
-    
-    protected JLabel
-	rulesExampleLabel, rulesOverviewLabel,
-	rulesGameplay1Label, rulesGameplay2Label,
-        playerWinsLabel, opponentWinsLabel, // Possibly don't need these
-	playerChipsLabel, opponentChipsLabel, 
-	potLabel, gameMessage, playerPrompt,  // Possibly don't need these
-	backCardLabel1, backCardLabel2, // Not sure what these are used for
-	gameOverLabel; // gameOverFrame
-    
-    protected JPanel
-	rulesPanel, rulesNextPageButtons, 
-	opponentPanel, playerPanel,
-	centerPanel, messagePanel, optionArea,
-	oSubPane1, oSubPane2, oSubPane3,
-	pSubPane1, pSubPane2, pSubPane3,
-        flopPane, turnPane, riverPane, betPane,
-	gameOverMessage, gameOverPanel, gameOverButtonPanel; // gameOverFrame
-    
+    /**
+     * Button to return to main menu when game is over
+     */
+	protected JButton gameOverButton; // gameOverFrame
+
+    /**
+     * Image of example poker hands
+     */
+    protected JLabel rulesExampleLabel;
+
+    /**
+     * Image of general overview of Texas Holdem
+     */
+    protected JLabel rulesOverviewLabel;
+
+    /**
+     * Image with information about basic gameplay in each round
+     */
+    protected JLabel rulesGameplay1Label;
+
+    /**
+     * Image with information about each round of the game
+     */
+    protected JLabel rulesGameplay2Label;
+
+    /**
+     * Displays player's winnings if player wins
+     */
+    protected JLabel playerWinsLabel;
+
+    /**
+     * Displays opponent's winnings if opponent wins
+     */
+    protected JLabel opponentWinsLabel;
+
+    /**
+     * Displays player's chips
+     */
+    protected JLabel playerChipsLabel;
+
+    /**
+     * Displays opponent's chips
+     */
+    protected JLabel opponentChipsLabel;
+
+    /**
+     * Displays current pot
+     */
+    protected JLabel potLabel;
+
+    /**
+     * Displays message about current game state
+     */
+    protected JLabel gameMessage;
+
+    /**
+     * Displays instructions for player
+     */
+    protected JLabel playerPrompt;
+
+    /**
+     * Image of back of card
+     */
+    protected JLabel backCardLabel1, backCardLabel2;
+
+    /**
+     * Displays message about who lost the game
+     */
+    protected JLabel gameOverLabel; // gameOverFrame
+   
+    /**
+     * Panel for displaying rules
+     */
+    protected JPanel rulesPanel;
+
+    /**
+     * Panel for buttons for navigating rules
+     */
+    protected JPanel rulesNextPageButtons;
+
+    /**
+     * Panel for opponent game information
+     */
+	protected JPanel opponentPanel;
+
+    /**
+     * Panel for player game information
+     */
+    protected JPanel playerPanel;
+
+    /**
+     * Panel for displaying cards
+     */
+	protected JPanel centerPanel;
+
+    /**
+     * Panel for displaying game message, current pot
+     */
+    protected JPanel messagePanel;
+
+    /**
+     * Panel holding the various game action buttons (bet, check, fold, etc)
+     */
+    protected JPanel optionArea;
+
+    /**
+     * Panel holding JComponents displaying the opponent's chips
+     */
+	protected JPanel oSubPane1;
+
+    /**
+     * Panel where the opponent's cards are displayed
+     */
+    protected JPanel oSubPane2;
+
+    /**
+     * Panel displaying each user's wins
+     */
+    protected JPanel oSubPane3;
+
+    /**
+     * Panel displaying player's chips
+     */
+	protected JPanel pSubPane1;
+
+    /**
+     * Panel where the player's cards are displayed
+     */
+    protected JPanel pSubPane2;
+
+    /**
+     * Panel where possible game actions are displayed (holds JPanel optionArea)
+     */
+    protected JPanel pSubPane3;
+
+    /**
+     * Panel displaying flop cards
+     */
+    protected JPanel flopPane;
+
+    /**
+     * Panel displaying turn card
+     */
+    protected JPanel turnPane;
+
+    /**
+     * Panel displaying river card
+     */
+    protected JPanel riverPane;
+
+    // gameOverFrame
+
+    /**
+     * Panel displaying gameover message
+     */
+	protected JPanel gameOverMessage;
+
+    /**
+     * Panel displaying "Back to Main Menu" button
+     */
+    protected JPanel gameOverButtonPanel;
+   
+    /**
+     * No arg constructor for PokerGameGui that simply calls the superclass constructor
+     */
     public PokerGameGui(){
-	super();		 
+        super();		 
     }
     
+    /**
+     * Initial GUI setup
+     * Instantiates the relevant JComponent objects (which is most of them) to their initial states
+     */
     public void layoutSubViews() {
         if (!gameOver) {
             Color pokerGreen = new Color(83, 157, 89);
@@ -51,64 +263,64 @@ public class PokerGameGui extends PokerGame{
             foldButton = new JButton("FOLD");
             foldButton.setEnabled(false);
             foldButton.addActionListener(new foldButtonHandler());
-	    betButton = new JButton("BET");
+            betButton = new JButton("BET");
             betButton.setEnabled(false);
-	    betButton.addActionListener(new betButtonHandler());
+            betButton.addActionListener(new betButtonHandler());
             betTextField = new JTextField(4);
             checkButton = new JButton("CHECK");
             checkButton.setEnabled(false);
-	    checkButton.addActionListener(new checkButtonHandler());
+            checkButton.addActionListener(new checkButtonHandler());
             callButton = new JButton("CALL");
             callButton.setEnabled(false);
-	    callButton.addActionListener(new callButtonHandler());
+            callButton.addActionListener(new callButtonHandler());
             showdownButton = new JButton("SHOWDOWN");
-	    showdownButton.addActionListener(new showdownButtonHandler());
+            showdownButton.addActionListener(new showdownButtonHandler());
 	    
-	    /*putting the rules pictures into the game without adding a new window */
-	    
-	    rulesButton = new JButton("RULES");
-	    rulesButton.setEnabled(true);
-	    rulesButton.addActionListener(new rulesButtonHandler());
-	    rulesPanel = new JPanel();
-	    
-	    rulesPanel.setLayout(new BorderLayout());
-	    rulesOverviewLabel = new JLabel();
-	    rulesGameplay1Label = new JLabel();
-	    rulesGameplay2Label = new JLabel();
-	    rulesExampleLabel = new JLabel();
-	    rulesOverviewLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesOverview.png"));
-	    rulesGameplay1Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay1.png"));
-	    rulesGameplay2Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay2.png"));
-	    rulesExampleLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesExamples.png"));
-	    
-	    rulesPanel.add(BorderLayout.CENTER, rulesOverviewLabel);
-	    
-	    overviewRulesButton = new JButton("Overview");
-	    overviewRulesButton.setEnabled(true);
-	    overviewRulesButton.addActionListener(new overviewButtonHandler() );
-	    gameplayRulesButton1 = new JButton("Rules");
-	    gameplayRulesButton1.setEnabled(true);
-	    gameplayRulesButton1.addActionListener(new gameplayButton1Handler() );
-	    gameplayRulesButton2 = new JButton("Rules(cont.)");
-	    gameplayRulesButton2.setEnabled(true);
-	    gameplayRulesButton2.addActionListener(new gameplayButton2Handler() );
-	    exampleRulesButton = new JButton("Example Hands");
-	    exampleRulesButton.setEnabled(true);
-	    exampleRulesButton.addActionListener(new exampleButtonHandler() );
-	    
-	    rulesNextPageButtons = new JPanel();
-	    rulesNextPageButtons.setLayout(new BoxLayout(rulesNextPageButtons, BoxLayout.X_AXIS));
-	    rulesNextPageButtons.add(overviewRulesButton);
-	    rulesNextPageButtons.add(gameplayRulesButton1);
-	    rulesNextPageButtons.add(gameplayRulesButton2);
-	    rulesNextPageButtons.add(exampleRulesButton);
-	    rulesNextPageButtons.setBackground(pokerGreen);
-	    
-	    rulesPanel.add(BorderLayout.SOUTH, rulesNextPageButtons);
-	    rulesPanel.setBackground(pokerGreen);
-	    rulesPanel.setVisible(false);
-	    
-	    opponentPanel = new JPanel();
+            /*putting the rules pictures into the game without adding a new window */
+            
+            rulesButton = new JButton("RULES");
+            rulesButton.setEnabled(true);
+            rulesButton.addActionListener(new rulesButtonHandler());
+            rulesPanel = new JPanel();
+            
+            rulesPanel.setLayout(new BorderLayout());
+            rulesOverviewLabel = new JLabel();
+            rulesGameplay1Label = new JLabel();
+            rulesGameplay2Label = new JLabel();
+            rulesExampleLabel = new JLabel();
+            rulesOverviewLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesOverview.png"));
+            rulesGameplay1Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay1.png"));
+            rulesGameplay2Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay2.png"));
+            rulesExampleLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesExamples.png"));
+            
+            rulesPanel.add(BorderLayout.CENTER, rulesOverviewLabel);
+            
+            overviewRulesButton = new JButton("Overview");
+            overviewRulesButton.setEnabled(true);
+            overviewRulesButton.addActionListener(new overviewButtonHandler() );
+            gameplayRulesButton1 = new JButton("Rules");
+            gameplayRulesButton1.setEnabled(true);
+            gameplayRulesButton1.addActionListener(new gameplayButton1Handler() );
+            gameplayRulesButton2 = new JButton("Rules(cont.)");
+            gameplayRulesButton2.setEnabled(true);
+            gameplayRulesButton2.addActionListener(new gameplayButton2Handler() );
+            exampleRulesButton = new JButton("Example Hands");
+            exampleRulesButton.setEnabled(true);
+            exampleRulesButton.addActionListener(new exampleButtonHandler() );
+            
+            rulesNextPageButtons = new JPanel();
+            rulesNextPageButtons.setLayout(new BoxLayout(rulesNextPageButtons, BoxLayout.X_AXIS));
+            rulesNextPageButtons.add(overviewRulesButton);
+            rulesNextPageButtons.add(gameplayRulesButton1);
+            rulesNextPageButtons.add(gameplayRulesButton2);
+            rulesNextPageButtons.add(exampleRulesButton);
+            rulesNextPageButtons.setBackground(pokerGreen);
+            
+            rulesPanel.add(BorderLayout.SOUTH, rulesNextPageButtons);
+            rulesPanel.setBackground(pokerGreen);
+            rulesPanel.setVisible(false);
+            
+            opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
             oSubPane1 = new JPanel();
             oSubPane1.setLayout(new BoxLayout(oSubPane1, BoxLayout.Y_AXIS));
@@ -136,7 +348,7 @@ public class PokerGameGui extends PokerGame{
             optionArea.add(callButton);
             optionArea.add(checkButton);
             optionArea.add(foldButton);
-	    optionArea.add(rulesButton);
+            optionArea.add(rulesButton);
 
             playerPanel = new JPanel();
             playerPanel.setLayout(new BorderLayout());
@@ -161,17 +373,17 @@ public class PokerGameGui extends PokerGame{
                 pSubPane2.add(new JLabel(getCardImage((player.getHand()).get(i))));
             }
 
-	    centerPanel = new JPanel();
+            centerPanel = new JPanel();
             centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
             flopPane = new JPanel();
             flopPane.add(new JLabel("Flop:"));
 
-	    for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 flopPane.add(new JLabel(getCardImage((table.getFlopCards()).get(i))));
             }
             flopPane.setVisible(false);
-            
-	    turnPane = new JPanel();
+
+            turnPane = new JPanel();
             turnPane.add(new JLabel("Turn:"));
             turnPane.add(new JLabel(getCardImage(table.getTurnCard())));
             turnPane.setVisible(false);
@@ -226,13 +438,13 @@ public class PokerGameGui extends PokerGame{
             mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
             mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
             mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
-	    mainFrame.getContentPane().add(BorderLayout.WEST, rulesPanel);
-	    mainFrame.setVisible(true);
-	}
+            mainFrame.getContentPane().add(BorderLayout.WEST, rulesPanel);
+            mainFrame.setVisible(true);
+        }
     }
 
     /**
-     * Method that updates the panels in the frame based on step
+     * Method that updates the panels in the frame based on the current game state 
      */
     public void updateFrame() {
         if (step == Step.FLOP) {
@@ -336,6 +548,9 @@ public class PokerGameGui extends PokerGame{
             }
         }
 
+        /**
+         * Handles the betting functionality for an all-in scenario
+         */
         private void allInBet() {
             prompt = "Opponent only has " + opponent.getChips() + " chips. Your bet is limited to ";
             prompt += opponent.getChips() + " chips.If this bet is called, it will be an all in.";
@@ -363,22 +578,22 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the checkButton using ActionListener
      */
     protected class checkButtonHandler implements ActionListener {
-	/**
+        /**
          * @param e action event
          */
-	public void actionPerformed(ActionEvent e) {
-	    bet = 0;
-	    message = "Opponent waiting to deal.";
-	    prompt = "Player checks.";
-	    betButton.setEnabled(false);
-	    betTextField.setEnabled(false);
-	    checkButton.setEnabled(false);
-	    callButton.setEnabled(false);
-	    foldButton.setEnabled(false);
-	    rulesButton.setEnabled(true);
-	    checkPassTurnUpdate();
-	    updateFrame();
-	}
+        public void actionPerformed(ActionEvent e) {
+            bet = 0;
+            message = "Opponent waiting to deal.";
+            prompt = "Player checks.";
+            betButton.setEnabled(false);
+            betTextField.setEnabled(false);
+            checkButton.setEnabled(false);
+            callButton.setEnabled(false);
+            foldButton.setEnabled(false);
+            rulesButton.setEnabled(true);
+            checkPassTurnUpdate();
+            updateFrame();
+        }
     }
 
     /**
@@ -388,11 +603,11 @@ public class PokerGameGui extends PokerGame{
         /**
          * @param e action event
          */
-	public void actionPerformed(ActionEvent e) {
-	    message = "Opponent waiting for turn.";
-	    prompt = "You fold.";
-	    player.foldHand();
-	}
+        public void actionPerformed(ActionEvent e) {
+            message = "Opponent waiting for turn.";
+            prompt = "You fold.";
+            player.foldHand();
+        }
     }
 
     /**
@@ -419,86 +634,99 @@ public class PokerGameGui extends PokerGame{
      * Inner class that handles the showdownButton using ActionListener
      */
     protected class showdownButtonHandler implements ActionListener {
-	/**
+        /**
          * @param e action event
          */
-	public void actionPerformed(ActionEvent e) {
-	    determineWinner();
-	    collectPot();
-	    showWinnerAlert();
-	}
+        public void actionPerformed(ActionEvent e) {
+            determineWinner();
+            collectPot();
+            showWinnerAlert();
+        }
     }
 
+    /**
+     * Inner class that handles the rulesButton using ActionListener
+     */
     protected class rulesButtonHandler implements ActionListener {// rules
         /**
          * @param e action event
          */
-	public void actionPerformed(ActionEvent e) {
-	    rulesPanel.setVisible(!rulesPanel.isVisible() );
-	}
+        public void actionPerformed(ActionEvent e) {
+            rulesPanel.setVisible(!rulesPanel.isVisible() );
+        }
     }
 
+    /**
+     * Inner class that handles the overviewButton using ActionListener
+     */
     protected class overviewButtonHandler implements ActionListener {// rules
-	/**
+        /**
          * @param e action event
          */
-	public void actionPerformed(ActionEvent e) {
-	 
-	    rulesPanel.remove(rulesGameplay1Label);
-	    rulesPanel.remove(rulesGameplay2Label);
-	    rulesPanel.remove(rulesOverviewLabel);
-	    rulesPanel.remove(rulesExampleLabel);
-	    rulesPanel.add(BorderLayout.CENTER, rulesOverviewLabel);
-	    rulesPanel.revalidate();
-	    rulesPanel.repaint();
-	}
+        public void actionPerformed(ActionEvent e) {
+            rulesPanel.remove(rulesGameplay1Label);
+            rulesPanel.remove(rulesGameplay2Label);
+            rulesPanel.remove(rulesOverviewLabel);
+            rulesPanel.remove(rulesExampleLabel);
+            rulesPanel.add(BorderLayout.CENTER, rulesOverviewLabel);
+            rulesPanel.revalidate();
+            rulesPanel.repaint();
+        }
     }
 
-      protected class gameplayButton1Handler implements ActionListener {// rules
-	  /**
-	   * @param e action event
-	   */
-	  public void actionPerformed(ActionEvent e) {	    
-	 
-	    rulesPanel.remove(rulesGameplay1Label);
-	    rulesPanel.remove(rulesGameplay2Label);
-	    rulesPanel.remove(rulesOverviewLabel);
-	    rulesPanel.remove(rulesExampleLabel);
-	    rulesPanel.add(BorderLayout.CENTER, rulesGameplay1Label);
-	    rulesPanel.revalidate();
-	    rulesPanel.repaint();
-	}
+    /**
+     * Inner class that handles gamePlayButton1 using ActionListener
+     */
+    protected class gameplayButton1Handler implements ActionListener {// rules
+        /**
+         * @param e action event
+         */
+        public void actionPerformed(ActionEvent e) {	    
+            rulesPanel.remove(rulesGameplay1Label);
+            rulesPanel.remove(rulesGameplay2Label);
+            rulesPanel.remove(rulesOverviewLabel);
+            rulesPanel.remove(rulesExampleLabel);
+            rulesPanel.add(BorderLayout.CENTER, rulesGameplay1Label);
+            rulesPanel.revalidate();
+            rulesPanel.repaint();
+        }
     }
+
+    /**
+     * Inner class that handles gamePlayButton2 using ActionListener
+     */
     protected class gameplayButton2Handler implements ActionListener {// rules
-	/**
+        /**
          * @param e action event
          */
-	public void actionPerformed(ActionEvent e) {	    
-	 
-	    rulesPanel.remove(rulesGameplay1Label);
-	    rulesPanel.remove(rulesGameplay2Label);
-	    rulesPanel.remove(rulesOverviewLabel);
-	    rulesPanel.remove(rulesExampleLabel);
-	    rulesPanel.add(BorderLayout.CENTER, rulesGameplay2Label);
-	    rulesPanel.revalidate();
-	    rulesPanel.repaint();
-	}
+        public void actionPerformed(ActionEvent e) {	    
+         
+            rulesPanel.remove(rulesGameplay1Label);
+            rulesPanel.remove(rulesGameplay2Label);
+            rulesPanel.remove(rulesOverviewLabel);
+            rulesPanel.remove(rulesExampleLabel);
+            rulesPanel.add(BorderLayout.CENTER, rulesGameplay2Label);
+            rulesPanel.revalidate();
+            rulesPanel.repaint();
+        }
     }
 
+    /**
+     * Inner class that handles exampleButton using ActionListener
+     */
     protected class exampleButtonHandler implements ActionListener {// rules
-	/**
-	 * @param e action event
-	 */
-	public void actionPerformed(ActionEvent e) {	 
-	    
-	    rulesPanel.remove(rulesGameplay1Label);
-	    rulesPanel.remove(rulesGameplay2Label);
-	    rulesPanel.remove(rulesOverviewLabel);
-	    rulesPanel.remove(rulesExampleLabel);
-	    rulesPanel.add(BorderLayout.CENTER, rulesExampleLabel);
-	    rulesPanel.revalidate();
-	    rulesPanel.repaint();
-	}
+        /**
+         * @param e action event
+         */
+        public void actionPerformed(ActionEvent e) {	 
+            rulesPanel.remove(rulesGameplay1Label);
+            rulesPanel.remove(rulesGameplay2Label);
+            rulesPanel.remove(rulesOverviewLabel);
+            rulesPanel.remove(rulesExampleLabel);
+            rulesPanel.add(BorderLayout.CENTER, rulesExampleLabel);
+            rulesPanel.revalidate();
+            rulesPanel.repaint();
+        }
     }
 
     /**

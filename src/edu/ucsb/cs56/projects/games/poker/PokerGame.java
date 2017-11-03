@@ -14,14 +14,24 @@ import java.util.ArrayList;
  */
 public class PokerGame {
     // PokerGame States
+
+    /**
+     * enum representing the game winner
+     */
     public enum Winner {
         PLAYER, OPPONENT, TIE, NEW_GAME
             };
 
+    /**
+     * enum representing the game step
+     */
     public enum Step {
         BLIND, FLOP, TURN, RIVER, SHOWDOWN
             };
 
+    /**
+     * enum representing which player's turn it is
+     */
     public enum Turn {
         PLAYER, OPPONENT
             };
@@ -30,26 +40,94 @@ public class PokerGame {
     
 
     // Properties of Poker Game
+
+    /**
+     * The user playing the game
+     */
     protected Player player;
+
+    /**
+     * The opponent (currently an AI)
+     */
     protected Player opponent;
+
+    /**
+     * The deck used for the game
+     */
     protected Deck deck;
+
+    /**
+     * The cards currently on the table
+     */
     protected TableCards table;
+
+    /**
+     * The current pot
+     */
     protected int pot;
 
     // Variables maybe used ---- Eventually this should not be in existence
+    
+    /**
+     * The current bet
+     */
     protected int bet = 0;
+
+    /**
+     * Information/instructions displayed to the user
+     */
     protected String message, prompt;
+
+    /**
+     * Image of the back of the card
+     */
     protected ImageIcon backCardImage;
+
+    /**
+     * The round winner
+     */
     protected Winner winnerType = Winner.NEW_GAME;
+
+    /**
+     * The current game step
+     */
     protected Step step;
+
+    /**
+     * Which player's turn it is
+     */
     protected Turn turn;
+
+    /**
+     * The back of a card
+     */
     protected Card backCard;
 
     // Booleans variable
+
+    /**
+     * Whether or not one player is responding to the other player's move
+     */
     protected boolean responding = false;
+
+    /**
+     * The game status
+     */
     protected boolean gameOver = false;
+
+    /**
+     * Whether or not the player has folded
+     */
     protected boolean youFold = false;
+
+    /**
+     * Whether or not the opponent has folded
+     */
     protected boolean opponentFold = false;
+
+    /**
+     * Whether or not someone has gone all in
+     */
     protected boolean allIn = false;
     
     /**
