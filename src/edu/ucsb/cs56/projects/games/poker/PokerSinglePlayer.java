@@ -59,12 +59,12 @@ final class PokerSinglePlayer extends PokerGameGui {
     //Method that directs the turn to who it needs to go to.
     //In the future, this can be changed to allow for multiplayer.
     public void turnDecider () {
-	if (turn == Turn.PLAYER) {
-	    playerTurn();
-	}
-	else {
-	    opponentAI();
-	}
+        if (turn == Turn.PLAYER) {
+            playerTurn();
+        }
+        else {
+            opponentAI();
+        }
     }
 
     
@@ -109,8 +109,8 @@ final class PokerSinglePlayer extends PokerGameGui {
     }
 
     public void playerTurn() {
-	controlButtons();
-	updateFrame();
+        controlButtons();
+        updateFrame();
     }
 
     /**
@@ -172,7 +172,7 @@ final class PokerSinglePlayer extends PokerGameGui {
         if (responding == true) {
             if (shouldCall) {
                 if (allIn) {
-                    message = "opponent goes all in";
+                    message = "opponent goes all in, no more bets will be allowed";
                     bet = opponent.getChips();
                 }
                 else {

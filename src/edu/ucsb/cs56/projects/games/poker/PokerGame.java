@@ -57,11 +57,11 @@ public class PokerGame {
      */
     // FIX THIS OR FIX setUp() METHOD
     public PokerGame() {
-	this.deck = new Deck();
-	this.player = new Player(500, deck);
-	this.opponent = new Player(500, deck);
-	this.table = new TableCards(deck);
-	pot = 0;
+        this.deck = new Deck();
+        this.player = new Player(500, deck);
+        this.opponent = new Player(500, deck);
+        this.table = new TableCards(deck);
+        pot = 0;
     }
 
     /**
@@ -70,13 +70,13 @@ public class PokerGame {
     public void setUp() {
         player.delegate = this;
         opponent.delegate = this;
-	if (player.getChips() >= 5 && opponent.getChips() >= 5) {
-	    player.bet(5);
-	    opponent.bet(5);
+        if (player.getChips() >= 5 && opponent.getChips() >= 5) {
+            player.bet(5);
+            opponent.bet(5);
             pot += 10;
             message = "Ante of 5 chips set.";
         }
-	else {
+        else {
             gameOver = true;
             showWinnerAlert();
         }

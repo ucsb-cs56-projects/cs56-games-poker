@@ -218,7 +218,7 @@ public class PokerGameGui extends PokerGame{
 
             mainFrame = new JFrame("Poker Game");
             mainFrame.setSize(new Dimension(1000, 600));
-	    mainFrame.setLayout(new BorderLayout() );
+            mainFrame.setLayout(new BorderLayout() );
             mainFrame.setResizable(false);
             mainFrame.setLocation(250, 250);
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -235,12 +235,15 @@ public class PokerGameGui extends PokerGame{
      * Method that updates the panels in the frame based on step
      */
     public void updateFrame() {
-	if (step == Step.FLOP) {
+        if (step == Step.FLOP) {
             flopPane.setVisible(true);
         } else if (step == Step.TURN) {
             turnPane.setVisible(true);
         } else if (step == Step.RIVER) {
             riverPane.setVisible(true);
+        }
+        if (allIn) {
+            message = "All in, no more bets allowed";
         }
         gameMessage.setText(message);
         playerPrompt.setText(prompt);
@@ -263,7 +266,13 @@ public class PokerGameGui extends PokerGame{
             callButton.setEnabled(false);
             foldButton.setEnabled(false);
             showdownButton.setVisible(true);
-	    rulesButton.setEnabled(true);
+        }
+        else if (allIn) {
+            betButton.setEnabled(false);
+            betTextField.setEnabled(false);
+            checkButton.setEnabled(true);
+            callButton.setEnabled(true);
+            foldButton.setEnabled(true);
         }
         else if (turn == Turn.PLAYER && responding) {
             betButton.setEnabled(false);
@@ -271,23 +280,21 @@ public class PokerGameGui extends PokerGame{
             checkButton.setEnabled(false);
             callButton.setEnabled(true);
             foldButton.setEnabled(true);
-	    rulesButton.setEnabled(true);
         } else if (turn == Turn.PLAYER) {
             betButton.setEnabled(true);
             betTextField.setEnabled(true);
             checkButton.setEnabled(true);
             callButton.setEnabled(false);
             foldButton.setEnabled(true);
-	    rulesButton.setEnabled(true);
         } else {
             betButton.setEnabled(false);
             betTextField.setEnabled(false);
             checkButton.setEnabled(false);
             callButton.setEnabled(false);
             foldButton.setEnabled(false);
-	    rulesButton.setEnabled(true);
         }
-	updateFrame();
+        rulesButton.setEnabled(true);
+        updateFrame();
     }
 
 
@@ -304,34 +311,22 @@ public class PokerGameGui extends PokerGame{
                 bet = Integer.parseInt(inputText);
                 if (bet<=0) {
                     prompt = "Enter a valid bet!";
-                    //updateFrame();
                 }
                 else if ((player.getChips() - bet >= 0) && (opponent.getChips() - bet >= 0)) {
                     pot += bet;
                     player.bet(bet);
                     prompt = "Player bets " + bet + ".";
-                    /*betTextField.setText("");
-                    message = "Opponent waiting for turn.";
-                    betButton.setEnabled(false);
-                    betTextField.setEnabled(false);
-                    checkButton.setEnabled(false);
-                    callButton.setEnabled(false);
-                    foldButton.setEnabled(false);
-                    responding = true;*/
                     updateBetGUIElements();
                     checkPassTurnUpdate();
-                    //updateFrame();
                 }
                 else if (((turn == Turn.PLAYER) && (player.getChips() < bet)) || ((turn == Turn.OPPONENT) && (opponent.getChips() < bet))) {
                     prompt = "Not enough chips!";
-                    //updateFrame();
                 }
                 else {
                     allIn = true;
                     allInBet();
                     updateBetGUIElements();
                     checkPassTurnUpdate();
-                    //updateFrame();
                 }
                 updateFrame();
             }
