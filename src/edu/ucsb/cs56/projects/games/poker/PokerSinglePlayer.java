@@ -219,10 +219,10 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    updateFrame();
     	    if (winnerType == Winner.PLAYER) {
                 System.out.println("player");
-                message = "You won! \n\n Next round?";
+                message = "You win! \n\n Next round?";
     	    } else if (winnerType == Winner.OPPONENT) {
     		System.out.println("opponent");
-    		message = "opponent won. \n\n Next round?";
+    		message = "Opponent wins. \n\n Next round?";
     	    } else if (winnerType == Winner.TIE){
                 System.out.println("tie");
                 message = "Tie \n\n Next round?";
@@ -230,18 +230,23 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    
     	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
     						       JOptionPane.YES_NO_OPTION);
-    	    if (option == JOptionPane.YES_OPTION) {
+    	    
+	    if (option == JOptionPane.YES_OPTION) {
     		// Restart
 		mainFrame.dispose();
 		PokerSinglePlayer singlePlayerReplay;
-		// First check if players have enough chips
+
+		// Check if players have enough chips.
 		
 		// Create new game
+		
 		if(player.getChips() < 5){
+		    JOptionPane.showMessageDialog(null, "Resetting chips...");
 		    singlePlayerReplay = new PokerSinglePlayer();
 		    singlePlayerReplay.go();
 		}
-		else if(opponent.getChips() < 5){
+		else if(opponent.getChips() < 5){		    
+		    JOptionPane.showMessageDialog(null, "Resetting chips...");
 		    singlePlayerReplay = new PokerSinglePlayer();
 		    singlePlayerReplay.go();
 		}
@@ -252,14 +257,15 @@ final class PokerSinglePlayer extends PokerGameGui {
 	       
 	    } else if (option == JOptionPane.NO_OPTION) {
 		if(opponent.getChips() < 5) {
-		    gameOver("GAME OVER!\n\n opponent has run out of chips!");
-		} else if (player.getChips() < 5) {
-		    gameOver("GAME OVER!\n\n you have run out of chips!");
+		    gameOver("GAME OVER!\n\nOpponent has run out of chips!\n");
+		} 	
+		else if (player.getChips() < 5) {
+		    gameOver("GAME OVER!\n\nYou have run out of chips!\n");
 		}
-
-		gameOver("");
-		
-	    } else {
+		gameOver("GAME OVER! Thanks for playing.\n\n");
+	    } 
+	    
+	    else {
     		// Quit
     		System.exit(1);
     	    }

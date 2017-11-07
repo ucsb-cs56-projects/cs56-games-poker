@@ -482,16 +482,18 @@ public class PokerGameGui extends PokerGame{
     protected void gameOver(String label) {
         gameOverFrame = new JFrame();
         gameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameOverFrame.setBackground(Color.red);
-
-        gameOverMessage = new JPanel();
-        gameOverMessage.setBackground(Color.red);
-
-        gameOverButtonPanel = new JPanel();
-        gameOverButtonPanel.setBackground(Color.red);
+	
+	Color gameOverGreen = new Color(0,153,76);
+	gameOverFrame.setBackground(gameOverGreen);
 
         gameOverLabel = new JLabel(label);
-        gameOverButton = new JButton("Back to Main Menu");
+	gameOverMessage = new JPanel();
+        gameOverMessage.setBackground(gameOverGreen);
+
+	gameOverButtonPanel = new JPanel();
+        gameOverButtonPanel.setBackground(gameOverGreen);
+        gameOverButton = new JButton("Return to Main Menu");
+
         gameOverButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e){
                     gameOverFrame.setVisible(false);
@@ -500,15 +502,15 @@ public class PokerGameGui extends PokerGame{
                 }
             });
 
-
         gameOverMessage.add(gameOverLabel);
         gameOverButtonPanel.add(gameOverButton);
 
-        gameOverFrame.setSize(300, 200);
+        gameOverFrame.setSize(new Dimension(300, 200));
         gameOverFrame.setResizable(false);
         gameOverFrame.setLocation(250, 250);
-        gameOverFrame.getContentPane().add(BorderLayout.NORTH, gameOverMessage);
-        gameOverFrame.getContentPane().add(BorderLayout.SOUTH, gameOverButtonPanel);
+
+        gameOverFrame.add(BorderLayout.NORTH, gameOverMessage);
+        gameOverFrame.add(BorderLayout.SOUTH, gameOverButtonPanel);
         gameOverFrame.pack();
         gameOverFrame.setVisible(true);
         mainFrame.dispose();
