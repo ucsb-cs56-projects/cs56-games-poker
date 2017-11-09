@@ -14,14 +14,24 @@ import java.util.ArrayList;
  */
 public class PokerGame {
     // PokerGame States
+
+    /**
+     * enum representing the game winner
+     */
     public enum Winner {
         PLAYER, OPPONENT, TIE, NEW_GAME
             };
 
+    /**
+     * enum representing the game step
+     */
     public enum Step {
         BLIND, FLOP, TURN, RIVER, SHOWDOWN
             };
 
+    /**
+     * enum representing which player's turn it is
+     */
     public enum Turn {
         PLAYER, OPPONENT
             };
@@ -30,37 +40,106 @@ public class PokerGame {
     
 
     // Properties of Poker Game
+
+    /**
+     * The user playing the game
+     */
     protected Player player;
+
+    /**
+     * The opponent (currently an AI)
+     */
     protected Player opponent;
+
+    /**
+     * The deck used for the game
+     */
     protected Deck deck;
+
+    /**
+     * The cards currently on the table
+     */
     protected TableCards table;
+
+    /**
+     * The current pot
+     */
     protected int pot;
 
     // Variables maybe used ---- Eventually this should not be in existence
+    
+    /**
+     * The current bet
+     */
     protected int bet = 0;
+
+    /**
+     * Information/instructions displayed to the user
+     */
     protected String message, prompt;
+
+    /**
+     * Image of the back of the card
+     */
     protected ImageIcon backCardImage;
+
+    /**
+     * The round winner
+     */
     protected Winner winnerType = Winner.NEW_GAME;
+
+    /**
+     * The current game step
+     */
     protected Step step;
+
+    /**
+     * Which player's turn it is
+     */
     protected Turn turn;
+
+    /**
+     * The back of a card
+     */
     protected Card backCard;
 
     // Booleans variable
+
+    /**
+     * Whether or not one player is responding to the other player's move
+     */
     protected boolean responding = false;
+
+    /**
+     * The game status
+     */
     protected boolean gameOver = false;
+
+    /**
+     * Whether or not the player has folded
+     */
     protected boolean youFold = false;
+
+    /**
+     * Whether or not the opponent has folded
+     */
     protected boolean opponentFold = false;
+
+    /**
+     * Whether or not someone has gone all in
+     */
+    protected boolean allIn = false;
     
     /**
      * No arg constructor that initializes a new deck.
      */
     // FIX THIS OR FIX setUp() METHOD
     public PokerGame() {
-	this.deck = new Deck();
-	this.player = new Player(500, deck);
-	this.opponent = new Player(500, deck);
-	this.table = new TableCards(deck);
-	pot = 0;
+        this.deck = new Deck();
+        this.player = new Player(500, deck);
+        this.opponent = new Player(500, deck);
+        this.table = new TableCards(deck);
+        pot = 0;
     }
 
     /**
@@ -69,13 +148,13 @@ public class PokerGame {
     public void setUp() {
         player.delegate = this;
         opponent.delegate = this;
-	if (player.getChips() >= 5 && opponent.getChips() >= 5) {
-	    player.bet(5);
-	    opponent.bet(5);
+        if (player.getChips() >= 5 && opponent.getChips() >= 5) {
+            player.bet(5);
+            opponent.bet(5);
             pot += 10;
             message = "Ante of 5 chips set.";
         }
-	else {
+        else {
             gameOver = true;
             showWinnerAlert();
         }
