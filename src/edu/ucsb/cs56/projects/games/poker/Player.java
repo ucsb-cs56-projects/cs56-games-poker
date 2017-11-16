@@ -8,24 +8,9 @@ import java.util.*;
    Class that represents a poker player
 */
 public class Player implements Serializable {
-    /**
-     * The player's current hand
-     */
     private Hand pokerHand;
-
-    /**
-     * The amount of chips the player currently has
-     */
     private int chips;
-
-    /**
-     * The number of wins the player has in the current round
-     */
     private int wins;
-
-    /**
-     * The current PokerGame the player is a part of
-     */
     public PokerGame delegate;
 
     /** 
@@ -33,18 +18,17 @@ public class Player implements Serializable {
      * @param hand the hand you have
      */
     public Player(Hand hand){
-        pokerHand = hand;
-        chips = 100;
-        wins = 0;
+	pokerHand = hand;
+	chips = 100;
+	wins = 0;
     }
-
     /**
      * Creates a Poker player with a designated number of chips
      * @param chips number of chips
      * @param deck of Cards
      */
     public Player(int chips, Deck deck) {
-        this.pokerHand = new Hand(deck);
+	this.pokerHand = new Hand(deck);
         this.chips = chips;
         this.wins = 0;
     }
