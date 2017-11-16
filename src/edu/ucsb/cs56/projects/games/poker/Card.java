@@ -7,15 +7,8 @@ import java.io.Serializable;
    @author Joey Dewan
    @version 5/29/12 CS56 S12
 */
-public class Card implements Serializable {
-    /**
-     * The card's numeric value
-     */
+public class Card implements Serializable{
     private int value;
-
-    /*
-     * The card's suit
-     */
     private String suit;
 	
     /** 2 argument constructor to initialize the value and the suit
@@ -23,8 +16,8 @@ public class Card implements Serializable {
 	@param suit suit of the card(hearts,dimaonds,etc.)
     */
     public Card(int value, String suit){
-        this.value=value;
-        this.suit=suit;
+	this.value=value;
+	this.suit=suit;
     }
 	
     /**
@@ -32,7 +25,7 @@ public class Card implements Serializable {
      * @return int int value of Card
      */
     public int getValue(){
-        return this.value;
+	return this.value;
     }
 	
     /**
@@ -40,7 +33,7 @@ public class Card implements Serializable {
      * @return String The Card's Suit
      */
     public String getSuit(){
-        return this.suit;
+	return this.suit;
     }
 	
     /**
@@ -48,7 +41,7 @@ public class Card implements Serializable {
      * @return String of the Card as valuesuit
     */
     public String toString(){
-        String s=""+value+suit;
-        return s;
+	String s=""+value+suit;
+	return s;
     }
 }
