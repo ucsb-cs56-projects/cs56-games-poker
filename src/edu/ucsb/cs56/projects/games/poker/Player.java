@@ -5,9 +5,9 @@ import java.util.*;
 
 
 /**
-   Class that represents a poker player
+   Abstract class that represents a poker player
 */
-public class Player implements Serializable {
+public abstract class Player implements Serializable {
     /**
      * The player's current hand
      */
@@ -97,10 +97,10 @@ public class Player implements Serializable {
     public void bet(int chipsBet) {
         if (chipsBet <= 0)
 	    ; // Assert an Error "Not Valid"
-	else if (chipsBet > chips)
-	    ; // Assert an Error "Not Enough Chips"
-	else
-	    chips -= chipsBet;
+        else if (chipsBet > chips)
+            ; // Assert an Error "Not Enough Chips"
+        else
+            chips -= chipsBet;
     }
 
     /**
@@ -110,4 +110,15 @@ public class Player implements Serializable {
     public void foldHand() {
         delegate.fold();
     }
+    
+    public void setDelegate(PokerGame game) {
+        this.delegate = game;
+    }
+
+    /**
+     * Performs a player's turn
+     * This behavior changes depending on if the player is human or AI
+     * and must be implemented by the subclass (User or OpponentAI)
+     */
+    public abstract void takeTurn(); 
 }
