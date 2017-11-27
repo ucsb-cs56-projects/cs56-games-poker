@@ -111,6 +111,7 @@ import org.junit.Test;
 		comparingHands = new CompareHands(player1, player2, table);
 		
 		assertEquals(1, comparingHands.compareHands());
+		assertEquals("Two Pair beats Pair", comparingHands.compareMessage());
 	 }
 	 /** test two pair loses against straight */
 	 @Test
@@ -123,6 +124,7 @@ import org.junit.Test;
 		comparingHands = new CompareHands(player1, player2, table);
 		
 		assertEquals(0, comparingHands.compareHands());
+		assertEquals("Straight beats Two Pair", comparingHands.compareMessage());
 	 }
 	
 	 /** test three of a kind wins against one pair */
@@ -136,6 +138,7 @@ import org.junit.Test;
 		comparingHands = new CompareHands(player1, player2, table);
 		
 		assertEquals(1, comparingHands.compareHands());
+		assertEquals("Three of a Kind beats Pair", comparingHands.compareMessage());
 	 }
 	 /** test three of a kind loses against flush */
 	 @Test
