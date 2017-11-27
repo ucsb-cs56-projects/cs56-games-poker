@@ -240,20 +240,26 @@ public class PokerGame {
      * Method to determine the winner of the game
      */
     // Possibly fix this
+ 
     public void determineWinner() {
 	CompareHands comparison = new CompareHands(player, opponent, table);
 	int winner = comparison.compareHands();
+
 	if (winner == 1) {
 	    player.win();
 	    winnerType = Winner.PLAYER;
         } else if (winner == 0) {
-            winnerType = Winner.OPPONENT;
-        } else {
+	    winnerType = Winner.OPPONENT;
+	    opponent.win();
+	} else {
             winnerType = Winner.TIE;
-            opponent.win();
         }
     }
 
+    public String winningHandMessage(){
+	CompareHands comparison = new CompareHands(player, opponent, table);
+	return comparison.compareMessage();
+    }
     /**
      * Method to pass the turn from opponent to player, or player to opponent
      * Must be overridden!!!

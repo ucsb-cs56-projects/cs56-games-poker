@@ -241,15 +241,18 @@ final class PokerSinglePlayer extends PokerGameGui {
     		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
     	    }
     	    updateFrame();
+
+	    message = winningHandMessage();
+
     	    if (winnerType == Winner.PLAYER) {
                 System.out.println("player");
-                message = "You win! \n\n Next round?";
+                message = message + ("\n\nYou win!\n\nNext round?");
     	    } else if (winnerType == Winner.OPPONENT) {
     		System.out.println("opponent");
-    		message = "Opponent wins. \n\n Next round?";
+    		message = message + ("\n\nOpponent wins.\n\nNext round?");
     	    } else if (winnerType == Winner.TIE){
                 System.out.println("tie");
-                message = "Tie \n\n Next round?";
+                message = message + ("\n\nTie \n\nNext round?");
     	    }
     	    
     	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",

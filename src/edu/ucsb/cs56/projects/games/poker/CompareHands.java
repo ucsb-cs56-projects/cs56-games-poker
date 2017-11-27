@@ -49,17 +49,18 @@ public class CompareHands implements Serializable{
         cardHand2.add(table.getTurnCard());
         cardHand2.add(table.getRiverCard());
     }
-
+	
     /**
      * Returns 1 if "Player 1" hand is better than "Player 2" hand
      * Returns 0 if the opposite.
      * Returns 2 if exact tie
      * @return int 
      */
+
     public int compareHands(){
         player1Value = calculateValue(cardHand1);
         player2Value = calculateValue(cardHand2);
-        
+
         if(player1Value>player2Value)
             return 1;
         else if(player1Value<player2Value)
@@ -168,6 +169,45 @@ public class CompareHands implements Serializable{
             return 1;
         else
             return 0;
+    }
+	
+   /**
+    * Method that explicitly names the player's hand.
+    * @param player: the cards belonging to the player.
+    * @return String
+    */
+
+    public String calculateValueToString(ArrayList<Card> player){
+	if(isStraightFlush(player))
+            return ("Straight Flush");
+        else if(isFourOfAKind(player))
+            return ("Four of a Kind");
+        else if(isFullHouse(player))
+            return ("Full House");
+        else if(isFlush(player))
+            return ("Flush");
+        else if(isStraight(player))
+            return ("Straight");
+        else if(isThreeOfAKind(player))
+            return ("Three of a Kind");
+        else if(isTwoPair(player))
+            return ("Two Pair");
+        else if(isOnePair(player))
+            return ("Pair");
+	else
+            return ("Mix");
+    }
+
+    public String compareMessage(){
+	if (this.compareHands() == 1){
+		return (calculateValueToString(cardHand1) + " beats " + calculateValueToString(cardHand2));
+	}
+	else if (this.compareHands() == 0){
+		return (calculateValueToString(cardHand2) + " beats " + calculateValueToString(cardHand1));
+	}
+	else{
+		return ("Tie with " + calculateValueToString(cardHand1));
+	}
     }
 
     /**
