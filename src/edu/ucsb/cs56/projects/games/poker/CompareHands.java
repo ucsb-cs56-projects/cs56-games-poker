@@ -54,9 +54,8 @@ public class CompareHands implements Serializable{
      * Returns 1 if "Player 1" hand is better than "Player 2" hand
      * Returns 0 if the opposite.
      * Returns 2 if exact tie
-     * @return int 
+     * @return int representing round winnner
      */
-
     public int compareHands(){
         player1Value = calculateValue(cardHand1);
         player2Value = calculateValue(cardHand2);
@@ -66,8 +65,40 @@ public class CompareHands implements Serializable{
         else if(player1Value<player2Value)
             return 0;
         else {
-            
-            int yourHandValue = sameHandUpdated(cardHand1, 1);
+            // player1Value and player2Value are equal (same general hand)
+            switch (player1Value) {
+                case 8:
+                    // straight flush
+                    return straightFlushTie();
+                case 7:
+                    // four of a kind
+                    return fourOfAKindTie();
+                case 6:
+                    // full house
+                    return fullHouseTie();
+                case 5:
+                    // flush
+                    return flushTie();
+                case 4:
+                    // straight
+                    return straightTie();
+                case 3:
+                    // three of a kind
+                    return threeOfAKindTie();
+                case 2:
+                    // two pair
+                    return twoPairTie();
+                case 1:
+                    // pair
+                    return pairTie();
+                case 0:
+                    // high card
+                    return highCardTie();
+                default:
+                    // should never happen
+                    return 2;
+            }
+            /*int yourHandValue = sameHandUpdated(cardHand1, 1);
             int otherHandValue = sameHandUpdated(cardHand2, 1);
             if(yourHandValue>otherHandValue)
                 return 1;
@@ -109,10 +140,10 @@ public class CompareHands implements Serializable{
                             return 2;// Only arrives here if cards are exactly the same		
                     }  //
                 }
-            }
+            }*/
         }
     }
-    
+
     /**
      * This method is used if both hands are the same type
      * Hand is either this or the otherhand
@@ -547,4 +578,324 @@ public class CompareHands implements Serializable{
             return false;
     }
 
+    /**
+     * Returns suit occurring the most in a hand
+     * @return char representing the suit
+     */
+    private char getMostCommonSuit(ArrayList<Card> hand) {
+        int heartsCounter = 0;
+        int diamondsCounter = 0;
+        int spadesCounter = 0;
+        int clubsCounter = 0;
+
+        for (int i = 0; i < hand.size(); i++) {
+            switch (hand.get(i).getSuit().charAt(0)) {
+                case 'H':
+                    heartsCounter++;
+                    break;
+                case 'D':
+                    diamondsCounter++;
+                    break;
+                case 'S':
+                    spadesCounter++;
+                    break;
+                case 'C':
+                    clubsCounter++;
+                    break;
+            }
+        }
+
+        int max_occurrences = Math.max(heartsCounter, Math.max(diamondsCounter, Math.max(spadesCounter, clubsCounter)));
+
+        if (max_occurrences == heartsCounter) {
+            return 'H';
+        }
+        else if (max_occurrences == diamondsCounter) {
+            return 'D';
+        }
+        else if (max_occurrences == spadesCounter) {
+            return 'S';
+        }
+        return 'C';
+    }
+
+    /**
+     * Determines the better hand of two straight flushes
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int straightFlushTie() {
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+        char mostCommonSuit1 = getMostCommonSuit(cardHand1);
+        char mostCommonSuit2 = getMostCommonSuit(cardHand2);
+        int maxCardHand1 = 0;
+        int maxCardHand2 = 0;
+
+        for (int i = cardHand1.size() - 1; i >= 0; i--) {
+            if (cardHand1.get(i).getSuit().charAt(0) == mostCommonSuit1 && cardHand1.get(i).getValue() > maxCardHand1) {
+                maxCardHand1 = cardHand1.get(i).getValue();
+            }
+            if (cardHand2.get(i).getSuit().charAt(0) == mostCommonSuit2 && cardHand2.get(i).getValue() > maxCardHand2) {
+                maxCardHand2 = cardHand2.get(i).getValue();
+            }
+        }
+
+        if (maxCardHand1 > maxCardHand2)
+            return 1;
+        else if (maxCardHand2 > maxCardHand1)
+            return 0;
+        else
+            return 2;
+    }
+
+    /**
+     * Determines the better hand of two four of a kinds
+     * @return 1 if the player wins, 0 if the opponent wins
+     */
+    private int fourOfAKindTie() {
+        int fourOfAKind1 = 0;
+        int fourOfAKind2 = 0;
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+
+        for (int i = 0; i < sortedHand1.size(); i++) {
+            if (Collections.frequency(sortedHand1, sortedHand1.get(i)) == 4)
+                fourOfAKind1 = sortedHand1.get(i);
+            if (Collections.frequency(sortedHand2, sortedHand2.get(i)) == 4)
+                fourOfAKind2 = sortedHand2.get(i);
+        }
+
+        if (fourOfAKind1 > fourOfAKind2)
+            return 1;
+        return 0;
+    }
+
+    /**
+     * Determines the better hand of two full houses
+     * @return 1 if the player wins, 0 if the opponent wins
+     */
+    private int fullHouseTie() {
+        return threeOfAKindTie();
+    }
+
+    /**
+     * Determines the better hand of two flushes
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int flushTie() {
+        char mostCommonSuit1 = getMostCommonSuit(cardHand1);
+        char mostCommonSuit2 = getMostCommonSuit(cardHand2);
+        ArrayList<Integer> flushCards1 = new ArrayList<Integer>();
+        ArrayList<Integer> flushCards2 = new ArrayList<Integer>();
+
+        for (int i = 0; i < cardHand1.size(); i++) {
+            if (cardHand1.get(i).getSuit().charAt(0) == mostCommonSuit1)
+                flushCards1.add(cardHand1.get(i).getValue());
+            if (cardHand2.get(i).getSuit().charAt(0) == mostCommonSuit2)
+                flushCards2.add(cardHand2.get(i).getValue());
+        }
+
+        Collections.sort(flushCards1);
+        Collections.sort(flushCards2);
+
+        int flush1_index = flushCards1.size() - 1;
+        int flush2_index = flushCards2.size() - 1;
+
+        while ((flush1_index >= 0) && (flush2_index >= 0)) {
+            if (flushCards1.get(flush1_index) > flushCards2.get(flush2_index)) {
+                return 1;
+            }
+            else if (flushCards2.get(flush2_index) > flushCards1.get(flush1_index)) {
+                return 0;
+            }
+            else {
+                flush1_index--;
+                flush2_index--;
+            }
+        }
+
+        return 2; // players have exact same cards for flush
+    }
+
+    /**
+     * Determines the better hand of two straights
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int straightTie() {
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+        removeDuplicates(sortedHand1);
+        removeDuplicates(sortedHand2);
+        int straightEndIndex1 = 0;
+        int straightEndIndex2 = 0;
+
+        for (int i = 0; i < sortedHand1.size() - 4; i++) {
+            if(sortedHand1.get(i)==(sortedHand1.get(i + 1) - 1) && 
+               sortedHand1.get(i)==(sortedHand1.get(i + 2) - 2) &&
+               sortedHand1.get(i)==(sortedHand1.get(i + 3) - 3) &&
+               sortedHand1.get(i)==(sortedHand1.get(i + 4) - 4))
+                {
+                straightEndIndex1 = i + 4;
+                }
+            if(sortedHand2.get(i)==(sortedHand2.get(i + 1) - 1) && 
+               sortedHand2.get(i)==(sortedHand2.get(i + 2) - 2) &&
+               sortedHand2.get(i)==(sortedHand2.get(i + 3) - 3) &&
+               sortedHand2.get(i)==(sortedHand2.get(i + 4) - 4))
+                {
+                straightEndIndex2 = i + 4;
+                }
+        }
+
+        if (sortedHand1.get(straightEndIndex1) > sortedHand2.get(straightEndIndex2))
+            return 1;
+        else if (sortedHand2.get(straightEndIndex2) > sortedHand2.get(straightEndIndex2))
+            return 0;
+        return 2;
+    }
+
+    /**
+     * Determines the better hand of two three of a kinds
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int threeOfAKindTie() {
+        int threeOfAKind1 = 0;
+        int threeOfAKind2 = 0;
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+
+        for (int i = 0; i < sortedHand1.size(); i++) {
+            if (Collections.frequency(sortedHand1, sortedHand1.get(i)) == 3 && sortedHand1.get(i) > threeOfAKind1)
+                threeOfAKind1 = sortedHand1.get(i);
+            if (Collections.frequency(sortedHand2, sortedHand2.get(i)) == 3 && sortedHand2.get(i) > threeOfAKind2)
+                threeOfAKind2 = sortedHand2.get(i);
+        }
+
+        if (threeOfAKind1 > threeOfAKind2)
+            return 1;
+        return 0;
+    }
+
+    /**
+     * Determines the better hand of two two pairs
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int twoPairTie() {
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+        ArrayList<Integer> pairsHand1 = new ArrayList<Integer>(); // each entry represents a pair (a 4 means a pair of 4's)
+        ArrayList<Integer> pairsHand2 = new ArrayList<Integer>();
+
+        for (int i = 0; i < sortedHand1.size(); i++) {
+            if ((Collections.frequency(sortedHand1, sortedHand1.get(i)) == 2) && (!pairsHand1.contains(sortedHand1.get(i)))) {
+                pairsHand1.add(sortedHand1.get(i));
+            }
+            if ((Collections.frequency(sortedHand2, sortedHand2.get(i)) == 2) && (!pairsHand2.contains(sortedHand2.get(i)))) {
+                pairsHand2.add(sortedHand2.get(i));
+            }
+        }
+
+        int pairsHand1_index = pairsHand1.size() - 1;
+        int pairsHand2_index = pairsHand2.size() - 1;
+        int maxNumPairs = 2; // only want to compare two highest pairs from each hand
+
+        while (maxNumPairs > 0) {
+            if (pairsHand1.get(pairsHand1_index) > pairsHand2.get(pairsHand2_index)) {
+                return 1;
+            }
+            else if (pairsHand2.get(pairsHand2_index) > pairsHand1.get(pairsHand1_index)) {
+                return 0;
+            }
+            else {
+                pairsHand1_index--;
+                pairsHand2_index--;
+            }
+        }
+
+        // if both pairs are the same, check the fifth card in each hand
+        int fifthCardHand1 = 0;
+        int fifthCardHand2 = 0;
+
+        for (int i = sortedHand1.size() - 1; i >= 0; i--) {
+            if (!pairsHand1.contains(sortedHand1.get(i))) {
+                fifthCardHand1 = sortedHand1.get(i);
+            }
+            if (!pairsHand2.contains(sortedHand2.get(i))) {
+                fifthCardHand2 = sortedHand2.get(i);
+            }
+        }
+
+        if (fifthCardHand1 > fifthCardHand2)
+            return 1;
+        else if (fifthCardHand2 > fifthCardHand1)
+            return 0;
+        return 2;
+    }
+
+    /**
+     * Determines the better hand of two pairs
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int pairTie() {
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+        int pair1 = 0;
+        int pair2 = 0;
+
+        for (int i = sortedHand1.size() - 1; i >= 0; i--) {
+            if ((Collections.frequency(sortedHand1, sortedHand1.get(i)) == 2) && (pair1 == 0)) {
+                pair1 = sortedHand1.get(i);
+            }
+            if ((Collections.frequency(sortedHand2, sortedHand2.get(i)) == 2) && (pair2 == 0)) {
+                pair2 = sortedHand2.get(i);
+            }
+        }
+
+        if (pair1 > pair2)
+            return 1;
+        else if (pair2 > pair1)
+            return 0;
+
+        sortedHand1.remove(new Integer(pair1));
+        sortedHand1.remove(new Integer(pair1));
+        sortedHand2.remove(new Integer(pair2));
+        sortedHand2.remove(new Integer(pair2));
+
+        int hand1_index = sortedHand1.size() - 1;
+        int hand2_index = sortedHand2.size() - 1;
+        int cardsExamined = 0;
+
+        while ((hand1_index >= 0) && (hand2_index >= 0) && (cardsExamined < 3)) {
+            if (sortedHand1.get(hand1_index) > sortedHand2.get(hand2_index)) {
+                return 1;
+            }
+            else if (sortedHand2.get(hand2_index) > sortedHand1.get(hand1_index)) {
+                return 0;
+            }
+            else {
+                hand1_index--;
+                hand2_index--;
+                cardsExamined++;
+            }
+        }
+
+        return 2;
+    }
+
+    /**
+     * Determines the winner when there is no clear hand using the high card
+     * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
+     */
+    private int highCardTie() {
+        ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
+        ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
+
+        for (int i = sortedHand1.size() - 1; i > sortedHand1.size() - 6; i--) {
+            if (sortedHand1.get(i) > sortedHand2.get(i))
+                return 1;
+            else if (sortedHand2.get(i) > sortedHand1.get(i))
+                return 0;
+        }
+
+        return 2;
+    }
 }

@@ -327,26 +327,22 @@ public class PokerGame {
     // Possibly fix this
  
     public void determineWinner() {
-<<<<<<< HEAD
-	CompareHands comparison = new CompareHands(player, opponent, table);
-	int winner = comparison.compareHands();
-
-	if (winner == 1) {
-	    player.win();
-	    winnerType = Winner.PLAYER;
-=======
         CompareHands comparison = new CompareHands(player, opponent, table);
         int winner = comparison.compareHands();
+
         if (winner == 1) {
             player.win();
             winnerType = Winner.PLAYER;
->>>>>>> 1a9d9a1e8943c02911591f2ab7adc26a83883498
-        } else if (winner == 0) {
-	    winnerType = Winner.OPPONENT;
-	    opponent.win();
-	} else {
-            winnerType = Winner.TIE;
-        }
+            if (winner == 1) {
+                player.win();
+                winnerType = Winner.PLAYER;
+            } else if (winner == 0) {
+                winnerType = Winner.OPPONENT;
+                opponent.win();
+            }
+        } else {
+                winnerType = Winner.TIE;
+            }
     }
 
     public String winningHandMessage(){
