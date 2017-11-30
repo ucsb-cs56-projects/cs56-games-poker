@@ -27,6 +27,8 @@ final class PokerSinglePlayer extends PokerGameGui {
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
     public PokerSinglePlayer(){
+        player.setDelegate(this);
+        opponent.setDelegate(this);
     }
     
     /**
@@ -38,6 +40,8 @@ final class PokerSinglePlayer extends PokerGameGui {
     public PokerSinglePlayer(int pChips, int oChips){
         player.setChips(pChips);
         opponent.setChips(oChips);
+        player.setDelegate(this);
+        opponent.setDelegate(this);
     }
     
     /**
@@ -75,10 +79,10 @@ final class PokerSinglePlayer extends PokerGameGui {
      */
     public void turnDecider () {
         if (turn == Turn.PLAYER) {
-            playerTurn();
+            player.takeTurn();
         }
         else {
-            opponentAI();
+            opponent.takeTurn();
         }
     }
 
@@ -126,7 +130,7 @@ final class PokerSinglePlayer extends PokerGameGui {
     /**
      * Updates GUI based on the player's decision
      */
-    public void playerTurn() {
+    public void userTurn() {
         controlButtons();
         updateFrame();
     }
@@ -145,89 +149,10 @@ final class PokerSinglePlayer extends PokerGameGui {
             step = Step.SHOWDOWN;
             message = "All bets are in.";
             prompt = "Determine Winner: ";
-	    controlButtons();
+            controlButtons();
         }
     }
 
-
-
-    /**
-     *  Simple AI for the opponent in single player.
-     */
-    // TODO: Make AI much more complex and less predictable
-    //Move Opponent AI into its own class
-    private void opponentAI() {
-        boolean shouldBet = false;
-        boolean shouldCall = true;
-        int dValue = 0;
-        int betAmount = 5 * dValue;
-        if (step == Step.BLIND) {
-            if (dValue >= 1) {
-                shouldBet = true;
-            }
-        } else if (step == Step.FLOP) {
-            if (dValue >= 3) {
-                shouldBet = true;
-            }
-            if ((dValue == 0 && bet >= 20)) {
-                shouldCall = false;
-            }
-        } else if (step == Step.TURN) {
-            if (dValue >= 4) {
-                shouldBet = true;
-            }
-            if ((dValue < 2 && bet > 20)) {
-                shouldCall = false;
-            }
-        } else if (step == Step.RIVER) {
-            if (dValue >= 4) {
-                shouldBet = true;
-            }
-            if ((dValue < 2 && bet > 20))
-                shouldCall = false;
-        }
-
-        if (responding == true) {
-            if (shouldCall) {
-                if (allIn) {
-                    message = "opponent goes all in, no more bets will be allowed";
-                    bet = opponent.getChips();
-                }
-                else {
-                    message = "opponent calls.";
-                }
-                pot += bet;
-                opponent.bet(bet);
-                bet = 0;
-                responding = false;
-                nextStep();
-                updateFrame();
-                timer.restart();
-            } else {
-                message = "opponent folds.";
-                opponent.foldHand();
-            }
-        } else if (shouldBet && step != Step.SHOWDOWN) {
-            if ((opponent.getChips() - betAmount >= 0) && (player.getChips() - betAmount >= 0)) {
-                bet = betAmount;
-                pot += bet;
-                opponent.bet(bet);
-                responding = true;
-                message = "opponent bets " + bet + " chips.";
-                updateFrame();
-                changeTurn();
-            } else {
-                message = "opponent checks.";
-                updateFrame();
-                changeTurn();
-            }
-        } else if (step != Step.SHOWDOWN) {
-            message = "opponent checks.";
-            updateFrame();
-            changeTurn();
-        }
-    }
-	
 
     /**
      * Method overridden to allow for a new single player game to start.
@@ -241,15 +166,18 @@ final class PokerSinglePlayer extends PokerGameGui {
     		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
     	    }
     	    updateFrame();
+
+	    message = winningHandMessage();
+
     	    if (winnerType == Winner.PLAYER) {
                 System.out.println("player");
-                message = "You win! \n\n Next round?";
+                message = message + ("\n\nYou win!\n\nNext round?");
     	    } else if (winnerType == Winner.OPPONENT) {
     		System.out.println("opponent");
-    		message = "Opponent wins. \n\n Next round?";
+    		message = message + ("\n\nOpponent wins.\n\nNext round?");
     	    } else if (winnerType == Winner.TIE){
                 System.out.println("tie");
-                message = "Tie \n\n Next round?";
+                message = message + ("\n\nTie \n\nNext round?");
     	    }
     	    
     	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
@@ -286,5 +214,11 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    }
     	}
     }
-	
+
+    /**
+     * Restarts the timer controlling turnDecider()
+     */
+    public void restartTimer() {
+        timer.restart();
+    }
 }
