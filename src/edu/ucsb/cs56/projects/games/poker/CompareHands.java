@@ -98,49 +98,6 @@ public class CompareHands implements Serializable{
                     // should never happen
                     return 2;
             }
-            /*int yourHandValue = sameHandUpdated(cardHand1, 1);
-            int otherHandValue = sameHandUpdated(cardHand2, 1);
-            if(yourHandValue>otherHandValue)
-                return 1;
-            else if (yourHandValue<otherHandValue)
-                return 0;
-            else {
-                Card yourmaxCard = cardHand1.get(0);
-                Card othermaxCard = cardHand2.get(0);
-                if (yourmaxCard.getValue()<cardHand1.get(1).getValue())
-                    yourmaxCard = cardHand1.get(1);
-                if (othermaxCard.getValue()<cardHand2.get(1).getValue())
-                    othermaxCard = cardHand2.get(1);
-
-                if (yourmaxCard.getValue()>othermaxCard.getValue())
-                    return 1;
-                else if (yourmaxCard.getValue()<othermaxCard.getValue())
-                    return 0;
-                
-                else { //
-                    yourHandValue = sameHandUpdated(cardHand1, 2);
-                    otherHandValue = sameHandUpdated(cardHand2, 2);
-                    if(yourHandValue>otherHandValue)
-                        return 1;
-                    else if (yourHandValue<otherHandValue)
-                        return 0;
-                    else {
-                        Card yourminCard = cardHand1.get(0);
-                        Card otherminCard = cardHand2.get(0);
-                        if (yourminCard.getValue()>cardHand1.get(1).getValue())
-                            yourminCard = cardHand1.get(1);
-                        if (otherminCard.getValue()>cardHand2.get(1).getValue())
-                            otherminCard = cardHand2.get(1);
-                        
-                        if (yourminCard.getValue()>otherminCard.getValue())
-                            return 1;
-                        else if (yourminCard.getValue()<otherminCard.getValue())
-                            return 0;
-                        else
-                            return 2;// Only arrives here if cards are exactly the same		
-                    }  //
-                }
-            }*/
         }
     }
 
