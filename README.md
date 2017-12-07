@@ -106,5 +106,6 @@ For an assessment of the basic program structure, please refer to the code assem
 
 Since Users and AIs can both be thought of as Players, extending the code to multiplayer should be easier since all players can be referred to using Player references, regardless of whether or not the player is a user or AI.
 
-**Recommendations**
+**Recommendations:**
+
 Because of the current state of the code base, we recommend refactoring the code for multiplayer before adding new features. Currently, the assumption that the game has only 2 players is reflected in much of the logic and much of the existing code requires significant refactoring to support multiplayer. Some of the issues, such as incorporating the chat server into the game GUI window, are only truly relevant if multiplayer has already been implemented. Additionally, the implementation for new features will likely differ depending on whether or not the game supports multiplayer. Adding too many features without adding multiplayer might make the code too dependent on the assumption that there are only two players for it to be feasible to be extended to multiplayer. One piece of general advice about refactoring the code to allow multiplayer is don't be surprised if you find yourself changing much (or most) of the code. As has been previously stated, the most of the existing code assumes only two players. Adding multiplayer requires significant change to existing code, showing how programming to implementations instead of interfaces can result in a program both difficult to maintain and extend.
