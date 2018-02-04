@@ -36,8 +36,14 @@ The way each individual file is organized, but together the code gets a little m
 * The Deck code describes how the cards are moved from the active deck to the discarded one.
 * The Hand code seems to describe how to return values in the hand.
 * The Player class gives it a hand of cards, keeps track of its wins, and the amount of chips it holds
-* One of the classes holds code for restarting a timer, but a timer isn't implemented within the game.
+* The PokerSinglePlayer class holds code for restarting a timer, but a timer isn't implemented within the game; it also depends heavily on there only being one opponent to determine many of its decisions.
 * The CompareHands code compares the values of two different cards in order to determine the winner - it is currently highly dependent on the fact that there are only two players
+* The Card class holds its value and suit with methods to return its value, its suit, and print out both in a string
+* The TableCards class represents the cards that are currently on the table, with the flop cards, turn card, and river card all being chosen randomly from the deck
+* The User class signifies a human player and includes a hand and chips, from the Player class, and a function to take a turn
+* The OpponentAI class inherits from the Player class and holds both a hand and a number of chips, and a method to determine whether or not it should bet or call and a string that tells the player what move the AI made.
+* The PokerMain class holds the staring menu to choose what type of game you want to play through buttons.
+* The PokerGame class holds the possible win conditions, the different steps of the game, whose turn it is, and all the other general assets that are present within the game
 
 ### Assessment of Test Code
 There are several test codes for win conditions for different match-ups. It doesn't cover every case, however, and could be improved in including cases for empty hands.  It also does not have any test cases for the bet implementation or other features, which could be added to make it more thorough.
