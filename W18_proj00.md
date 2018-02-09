@@ -44,6 +44,7 @@ The way each individual file is organized, but together the code gets a little m
 * The OpponentAI class inherits from the Player class and holds both a hand and a number of chips, and a method to determine whether or not it should bet or call and a string that tells the player what move the AI made.
 * The PokerMain class holds the staring menu to choose what type of game you want to play through buttons.
 * The PokerGame class holds the possible win conditions, the different steps of the game, whose turn it is, and all the other general assets that are present within the game
+* Most of the issues or additonal features we can add to this code will require a lot of refactoring of the original code, because of the way this is originally structured. We anticipate a large scale refactoring of this code, which might be challenging.
 
 ### Assessment of Test Code
 There are several test codes for win conditions for different match-ups. It doesn't cover every case, however, and could be improved in including cases for empty hands.  It also does not have any test cases for the bet implementation or other features, which could be added to make it more thorough.
