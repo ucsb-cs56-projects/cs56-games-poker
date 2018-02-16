@@ -21,6 +21,7 @@ public class PokerGame {
     public enum Winner {
         PLAYER, OPPONENT, TIE, NEW_GAME
             };
+    public boolean Fold = false;
 
 
     /**
@@ -277,6 +278,7 @@ public class PokerGame {
             player.win();
         }
         collectPot();
+	Fold = true;
         showWinnerAlert();
 	// Reset player win flag
 
