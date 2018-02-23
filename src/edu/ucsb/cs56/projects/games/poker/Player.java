@@ -28,6 +28,12 @@ public abstract class Player implements Serializable {
      */
     public PokerGame delegate;
 
+    /**
+     * Whether the player is active or folded
+     * 0 = folded, 1 = active
+     */
+    public int type;
+
     /** 
      *Creates a Poker player with a set hand 
      * @param hand the hand you have
@@ -36,6 +42,7 @@ public abstract class Player implements Serializable {
         pokerHand = hand;
         chips = 100;
         wins = 0;
+	type = 1;
     }
 
     /**
@@ -108,6 +115,7 @@ public abstract class Player implements Serializable {
      */
     // Might never need to be used---Check later
     public void foldHand() {
+	type = 0;
         delegate.fold();
     }
     
