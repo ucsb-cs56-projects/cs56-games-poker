@@ -23,7 +23,6 @@ public class PokerGame {
             };
     public boolean Fold = false;
 
-
     /**
      * enum representing the game step
      */
