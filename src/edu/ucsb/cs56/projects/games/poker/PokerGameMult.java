@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Class that represents a Texas Holdem' Style Poker Game.
  */
-public class PokerGameMult {
+public class PokerGameMult extends PokerGame {
     // PokerGame States
 
     /**
@@ -202,7 +202,7 @@ public class PokerGameMult {
      * Returns the game's current step
      * @return the current step
      */
-    public Step getStep() {
+   /* public Step getStep() {
         return step;
     }
 
@@ -279,10 +279,12 @@ public class PokerGameMult {
      */
     // COULD IMPROVE IMPLEMENTATION
     public void fold() {
-        int activePlayers;
+        int activePlayers = 0;
 	for (Player player:players) {
-	    if (player.type == 1) 
+	    if (player.status == 1) { 
 		activePlayers +=1;
+		player.winStatus = true;
+	    }
 	}
 	if (activePlayers <= 1) {
         	collectPot();
@@ -292,42 +294,40 @@ public class PokerGameMult {
         // deck.reShuffle();
     	    winnerType = Winner.NEW_GAME;
 	}
+	else {
+		for (Player player:players)
+			player.winStatus = false;
+	}
     }
 
     /** TODO: Change for multiplayer
      * Function that transfers winnings to a player
      */
-    protected void collectPot() {	
-        if (winnerType == Winner.PLAYER) {
-	    // Player won
-            System.out.println("Player");
-            System.out.println(String.format("%d", pot));
-            int playerChips = player.getChips();
-            playerChips += pot;
+    protected void collectPot() {
+        for (Player player:players) {
+    	    if (player.winStatus == true) {	
+		if (player.type == 1) {
+	    	    System.out.println("Player");
+		    System.out.println(String.format("%d", pot));
+		}
+		else if (player.type == 0) {
+		     System.out.println("Opponent");
+                     System.out.println(String.format("%d", pot));
+		}
+		int playerChips = player.getChips();
+		playerChips += pot;
+		player.setChips(playerChips);
+		player.win();
+		return;
+	    }
+	}
+        System.out.println("Tie");
+        System.out.println(String.format("%d", pot));
+	int chipsGained = pot/4;
+        for (Player player:players) {
+	    int playerChips = player.getChips();
+            playerChips += chipsGained;
             player.setChips(playerChips);
-            player.win();
-        } else if (winnerType == Winner.OPPONENT) {
-            // Player lost
-            System.out.println("OPPONENT");
-            System.out.println(String.format("%d", pot));
-            int opponentChips = opponent.getChips();
-            opponentChips += pot;
-            opponent.setChips(opponentChips);
-            opponent.win();
-        } else if (winnerType == Winner.TIE) {
-            // Tie, split pot, should be extremely rare
-            System.out.println("Tie");
-            System.out.println(String.format("%d", pot));
-            int opponentChips = opponent.getChips();
-            opponentChips += (pot / 2);
-            opponent.setChips(opponentChips);
-            pot -= (pot / 2);
-            int playerChips = player.getChips();
-            playerChips += pot;
-            player.setChips(playerChips);
-        } else {
-            // New game, should never be called
-            pot = 0;
         }
     }
 	
@@ -338,21 +338,11 @@ public class PokerGameMult {
  
     public void determineWinner() {
         CompareHands comparison = new CompareHands(player, opponent, table);
-        int winner = comparison.compareHands();
-
-        if (winner == 1) {
-            player.win();
-            winnerType = Winner.PLAYER;
-            if (winner == 1) {
-                player.win();
-                winnerType = Winner.PLAYER;
-            } else if (winner == 0) {
-                winnerType = Winner.OPPONENT;
-                opponent.win();
-            }
-        } else {
-                winnerType = Winner.TIE;
-            }
+        int win = comparison.compareHands();
+//assume compareHands() returns player index of winning player
+        Player winner = players.get(win);
+	winner.win();
+	winner.winStatus = true;
     }
 
     public String winningHandMessage(){

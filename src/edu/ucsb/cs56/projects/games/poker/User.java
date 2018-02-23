@@ -14,6 +14,7 @@ public class User extends Player implements Serializable {
      */
     public User(Hand hand){
         super(hand);
+	this.type = 1;
     }
 
     /**
@@ -23,6 +24,7 @@ public class User extends Player implements Serializable {
      */
     public User(int chips, Deck deck) {
         super(chips, deck);
+	this.type = 1;
     }
 
     /**
