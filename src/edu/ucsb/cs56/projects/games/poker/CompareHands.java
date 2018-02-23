@@ -49,6 +49,27 @@ public class CompareHands implements Serializable{
         cardHand2.add(table.getTurnCard());
         cardHand2.add(table.getRiverCard());
     }
+
+    public CompareHands(ArrayList<Player> Players, TableCards table) {
+	// arraylist of cardhands?
+	// for each cardhand, addAll, add
+	ArrayList<ArrayList<Card>> Hands = new ArrayList<ArrayList<Card>>();
+	ArrayList<Card> cards = new ArrayList<Card>(Players.size()); 
+	for (int i = 0; i < Players.size(); i ++) {
+	    Hands.add(cards); 
+	}
+	
+	for (int i = 0; i < Players.size(); i++) {
+	    Player current = Players.get(i);
+	    ArrayList<Card> hand = Hands.get(i);
+	    
+	    hand.addAll(current.getHand());
+	    hand.addAll(table.getFlopCards());
+            hand.add(table.getTurnCard());
+            hand.add(table.getRiverCard());
+	}
+	
+    }
 	
     /**
      * Returns 1 if "Player 1" hand is better than "Player 2" hand
