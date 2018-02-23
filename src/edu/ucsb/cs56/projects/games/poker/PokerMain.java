@@ -20,6 +20,8 @@ public class PokerMain {
      */
     JButton singlePlayerButton;
 
+    JButton multiPlayerButton;
+
     /**
      * Currently unused
      */
@@ -69,6 +71,11 @@ public class PokerMain {
         singlePlayerButton = new JButton("Play Single Player");
         singlePlayerButton.addActionListener(listener);
         panel.add(singlePlayerButton);
+
+        multiPlayerButton = new JButton("Play MultiPlayer");
+        multiPlayerButton.addActionListener(listener);
+        panel.add(multiPlayerButton);
+	
 
         /*
         serverButton = new JButton("Create Poker Server");
