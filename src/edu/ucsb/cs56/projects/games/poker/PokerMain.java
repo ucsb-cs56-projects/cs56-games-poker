@@ -76,7 +76,6 @@ public class PokerMain {
         multiPlayerButton.addActionListener(listener);
         panel.add(multiPlayerButton);
 	
-
         /*
         serverButton = new JButton("Create Poker Server");
         serverButton.addActionListener(listener);
