@@ -166,11 +166,15 @@ final class PokerSinglePlayer extends PokerGameGui {
     		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
     	    }
     	    updateFrame();
-
-	    message = winningHandMessage();
-
+	    if (!Fold) {	      
+		message = winningHandMessage();
+	    }
+	    else {
+		message = ("Folded!");
+	    }
+	   
     	    if (winnerType == Winner.PLAYER) {
-                System.out.println("player");
+                System.out.println("player");	    
                 message = message + ("\n\nYou win!\n\nNext round?");
     	    } else if (winnerType == Winner.OPPONENT) {
     		System.out.println("opponent");
