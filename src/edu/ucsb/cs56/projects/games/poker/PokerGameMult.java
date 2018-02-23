@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Class that represents a Texas Holdem' Style Poker Game.
  */
-public class PokerGame {
+public class PokerGameMult {
     // PokerGame States
 
     /**
@@ -145,7 +145,7 @@ public class PokerGame {
      * No arg constructor that initializes a new deck.
      */
     // FIX THIS OR FIX setUp() METHOD
-    public PokerGame() {
+    public PokerGameMult() {
         this.deck = new Deck();
         this.players.add(new User(500, deck));
         this.players.add(new OpponentAI(500, deck));
@@ -153,7 +153,7 @@ public class PokerGame {
         pot = 0;
     }
 
-   public PokerGame(int player) {
+   public PokerGameMult(int player) {
 	this.deck = new Deck();
 	int AIs = 4 - player; //Assuming multiplayer only supports 4 people
 	for (int i = 0; i < player; i++)

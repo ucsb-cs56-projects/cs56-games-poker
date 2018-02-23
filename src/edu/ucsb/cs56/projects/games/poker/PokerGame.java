@@ -19,7 +19,7 @@ public class PokerGame {
      * enum representing the game winner
      */
     public enum Winner {
-        PLAYER1, PLAYER2, PLAYER3, PLAYER4, TIE, NEW_GAME
+        PLAYER, OPPONENT, TIE, NEW_GAME
             };
 
 
@@ -34,12 +34,8 @@ public class PokerGame {
      * enum representing which player's turn it is
      */
     public enum Turn {
-        PLAYER1, PLAYER2, PLAYER3, PLAYER4
+        PLAYER, OPPONENT
             };
-
-    public enum Type {
-	    ACTIVE, FOLDED
-    };
 
 
     // PokerGame GUI
@@ -50,17 +46,17 @@ public class PokerGame {
     /**
      * ArrayList holding the game's current players
      */
-    protected ArrayList<Player> players;
+    //protected ArrayList<Player> players;
 
     /**
      * The user playing the game
      */
-    //protected Player player1, player2, player3, player4;
+    protected Player player;
 
     /**
      * The opponent (currently an AI)
      */
-   // protected Player opponent;
+    protected Player opponent;
 
     /**
      * The deck used for the game
@@ -104,7 +100,7 @@ public class PokerGame {
      * winner = 1 : players[1] is the winner
      * etc.
      */
-    int winner;
+    //int winner;
 
     /**
      * The current game step
@@ -121,7 +117,7 @@ public class PokerGame {
      * turn = 1 : players[1] turn
      * etc
      */
-    int turn;
+    //int turn;
 
     /**
      * The back of a card
@@ -151,21 +147,10 @@ public class PokerGame {
     // FIX THIS OR FIX setUp() METHOD
     public PokerGame() {
         this.deck = new Deck();
-        this.players.add(new User(500, deck));
-        this.players.add(new OpponentAI(500, deck));
+        this.player = new User(500, deck);
+        this.opponent = new OpponentAI(500, deck);
         this.table = new TableCards(deck);
         pot = 0;
-    }
-
-   public PokerGame(int players) {
-	this.deck = new Deck();
-	int AIs = 4 - players; //Assuming multiplayer only supports 4 people
-	for (int i = 0; i < players; i++)
-	    this.players.add(new User(500, deck));
-	for (int i = 0; i < AIs; i++)
-	    this.players.add(new OpponentAI(500, deck));
-	this.table = new TableCards(deck);
-	pot = 0;
     }
     
     // Getters and setters for various members
@@ -246,18 +231,19 @@ public class PokerGame {
      * Sets up the player's and opponent's hand.
      */
     public void setUp() {
-        for(player:players) {
-	    player.setDelegate(this);
-	    if (player.getChips() >= 5) {
-          	player.bet(5);
-           	pot += 5;
+        player.setDelegate(this);
+        opponent.setDelegate(this);
+        if (player.getChips() >= 5 && opponent.getChips() >= 5) {
+            player.bet(5);
+            opponent.bet(5);
+            pot += 10;
+            message = "Ante of 5 chips set.";
         }
-            else {
-                  gameOver = true;
-                  showWinnerAlert();
-	    }
-	}
-	message = "Ante of 5 chips set.";
+        else {
+            gameOver = true;
+            showWinnerAlert();
+        }
+
         backCard = new Card(100, "B");
         String dir = "Cards/";
         String cardFile = "B.png";
@@ -283,7 +269,13 @@ public class PokerGame {
      */
     // COULD IMPROVE IMPLEMENTATION
     public void fold() {
-        if (
+        if (turn == Turn.PLAYER) {
+            winnerType = Winner.OPPONENT;
+            opponent.win();
+        } else {
+            winnerType = Winner.PLAYER;
+            player.win();
+        }
         collectPot();
         showWinnerAlert();
 	// Reset player win flag
