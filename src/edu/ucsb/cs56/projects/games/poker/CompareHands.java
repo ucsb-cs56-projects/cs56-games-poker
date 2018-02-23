@@ -19,6 +19,17 @@ public class CompareHands implements Serializable{
      */
     private ArrayList<Card> cardHand2;
 
+    /**
+     * ArrayList to hold each Player's hand
+    */
+    private ArrayList<ArrayList<Card>> Hands;
+
+    /**
+     * ArrayList to hold each Hand's cards 
+    */
+
+    private ArrayList<Card> cards; 
+
     /*
      * Value of player1's hand
      */
@@ -51,10 +62,12 @@ public class CompareHands implements Serializable{
     }
 
     public CompareHands(ArrayList<Player> Players, TableCards table) {
-	// arraylist of cardhands?
-	// for each cardhand, addAll, add
-	ArrayList<ArrayList<Card>> Hands = new ArrayList<ArrayList<Card>>();
-	ArrayList<Card> cards = new ArrayList<Card>(Players.size()); 
+	// initialize ArrayLists
+	// nested ArrayList; Players[0] = ArrayList of cards
+	// EX: Hands = [ [card1, card2...], [card1, card2...] ]
+	
+	Hands = new ArrayList<ArrayList<Card>>();
+	cards = new ArrayList<Card>(Players.size()); 
 	for (int i = 0; i < Players.size(); i ++) {
 	    Hands.add(cards); 
 	}
@@ -86,7 +99,9 @@ public class CompareHands implements Serializable{
         else if(player1Value<player2Value)
             return 0;
         else {
-            // player1Value and player2Value are equal (same general hand)
+	    // return value for below functions are T/F values, return values are lost and have no functionality here
+	    /*
+	    // player1Value and player2Value are equal (same general hand)
             switch (player1Value) {
                 case 8:
                     // straight flush
@@ -117,9 +132,33 @@ public class CompareHands implements Serializable{
                     return highCardTie();
                 default:
                     // should never happen
-                    return 2;
+		    return 2;
             }
+	    */
+	    return 2;
         }
+    }
+
+    public int compareHands_mult() {
+	int max_value = -1;
+	int winner = -1;
+	
+	for (ArrayList<Card> hands: Hands) {
+	    int value = calculateValue(hands);
+	    
+	    if (value > max_value) {
+		// reset max value
+		max_value = value;
+		// replace previous winner 
+		winner = Hands.indexOf(hands);
+	    }
+	    // if equal hands, TIE. return -1
+	    else if (value == max_value) {
+		winner = -1;
+	    }
+	}
+	return winner; 
+	
     }
 
     /**
@@ -217,6 +256,12 @@ public class CompareHands implements Serializable{
 	else{
 		return ("Tie with " + calculateValueToString(cardHand1));
 	}
+    }
+
+    public String compareMessage_mult(){
+	// this.compareHands --> return player number winner 
+	// String message = calculateValueToString(this.compareHands()) " beats all!");
+	return "stub";
     }
 
     /**
