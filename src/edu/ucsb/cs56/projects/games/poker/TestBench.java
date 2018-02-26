@@ -10,7 +10,7 @@ import java.util.Iterator;
  */
 
 public class TestBench {
-	public static HashMap<String, Boolean> coverage;
+	private static HashMap<String, Boolean> coverage;
 	
 	/**
 	 * Initialize the data structure used for 
