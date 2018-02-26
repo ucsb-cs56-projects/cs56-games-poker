@@ -678,7 +678,7 @@ public class CompareHands implements Serializable{
      * Determines the better hand of two straights
      * @return 1 if the player wins, 0 if the opponent wins, 2 if it is a tie
      */
-    private int straightTie() {
+    int straightTie() {
         ArrayList<Integer> sortedHand1 = sortHand(cardHand1);
         ArrayList<Integer> sortedHand2 = sortHand(cardHand2);
         removeDuplicates(sortedHand1);
