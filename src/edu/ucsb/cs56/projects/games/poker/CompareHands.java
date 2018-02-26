@@ -385,21 +385,30 @@ public class CompareHands implements Serializable{
         int cloverCounter=0;
         int heartCounter=0;
         int diamondCounter=0;
-        for(Card c: player){
-            if(c.getSuit()=="S")
-            spadeCounter++;
-            else if(c.getSuit()=="C")
-            cloverCounter++;
-            else if(c.getSuit()=="D")
-            diamondCounter++;
-            else
-            heartCounter++;
+
+        for (Card c: player) {
+TestBench.BranchReached("isFlush0");
+            if(c.getSuit()=="S") {
+TestBench.BranchReached("isFlush1");
+            	spadeCounter++;
+            } else if(c.getSuit()=="C") {
+TestBench.BranchReached("isFlush2");
+            	cloverCounter++;
+            } else if(c.getSuit()=="D") {
+TestBench.BranchReached("isFlush3");
+            	diamondCounter++;
+            } else {
+TestBench.BranchReached("isFlush4");
+            	heartCounter++;
+            }
         }
-        if(spadeCounter>=5 || cloverCounter>=5 || diamondCounter>=5
-           || heartCounter>=5)
+        if(spadeCounter>=5 || cloverCounter>=5 || diamondCounter>=5 || heartCounter>=5) {
+TestBench.BranchReached("isFlush5");
             return true;
-        else
+        } else {
+TestBench.BranchReached("isFlush6");
             return false;
+        }
     }
 
     /**

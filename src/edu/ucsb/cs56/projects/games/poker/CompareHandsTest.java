@@ -514,7 +514,9 @@ import org.junit.Test;
     	cards.add(queenClub);
     	cards.add(jackClub);
     	assertEquals(comparingHands.getMostCommonSuit(cards), 'C');
+    }
 
+    /*
      * Tests that straightTie() can successfully conclude that two straights
      * are tied when they're the same. 
      */
