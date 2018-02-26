@@ -154,66 +154,63 @@ final class PokerSinglePlayer extends PokerGameGui {
     }
 
 
-    /**
-     * Method overridden to allow for a new single player game to start.
-     */    
-    public void showWinnerAlert() {
-    	if(!gameOver){
-    	    String message = "";
-    	    oSubPane2.remove(backCardLabel1);
-    	    oSubPane2.remove(backCardLabel2);
-    	    for(int i=0;i<2;i++){
-    		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
-    	    }
-    	    updateFrame();
+	/**
+	* Method overridden to allow for a new single player game to start.
+	*/
+	public void showWinnerAlert() {
+		if(!gameOver){
+			String message = "";
+			oSubPane2.remove(backCardLabel1);
+			oSubPane2.remove(backCardLabel2);
+			for(int i=0;i<2;i++){
+				oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
+			}
+			updateFrame();
 
-	    message = winningHandMessage();
+			message = winningHandMessage();
 
-    	    if (winnerType == Winner.PLAYER) {
-                System.out.println("player");
-                message = message + ("\n\nYou win!\n\nNext round?");
-    	    } else if (winnerType == Winner.OPPONENT) {
-    		System.out.println("opponent");
-    		message = message + ("\n\nOpponent wins.\n\nNext round?");
-    	    } else if (winnerType == Winner.TIE){
-                System.out.println("tie");
-                message = message + ("\n\nTie \n\nNext round?");
-    	    }
-    	    
-    	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
-    						       JOptionPane.YES_NO_OPTION);
-    	    
-	    if (option == JOptionPane.YES_OPTION) {
-    		// Restart
-		mainFrame.dispose();
-		PokerSinglePlayer singlePlayerReplay;
+			if (winnerType == Winner.PLAYER) {
+				System.out.println("player");
+				message = message + ("\n\nYou win!\n\nNext round?");
+			} else if (winnerType == Winner.OPPONENT) {
+				System.out.println("opponent");
+				message = message + ("\n\nOpponent wins.\n\nNext round?");
+			} else if (winnerType == Winner.TIE){
+				System.out.println("tie");
+				message = message + ("\n\nTie \n\nNext round?");
+			}
 
-		// Check if players have enough chips.	
-		// Create new game.
-		
-		if(player.getChips() < 5 || opponent.getChips() < 5){
-		    JOptionPane.showMessageDialog(null, "Resetting chips...");
-		    singlePlayerReplay = new PokerSinglePlayer();
-		    singlePlayerReplay.go();
+			int option = JOptionPane.showConfirmDialog(null, message, "Winner",
+				JOptionPane.YES_NO_OPTION);
+
+			if (option == JOptionPane.YES_OPTION) {
+				// Restart
+				mainFrame.dispose();
+				PokerSinglePlayer singlePlayerReplay;
+
+				// Check if players have enough chips.
+				// Create new game.
+				if(player.getChips() < 5 || opponent.getChips() < 5){
+					JOptionPane.showMessageDialog(null, "Resetting chips...");
+					singlePlayerReplay = new PokerSinglePlayer();
+					singlePlayerReplay.go();
+				}
+				else {
+					singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
+					singlePlayerReplay.go();
+				}
+
+			} else if (option == JOptionPane.NO_OPTION) {
+				if(player.getChips() < 5 || opponent.getChips() < 5) {
+					gameOver("GAME OVER! No chips left!");
+				}
+				gameOver("GAME OVER! Thanks for playing.\n\n");
+			} else {
+				// Quit
+				System.exit(1);
+			}
 		}
-		else {
-		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
-		    singlePlayerReplay.go();
-		}
-	       
-	    } else if (option == JOptionPane.NO_OPTION) {
-		if(player.getChips() < 5 || opponent.getChips() < 5) {
-		    gameOver("GAME OVER! No chips left!");
-		}
-		gameOver("GAME OVER! Thanks for playing.\n\n");
-	    } 
-	    
-	    else {
-    		// Quit
-    		System.exit(1);
-    	    }
-    	}
-    }
+	}
 
     /**
      * Restarts the timer controlling turnDecider()
