@@ -283,7 +283,59 @@ import org.junit.Test;
 		
 		assertEquals(1, comparingHands.compareHands());
 	 }
-
+         
+         /** test case of two pair of K's and 2's loses a two pair of K's and Q's.*/
+         @Test
+         public void testTwoPairTieEqualBestPair() {
+                table = new TableCards(kingSpade, queenDiamond, threeHeart, twoClub, jackClub);
+		hand1 = new Hand(kingDiamond, twoSpade);
+		player1 = new User(hand1);
+		hand2 = new Hand(kingHeart, queenSpade);
+		player2 = new User(hand2);
+		comparingHands = new CompareHands(player1, player2, table);
+		
+		assertEquals(0, comparingHands.compareHands());
+         }
+         
+         /** test case when kicker decides when the two pair is equal, player one wins*/
+         @Test
+         public void testTwoPairKickerP1() {
+                table = new TableCards(threeSpade, sevenDiamond, jackHeart, tenClub, threeClub);
+		hand1 = new Hand(kingDiamond, sevenSpade);
+		player1 = new User(hand1);
+		hand2 = new Hand(sevenHeart, queenSpade);
+		player2 = new User(hand2);
+		comparingHands = new CompareHands(player1, player2, table);
+		
+		assertEquals(1, comparingHands.compareHands());
+         }
+         
+          /** test case when kicker decides when the two pair is equal, player two wins*/
+         @Test
+         public void testTwoPairKickerP2() {
+                table = new TableCards(eightSpade, jackDiamond, threeHeart, nineClub, jackClub);
+		hand1 = new Hand(eightDiamond, twoSpade);
+		player1 = new User(hand1);
+		hand2 = new Hand(tenDiamond, eightHeart);
+		player2 = new User(hand2);
+		comparingHands = new CompareHands(player1, player2, table);
+		
+		assertEquals(0, comparingHands.compareHands());
+         }
+         
+         /** test two pair tie when the outcome should result in a split pot*/
+         @Test
+         public void testEqualTwoPairTie() {
+                table = new TableCards(fiveSpade, twoDiamond, tenHeart, twoClub, jackClub);
+		hand1 = new Hand(kingDiamond, tenSpade);
+		player1 = new User(hand1);
+		hand2 = new Hand(tenDiamond, kingSpade);
+		player2 = new User(hand2);
+		comparingHands = new CompareHands(player1, player2, table);
+		
+		assertEquals(2, comparingHands.compareHands());
+         }
+         
 	 /** test case where players have the same hand */
 	 @Test
 	 public void testTie(){
