@@ -52,6 +52,7 @@ public class PokerMain {
     		TestBench.SetupCoverageTracking();
         PokerMain start = new PokerMain();
         start.go();
+        TestBench.AnalyzeCoverage();
     }    
 
     /**
