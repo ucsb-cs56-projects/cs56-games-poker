@@ -3,3 +3,5 @@ build/
 *~
 .ant-targets-build.xml
 .idea/
+/bin/
+/.clover/

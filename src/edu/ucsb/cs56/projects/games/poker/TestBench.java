@@ -31,6 +31,10 @@ public class TestBench {
 		coverage.put("compareHands9", false);
 		coverage.put("compareHands10", false);
 		coverage.put("compareHands11", false);
+
+		for (int i = 0; i <= 13; i++) {
+			coverage.put("showWinnerAlert" + i, false);
+		}
 	}
 	
 	/**

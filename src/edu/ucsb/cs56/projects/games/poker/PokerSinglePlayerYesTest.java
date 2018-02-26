@@ -2,6 +2,8 @@ package edu.ucsb.cs56.projects.games.poker;
 
 import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.junit.Test;
 
@@ -15,11 +17,8 @@ public class PokerSinglePlayerYesTest extends PokerSinglePlayer {
 	public void testShowWinnerAlertWinYesMoreThan5Chips() {
 		// Streams results is to be written to
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-		ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-		
-		// Connect stdout and stderr to these
+		// Connect stdout to these
 	    System.setOut(new PrintStream(outContent));
-	    System.setErr(new PrintStream(errContent));
 
 	    PokerSinglePlayerYesTest sp = new PokerSinglePlayerYesTest();
 	    sp.layoutSubViews();
@@ -30,9 +29,8 @@ public class PokerSinglePlayerYesTest extends PokerSinglePlayer {
 	    assertEquals("player\n", outContent.toString());
 	    assertFalse(sp.mainFrame.isVisible());
 
-		// Reconnect stdout and stderr to its original streams
-		System.setOut(System.out);	
-		System.setErr(System.err);
+		// Reconnect stdout to its original streams
+	    System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 	}
 
 }
