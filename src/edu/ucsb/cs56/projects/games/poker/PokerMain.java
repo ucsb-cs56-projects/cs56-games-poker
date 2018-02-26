@@ -48,11 +48,9 @@ public class PokerMain {
     /**
      * Runs the application
      */
-    public static void main(String[] args) {
-    		TestBench.SetupCoverageTracking();
+    public static void main(String[] args) {	
         PokerMain start = new PokerMain();
         start.go();
-        TestBench.AnalyzeCoverage();
     }    
 
     /**
