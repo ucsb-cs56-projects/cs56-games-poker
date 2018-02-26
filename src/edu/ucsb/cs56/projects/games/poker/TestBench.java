@@ -55,4 +55,12 @@ public class TestBench {
 		double res = ((double)traversedBranches / (double)totalNumberOfBranches)*100;
 		System.out.println("Total branch coverage is " + res + "%");
 	}
+	
+	/**
+	 * Flag branch @branchID as traversed.
+	 * @param branchID
+	 */
+	public static void BranchReached(String branchID) {
+		coverage.put(branchID, true);
+	}
 }
