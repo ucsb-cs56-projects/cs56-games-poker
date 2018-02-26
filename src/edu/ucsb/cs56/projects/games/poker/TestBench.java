@@ -12,6 +12,12 @@ import java.util.Iterator;
 public class TestBench {
 	public static HashMap<String, Boolean> coverage;
 	
+	/**
+	 * Initialize the data structure used for 
+	 * DIY branch coverage. All branches needs
+	 * to be registered here as false to provide
+	 * correct ratio in AnalyzeCoverage
+	 */
 	public static void SetupCoverageTracking() {
 		coverage = new HashMap<String, Boolean>();
 		coverage.put("compareHands1", false);
@@ -27,6 +33,10 @@ public class TestBench {
 		coverage.put("compareHands11", false);
 	}
 	
+	/**
+	 * Iterate through registered branches 
+	 * and calculate ratio of traversed branches. 
+	 */
 	public static void AnalyzeCoverage() {
 		Collection<Boolean> values = coverage.values();
 		int totalNumberOfBranches = values.size();
