@@ -41,7 +41,7 @@ public class TestBench {
 		Collection<Boolean> values = coverage.values();
 		int totalNumberOfBranches = values.size();
 		if(totalNumberOfBranches < 1) {
-			System.out.println("No branches have been registered, aborting...");
+			System.out.println("No branches have been registered, coverage ratio calculations skipped.");
 			return;
 		}
 		int traversedBranches = 0;
@@ -61,6 +61,9 @@ public class TestBench {
 	 * @param branchID
 	 */
 	public static void BranchReached(String branchID) {
+		if(coverage == null) {
+			SetupCoverageTracking();
+		}
 		coverage.put(branchID, true);
 	}
 }
