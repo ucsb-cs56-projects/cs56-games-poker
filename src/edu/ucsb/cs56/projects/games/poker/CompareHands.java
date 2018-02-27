@@ -19,6 +19,17 @@ public class CompareHands implements Serializable{
      */
     private ArrayList<Card> cardHand2;
 
+    /**
+     * ArrayList to hold each Player's hand
+    */
+    private ArrayList<ArrayList<Card>> hands;
+
+    /**
+     * ArrayList to hold each Hand's cards 
+    */
+
+    private ArrayList<Card> cards; 
+
     /*
      * Value of player1's hand
      */
@@ -49,6 +60,29 @@ public class CompareHands implements Serializable{
         cardHand2.add(table.getTurnCard());
         cardHand2.add(table.getRiverCard());
     }
+
+    /* Multiplayer Compare Hands Constructor */
+    /* Supports dynamic arraylist for any number of players */
+    public CompareHands(ArrayList<Player> Players, TableCards table) {
+	// initialize ArrayLists
+	// nested ArrayList; Players[0] = ArrayList of cards
+	// EX: Hands = [ [card1, card2...], [card1, card2...] ]
+	
+	hands = new ArrayList<ArrayList<Card>>(Players.size());
+	cards = new ArrayList<Card>(Players.size()); 
+	for (int i = 0; i < Players.size(); i ++) {
+	    hands.add(cards);
+	    
+	    Player current = Players.get(i);
+	    ArrayList<Card> hand = hands.get(i);
+	    
+	    hand.addAll(current.getHand());
+	    hand.addAll(table.getFlopCards());
+            hand.add(table.getTurnCard());
+            hand.add(table.getRiverCard());
+	}
+	
+    }
 	
     /**
      * Returns 1 if "Player 1" hand is better than "Player 2" hand
@@ -65,7 +99,9 @@ public class CompareHands implements Serializable{
         else if(player1Value<player2Value)
             return 0;
         else {
-            // player1Value and player2Value are equal (same general hand)
+	    // return value for below functions are T/F values, return values are lost and have no functionality here
+	    /*
+	    // player1Value and player2Value are equal (same general hand)
             switch (player1Value) {
                 case 8:
                     // straight flush
@@ -96,9 +132,38 @@ public class CompareHands implements Serializable{
                     return highCardTie();
                 default:
                     // should never happen
-                    return 2;
+		    return 2;
             }
+	    */
+	    return 2;
         }
+    }
+
+    /**
+     * compareHands multiplayer function
+     * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing) 
+     * Returns -1 if there is a tie for the highest hand value
+    **/
+    public int compareHands_mult() {
+	int max_value = -1;
+	int winner = -1;
+	
+	for (ArrayList<Card> hand: hands) {
+	    int value = calculateValue(hand);
+	    
+	    if (value > max_value) {
+		// reset max value
+		max_value = value;
+		// replace previous winner 
+		winner = hands.indexOf(hand);
+	    }
+	    // if equal hands, TIE. return -1
+	    else if (value == max_value) {
+		winner = -1;
+	    }
+	}
+	return winner; 
+	
     }
 
     /**
@@ -196,6 +261,29 @@ public class CompareHands implements Serializable{
 	else{
 		return ("Tie with " + calculateValueToString(cardHand1));
 	}
+    }
+    /** 
+     * compareMessage for multiplayer
+     * relies on compareHands of multiplayer
+     **/
+    public String compareMessage_mult(){
+	// get winner's index in hands ArrayList
+	int winner = this.compareHands_mult();
+	ArrayList<Card> winning_hand = hands.get(winner);
+	String message;
+	
+	/** if it is not a TIE **/
+	if (winner >= 0) {
+	    // get winner's cards
+	    // ArrayList<Card> winning_hand = hands.get(winner);
+	
+	    message = calculateValueToString(winning_hand) + " beats all!";
+	}
+	else {
+	    message = "It's a tie with " + calculateValueToString(winning_hand);
+	}
+	
+	return message;
     }
 
     /**
