@@ -59,11 +59,12 @@ final class PokerSinglePlayer extends PokerGameGui {
 	    first.turn = true;
 	    turn = rng;
             if (rng == 0) { //1 = player 1 goes first.
-		message = "player 1 goes first!"
+		message = "player 1 goes first!";
                 prompt = "what will you do?";
             }
-	    else 
-		prompt = "opponent " + (rng + 1) " goes first!";
+	    else
+	 
+	    prompt = "opponent " + (rng + 1) + " goes first!";
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.
@@ -225,13 +226,15 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    	singlePlayerReplay = new PokerSinglePlayer();
 		    	singlePlayerReplay.go();
 			Continue++;
+		    }
 		}
 		if (Continue == 0) {
 		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
 		    singlePlayerReplay.go();
 		}
 	       
-	    } else if (option == JOptionPane.NO_OPTION) {
+	    }
+	    else if (option == JOptionPane.NO_OPTION) {
 		for (Player player:players) {
 		    if(player.getChips() < 5) {
 		         gameOver("GAME OVER! No chips left!");
