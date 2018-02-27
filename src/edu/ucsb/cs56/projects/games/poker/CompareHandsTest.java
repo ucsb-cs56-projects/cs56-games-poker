@@ -455,4 +455,56 @@ import org.junit.Test;
 
         assertEquals(1, comparingHands.compareHands());
     }
+    
+    /** Test both players have same pair and it is a tie */
+    @Test
+    public void testPairTieTie() {
+    		table = new TableCards(sevenClub, tenDiamond, fiveHeart, eightDiamond, fourClub);
+        hand1 = new Hand(twoClub, twoSpade);
+        player1 = new User(hand1);
+        hand2 = new Hand(twoHeart, twoDiamond);
+        player2 = new User(hand2);
+        comparingHands = new CompareHands(player1, player2, table);
+        
+        assertEquals(2, comparingHands.compareHands());
+    }
+    
+    /** Test both players have a pair and opponent wins */
+    @Test
+    public void testPairTieOpponentWins() {
+    		table = new TableCards(sevenClub, tenDiamond, fiveHeart, eightDiamond, fourClub);
+        hand1 = new Hand(twoClub, twoSpade);
+        player1 = new User(hand1);
+        hand2 = new Hand(threeHeart, threeDiamond);
+        player2 = new User(hand2);
+        comparingHands = new CompareHands(player1, player2, table);
+        
+        assertEquals(0, comparingHands.compareHands());
+    }
+    
+    /** Test both players have a tie pair and opponent wins with high card */
+    @Test
+    public void testPairTieOpponentHighCard() {
+    		table = new TableCards(sevenClub, tenDiamond, fourHeart, twoDiamond, jackClub);
+        hand1 = new Hand(twoClub, threeHeart);
+        player1 = new User(hand1);
+        hand2 = new Hand(twoSpade, aceDiamond);
+        player2 = new User(hand2);
+        
+        comparingHands = new CompareHands(player1, player2, table);
+        assertEquals(0, comparingHands.compareHands());
+    }
+    
+    /** Test both players have a tie pair and player wins with high card */
+    @Test
+    public void testPairTiePlayerHighCard() {
+    		table = new TableCards(sevenClub, tenDiamond, fourHeart, twoDiamond, jackClub);
+        hand1 = new Hand(twoSpade, aceDiamond);
+        player1 = new User(hand1);
+        hand2 = new Hand(twoClub, threeHeart);
+        player2 = new User(hand2);
+        
+        comparingHands = new CompareHands(player1, player2, table);
+        assertEquals(1, comparingHands.compareHands());
+    }
 }

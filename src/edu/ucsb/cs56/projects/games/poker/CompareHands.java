@@ -742,11 +742,14 @@ public class CompareHands implements Serializable{
         ArrayList<Integer> pairsHand1 = new ArrayList<Integer>(); // each entry represents a pair (a 4 means a pair of 4's)
         ArrayList<Integer> pairsHand2 = new ArrayList<Integer>();
 
-        for (int i = 0; i < sortedHand1.size(); i++) {
-            if ((Collections.frequency(sortedHand1, sortedHand1.get(i)) == 2) && (!pairsHand1.contains(sortedHand1.get(i)))) {
+        for (int i = 0; i < sortedHand1.size(); i++) { 
+            // branch 1
+            if ((Collections.frequency(sortedHand1, sortedHand1.get(i)) == 2) && (!pairsHand1.contains(sortedHand1.get(i)))) { 
+                // branch 2
                 pairsHand1.add(sortedHand1.get(i));
             }
-            if ((Collections.frequency(sortedHand2, sortedHand2.get(i)) == 2) && (!pairsHand2.contains(sortedHand2.get(i)))) {
+            if ((Collections.frequency(sortedHand2, sortedHand2.get(i)) == 2) && (!pairsHand2.contains(sortedHand2.get(i)))) { 
+                // branch 3
                 pairsHand2.add(sortedHand2.get(i));
             }
         }
@@ -755,11 +758,14 @@ public class CompareHands implements Serializable{
         int pairsHand2_index = pairsHand2.size() - 1;
         int maxNumPairs = 2; // only want to compare two highest pairs from each hand
 
-        while (maxNumPairs > 0) {
-            if (pairsHand1.get(pairsHand1_index) > pairsHand2.get(pairsHand2_index)) {
+        while (maxNumPairs > 0) { 
+            // branch 4
+            if (pairsHand1.get(pairsHand1_index) > pairsHand2.get(pairsHand2_index)) { 
+                // branch 5
                 return 1;
             }
-            else if (pairsHand2.get(pairsHand2_index) > pairsHand1.get(pairsHand1_index)) {
+            else if (pairsHand2.get(pairsHand2_index) > pairsHand1.get(pairsHand1_index)) { 
+                // branch 6
                 return 0;
             }
             else {
@@ -772,18 +778,23 @@ public class CompareHands implements Serializable{
         int fifthCardHand1 = 0;
         int fifthCardHand2 = 0;
 
-        for (int i = sortedHand1.size() - 1; i >= 0; i--) {
-            if (!pairsHand1.contains(sortedHand1.get(i))) {
+        for (int i = sortedHand1.size() - 1; i >= 0; i--) { 
+            // branch 7
+            if (!pairsHand1.contains(sortedHand1.get(i))) { 
+                // branch 8
                 fifthCardHand1 = sortedHand1.get(i);
             }
-            if (!pairsHand2.contains(sortedHand2.get(i))) {
+            if (!pairsHand2.contains(sortedHand2.get(i))) { 
+                // branch 9
                 fifthCardHand2 = sortedHand2.get(i);
             }
         }
 
-        if (fifthCardHand1 > fifthCardHand2)
+        if (fifthCardHand1 > fifthCardHand2) 
+            // branch 10
             return 1;
         else if (fifthCardHand2 > fifthCardHand1)
+            // branch 11
             return 0;
         return 2;
     }
@@ -798,20 +809,31 @@ public class CompareHands implements Serializable{
         int pair1 = 0;
         int pair2 = 0;
 
-        for (int i = sortedHand1.size() - 1; i >= 0; i--) {
-            if ((Collections.frequency(sortedHand1, sortedHand1.get(i)) == 2) && (pair1 == 0)) {
+        for (int i = sortedHand1.size() - 1; i >= 0; i--) { 
+            // branch 1
+            TestBench.BranchReached("pairTie1");
+            if ((Collections.frequency(sortedHand1, sortedHand1.get(i)) == 2) && (pair1 == 0)) { 
+                // branch 2
+                TestBench.BranchReached("pairTie2");
                 pair1 = sortedHand1.get(i);
             }
-            if ((Collections.frequency(sortedHand2, sortedHand2.get(i)) == 2) && (pair2 == 0)) {
+            if ((Collections.frequency(sortedHand2, sortedHand2.get(i)) == 2) && (pair2 == 0)) { 
+                // branch 3
+                TestBench.BranchReached("pairTie3");
                 pair2 = sortedHand2.get(i);
             }
         }
 
-        if (pair1 > pair2)
+        if (pair1 > pair2) {
+            // branch 4
+            TestBench.BranchReached("pairTie4");
             return 1;
-        else if (pair2 > pair1)
+        } else if (pair2 > pair1) {
+            // branch 5
+            TestBench.BranchReached("pairTie5");
             return 0;
-
+        }
+        
         sortedHand1.remove(new Integer(pair1));
         sortedHand1.remove(new Integer(pair1));
         sortedHand2.remove(new Integer(pair2));
@@ -821,11 +843,17 @@ public class CompareHands implements Serializable{
         int hand2_index = sortedHand2.size() - 1;
         int cardsExamined = 0;
 
-        while ((hand1_index >= 0) && (hand2_index >= 0) && (cardsExamined < 3)) {
-            if (sortedHand1.get(hand1_index) > sortedHand2.get(hand2_index)) {
+        while ((hand1_index >= 0) && (hand2_index >= 0) && (cardsExamined < 3)) { 
+            // branch 6
+            TestBench.BranchReached("pairTie6");
+            if (sortedHand1.get(hand1_index) > sortedHand2.get(hand2_index)) { 
+                // branch 7
+                TestBench.BranchReached("pairTie7");
                 return 1;
             }
-            else if (sortedHand2.get(hand2_index) > sortedHand1.get(hand1_index)) {
+            else if (sortedHand2.get(hand2_index) > sortedHand1.get(hand1_index)) { 
+                // branch 8
+                TestBench.BranchReached("pairTie8");
                 return 0;
             }
             else {
@@ -834,7 +862,6 @@ public class CompareHands implements Serializable{
                 cardsExamined++;
             }
         }
-
         return 2;
     }
 
