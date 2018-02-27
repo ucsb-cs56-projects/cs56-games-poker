@@ -300,14 +300,14 @@ import org.junit.Test;
          /** test case when kicker decides when the two pair is equal, player one wins*/
          @Test
          public void testTwoPairKickerP1() {
-                table = new TableCards(threeSpade, sevenDiamond, jackHeart, tenClub, threeClub);
-		hand1 = new Hand(kingDiamond, sevenSpade);
-		player1 = new User(hand1);
-		hand2 = new Hand(sevenHeart, queenSpade);
-		player2 = new User(hand2);
-		comparingHands = new CompareHands(player1, player2, table);
+        	 	table = new TableCards(threeSpade, sevenDiamond, jackHeart, tenClub, threeClub);
+        	 	hand1 = new Hand(kingDiamond, sevenSpade);
+        	 	player1 = new User(hand1);
+        	 	hand2 = new Hand(sevenHeart, queenSpade);
+        	 	player2 = new User(hand2);
+        	 	comparingHands = new CompareHands(player1, player2, table);
 		
-		assertEquals(1, comparingHands.compareHands());
+        	 	assertEquals(1, comparingHands.compareHands());
          }
          
           /** test case when kicker decides when the two pair is equal, player two wins*/
