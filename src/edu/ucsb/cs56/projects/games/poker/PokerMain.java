@@ -23,6 +23,11 @@ public class PokerMain {
     JButton multiPlayerButton;
 
     /**
+      * Button to start a multiplayer games
+    */
+    JButton multiPlayerButton;
+
+    /**
      * Currently unused
      */
     JButton serverButton, clientButton;
@@ -53,7 +58,7 @@ public class PokerMain {
     public static void main(String[] args) {
         PokerMain start = new PokerMain();
         start.go();
-    }    
+    }
 
     /**
      * Brings up option window to start game.
@@ -75,7 +80,7 @@ public class PokerMain {
         multiPlayerButton = new JButton("Play MultiPlayer");
         multiPlayerButton.addActionListener(listener);
         panel.add(multiPlayerButton);
-	
+
         /*
         serverButton = new JButton("Create Poker Server");
         serverButton.addActionListener(listener);
@@ -85,21 +90,21 @@ public class PokerMain {
         clientButton.addActionListener(listener);
         panel.add(clientButton);
         */
-        
+
         serverChatButton = new JButton("Create Poker Chat Server");
         serverChatButton.addActionListener(listener);
         panel.add(serverChatButton);
-            
+
         clientChatButton = new JButton("Connect to Poker Chat Server");
         clientChatButton.addActionListener(listener);
         panel.add(clientChatButton);
-        
+
 
         playButtonFrame.add(BorderLayout.CENTER, panel);
         playButtonFrame.setSize(300, 200);
         playButtonFrame.setResizable(false);
         playButtonFrame.setLocation(250, 250);
-        
+
         playButtonFrame.setVisible(true);
     }
 
@@ -121,19 +126,19 @@ public class PokerMain {
             else if (src == serverButton) {
             PokerServer server = new PokerServer();
             server.go();
-            } 
+            }
             else if (src == clientButton) {
             PokerClient client = new PokerClient();
             address = JOptionPane.showInputDialog(playButtonFrame, "What IP Address are you connecting to?");
             if(address != null){
-                client.setAddress(address);	
+                client.setAddress(address);
                 try{
                 client.go();
                 } catch (IOException ex){ex.printStackTrace();
                 }
             }
             }*/
-            
+
             else if(src == serverChatButton){
                 PokerChatServer server2 = new PokerChatServer();
                 server2.go();
@@ -146,8 +151,8 @@ public class PokerMain {
                     client2.go();
                 }
             }
-            
+
             playButtonFrame.setVisible(false);
         }
-    }	
+    }
 }
