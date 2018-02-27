@@ -27,8 +27,8 @@ final class PokerSinglePlayer extends PokerGameGui {
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
     public PokerSinglePlayer(){
-        player.setDelegate(this);
-        opponent.setDelegate(this);
+	for(Player player:players)
+	    player.setDelegate(this);
     }
     
     /**
@@ -38,10 +38,10 @@ final class PokerSinglePlayer extends PokerGameGui {
      * @param oChips the opponent's chips
      */
     public PokerSinglePlayer(int pChips, int oChips){
+	for(Player player:players) {
         player.setChips(pChips);
-        opponent.setChips(oChips);
         player.setDelegate(this);
-        opponent.setDelegate(this);
+       }
     }
     
     /**
