@@ -9,7 +9,7 @@ import java.lang.System;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PokerGameGui extends PokerGame{
+public class PokerGameGui extends PokerGameMult{
 
     /**
      * The main frame for running the game

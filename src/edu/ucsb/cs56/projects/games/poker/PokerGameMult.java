@@ -33,9 +33,9 @@ public class PokerGameMult extends PokerGame {
     /**
      * enum representing which player's turn it is
      */
-    public enum Turn {
-        PLAYER1, PLAYER2, PLAYER3, PLAYER4
-            };
+//    public enum Turn {
+  //      PLAYER1, PLAYER2, PLAYER3, PLAYER4
+    //        };
 
 
     // PokerGame GUI
@@ -110,7 +110,7 @@ public class PokerGameMult extends PokerGame {
     /**
      * Which player's turn it is
      */
-    protected Turn turn;
+    protected int turn;
     /**
      * Variable representing which player's turn it is
      * turn = 0 : players[0] turn

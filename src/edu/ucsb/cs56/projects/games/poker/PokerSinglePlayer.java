@@ -55,15 +55,16 @@ final class PokerSinglePlayer extends PokerGameGui {
         if(!gameOver){ 
             step = Step.BLIND; //This is the first step in the game.
             int rng = (int) (Math.random()*5); //generate random num 0-4 
-	    Player firstTurn = players.get(rng);
+	    Player first = players.get(rng);
 	    first.turn = true;
 	    turn = rng;
-            if (rng == 0) { //1 = player 1 goes first.
-		message = "player 1 goes first!"
+	    rng++;
+            if (turn == 0) { //1 = player 1 goes first.
+		message = "player 1 goes first!";
                 prompt = "what will you do?";
             }
 	    else 
-		prompt = "opponent " + (rng + 1) " goes first!";
+		prompt = "player " + rng + " goes first!";
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.
@@ -110,7 +111,7 @@ final class PokerSinglePlayer extends PokerGameGui {
                 }
         } else {
             if (responding == true) {
-                if (turn < 4) {
+                if (turn < 3) {
 		    turn++;
    		    controlButtons();
         	    message = "player 2 is thinking...";
@@ -125,13 +126,14 @@ final class PokerSinglePlayer extends PokerGameGui {
 			updateFrame();
 		}
             } else {
-		if (turn < 4) {
+		if (turn < 3) {
 		    updateFrame();
                     nextStep();
-                    turn++;
+                    turn += 2;
                     controlButtons();
-                    prompt = "player " + (turn + 1) + "'s Turn.";
-                    message = "player " + (turn + 1) + " is thinking...";
+                    prompt = "player " + turn + "'s Turn.";
+                    message = "player " + turn + " is thinking...";
+		    turn--;
                     updateFrame();
                     timer.restart();
 		}
@@ -197,8 +199,9 @@ final class PokerSinglePlayer extends PokerGameGui {
 			System.out.println("player 1");
 			message = message + ("\n\nYou win!\n\nNext round?");
 		    } else {
+			index++;
 			System.out.println("opponent");
-			message = message + ("\n\nOpponent " + (index + 1) + " wins.\n\nNext round?");
+			message = message + ("\n\nOpponent " + index + " wins.\n\nNext round?");
 		    }
 		    winner++;
 		}
@@ -229,6 +232,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		if (Continue == 0) {
 		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
 		    singlePlayerReplay.go();
+		}
 		}
 	       
 	    } else if (option == JOptionPane.NO_OPTION) {

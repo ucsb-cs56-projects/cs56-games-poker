@@ -35,6 +35,7 @@ public abstract class Player implements Serializable {
     public int status;
     public boolean winStatus;
     public int type;
+    public boolean turn;
 
     /** 
      *Creates a Poker player with a set hand 
