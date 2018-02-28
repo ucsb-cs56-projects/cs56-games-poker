@@ -28,6 +28,15 @@ public abstract class Player implements Serializable {
      */
     public PokerGame delegate;
 
+    /**
+     * Whether the player is active or folded
+     * 0 = folded, 1 = active
+     */
+    public int status;
+    public boolean winStatus;
+    public boolean turn;
+    public int type;
+
     /** 
      *Creates a Poker player with a set hand 
      * @param hand the hand you have
@@ -36,6 +45,8 @@ public abstract class Player implements Serializable {
         pokerHand = hand;
         chips = 100;
         wins = 0;
+	winStatus = false;
+	status = 1;
     }
 
     /**
@@ -47,6 +58,8 @@ public abstract class Player implements Serializable {
         this.pokerHand = new Hand(deck);
         this.chips = chips;
         this.wins = 0;
+	status = 1;
+	winStatus = false;
     }
 
     /**
@@ -108,11 +121,20 @@ public abstract class Player implements Serializable {
      */
     // Might never need to be used---Check later
     public void foldHand() {
+	status = 0;
         delegate.fold();
     }
     
     public void setDelegate(PokerGame game) {
         this.delegate = game;
+    }
+    
+    public void setWin() {
+	winStatus = true;
+    }
+
+    public int getType() {
+	return type;
     }
 
     /**
