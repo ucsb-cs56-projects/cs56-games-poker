@@ -228,6 +228,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    	singlePlayerReplay = new PokerSinglePlayer();
 		    	singlePlayerReplay.go();
 			Continue++;
+		    }
 		}
 		if (Continue == 0) {
 		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
@@ -235,7 +236,8 @@ final class PokerSinglePlayer extends PokerGameGui {
 		}
 		}
 	       
-	    } else if (option == JOptionPane.NO_OPTION) {
+	    }
+	    else if (option == JOptionPane.NO_OPTION) {
 		for (Player player:players) {
 		    if(player.getChips() < 5) {
 		         gameOver("GAME OVER! No chips left!");
