@@ -30,6 +30,10 @@ public class PokerGameMult extends PokerGame {
         BLIND, FLOP, TURN, RIVER, SHOWDOWN
             };
 
+    public enum Type {
+	PLAYER, COMPUTER
+    };
+
     /**
      * enum representing which player's turn it is
      */
@@ -306,11 +310,11 @@ public class PokerGameMult extends PokerGame {
     protected void collectPot() {
         for (Player player:players) {
     	    if (player.winStatus == true) {	
-		if (player.type == 1) {
-	    	    System.out.println("Player");
+		if (player.type == Type.PLAYER) {
+	    	    System.out.println("Player " + players.indexOf(player));
 		    System.out.println(String.format("%d", pot));
 		}
-		else if (player.type == 0) {
+		else if (player.type == Type.COMPUTER) {
 		     System.out.println("Opponent");
                      System.out.println(String.format("%d", pot));
 		}

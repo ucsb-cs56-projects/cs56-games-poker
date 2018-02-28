@@ -234,8 +234,6 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
 		    singlePlayerReplay.go();
 		}
-		}
-	       
 	    }
 	    else if (option == JOptionPane.NO_OPTION) {
 		for (Player player:players) {

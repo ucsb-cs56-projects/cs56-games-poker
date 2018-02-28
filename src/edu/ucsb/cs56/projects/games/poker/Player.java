@@ -34,8 +34,12 @@ public abstract class Player implements Serializable {
      */
     public int status;
     public boolean winStatus;
-    public int type;
     public boolean turn;
+    public enum Type {
+	    PLAYER, COMPUTER
+    };
+
+    public Type type;
 
     /** 
      *Creates a Poker player with a set hand 
@@ -46,7 +50,7 @@ public abstract class Player implements Serializable {
         chips = 100;
         wins = 0;
 	winStatus = false;
-	type = 1;
+	status = 1;
     }
 
     /**
