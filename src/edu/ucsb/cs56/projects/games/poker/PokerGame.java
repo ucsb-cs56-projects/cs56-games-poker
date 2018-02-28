@@ -331,18 +331,18 @@ public class PokerGame {
         int winner = comparison.compareHands();
 
         if (winner == 1) {
-            player.win();
             winnerType = Winner.PLAYER;
-            if (winner == 1) {
-                player.win();
-                winnerType = Winner.PLAYER;
-            } else if (winner == 0) {
-                winnerType = Winner.OPPONENT;
-                opponent.win();
-            }
-        } else {
-                winnerType = Winner.TIE;
-            }
+	    player.win();
+	}
+
+	else if (winner == 0) {
+	    winnerType = Winner.OPPONENT;
+            opponent.win();
+            
+        }
+	else {
+	    winnerType = Winner.TIE;
+	}
     }
 
     public String winningHandMessage(){
