@@ -310,11 +310,11 @@ public class PokerGameMult extends PokerGame {
     protected void collectPot() {
         for (Player player:players) {
     	    if (player.winStatus == true) {	
-		if (player.type == Type.PLAYER) {
+		if (player.getType() == 1) {
 	    	    System.out.println("Player " + players.indexOf(player));
 		    System.out.println(String.format("%d", pot));
 		}
-		else if (player.type == Type.COMPUTER) {
+		else if (player.getType() == 0) {
 		     System.out.println("Opponent");
                      System.out.println(String.format("%d", pot));
 		}

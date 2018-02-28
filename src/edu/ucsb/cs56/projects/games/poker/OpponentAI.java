@@ -14,7 +14,7 @@ public class OpponentAI extends Player implements Serializable {
      */
     public OpponentAI(Hand hand){
         super(hand);
-	this.type = Type.COMPUTER;
+	this.type = 0;
     }
 
     /**
@@ -24,7 +24,7 @@ public class OpponentAI extends Player implements Serializable {
      */
     public OpponentAI(int chips, Deck deck) {
         super(chips, deck);
-	this.type = Type.COMPUTER;
+	this.type = 0;
     }
 
     /**
