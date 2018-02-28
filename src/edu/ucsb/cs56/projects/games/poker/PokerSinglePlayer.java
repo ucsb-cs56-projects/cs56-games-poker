@@ -27,8 +27,8 @@ final class PokerSinglePlayer extends PokerGameGui {
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
     public PokerSinglePlayer(){
-	for(Player player:players)
-	    player.setDelegate(this);
+        player.setDelegate(this);
+        opponent.setDelegate(this);
     }
     
     /**
@@ -38,10 +38,10 @@ final class PokerSinglePlayer extends PokerGameGui {
      * @param oChips the opponent's chips
      */
     public PokerSinglePlayer(int pChips, int oChips){
-	for(Player player:players) {
         player.setChips(pChips);
+        opponent.setChips(oChips);
         player.setDelegate(this);
-       }
+        opponent.setDelegate(this);
     }
     
     /**
@@ -54,34 +54,36 @@ final class PokerSinglePlayer extends PokerGameGui {
 
         if(!gameOver){ 
             step = Step.BLIND; //This is the first step in the game.
-            int rng = (int) (Math.random()*5); //generate random num 0-4 
-	    Player first = players.get(rng);
-	    first.turn = true;
-	    turn = rng;
-	    rng++;
-            if (turn == 0) { //1 = player 1 goes first.
-		message = "player 1 goes first!";
+            turn = Turn.OPPONENT;
+            prompt = "opponent goes first!";
+            
+            int rng = (int) (Math.random()*2); //generate a random 0 or 1 
+            if (rng == 1) { //1 = player 1 goes first.
+                turn = Turn.PLAYER;
+                message = "player goes first!";
                 prompt = "what will you do?";
+              
             }
-	    else 
-		prompt = "player " + rng + " goes first!";
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.
-            timer = new Timer(timer_value, e -> turnDecider(rng) );
+            timer = new Timer(timer_value, e -> turnDecider() );
             timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
             updateFrame(); //function is inside of PokerGameGui
             timer.restart();
-	    first.turn = false;
         }
     }
 
     /**
      * Method that directs the turn to who it needs to go to
      */
-    public void turnDecider (int index) {
-        Player currentTurn = players.get(index);
-	currentTurn.takeTurn();
+    public void turnDecider () {
+        if (turn == Turn.PLAYER) {
+            player.takeTurn();
+        }
+        else {
+            opponent.takeTurn();
+        }
     }
 
     
@@ -90,59 +92,37 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Changes between you and the AI
      */
     public void changeTurn() {
-        if (turn == 0) {
+        if (turn == Turn.PLAYER) {
             if (responding == true) {
-                turn = 1;
+                turn = Turn.OPPONENT;
                 controlButtons();
-                message = "player 2 is thinking...";
+                message = "opponent is thinking...";
                 updateFrame();		
                 timer.restart();
                 } else {
                     updateFrame();
                     nextStep();
                     if (step != Step.SHOWDOWN) {
-                        turn = 1;
+                        turn = Turn.OPPONENT;
                         controlButtons();
-                        prompt = "player 2's Turn.";
-                        message = "player 2 is thinking...";
+                        prompt = "opponent Turn.";
+                        message = "opponent is thinking...";
                         updateFrame();
                         timer.restart();
                     }
                 }
-        } else {
+        } else if (turn == Turn.OPPONENT) {
             if (responding == true) {
-                if (turn < 3) {
-		    turn++;
-   		    controlButtons();
-        	    message = "player 2 is thinking...";
-               	    updateFrame();
-               	    timer.restart();
-		}
-		else {
-			turn = 0;
-                	controlButtons();
-                	responding = false;
-                	prompt = "What will you do?";
-			updateFrame();
-		}
+                turn = Turn.PLAYER;
+                controlButtons();
+                responding = false;
+                prompt = "What will you do?";
+                updateFrame();
             } else {
-		if (turn < 3) {
-		    updateFrame();
-                    nextStep();
-                    turn += 2;
-                    controlButtons();
-                    prompt = "player " + turn + "'s Turn.";
-                    message = "player " + turn + " is thinking...";
-		    turn--;
-                    updateFrame();
-                    timer.restart();
-		}
-		else {
-		    prompt = "What will you do?";
-    		    turn = 0;
-    		    controlButtons();
-    		    updateFrame();
-		}
+                prompt = "What will you do?";
+                turn = Turn.PLAYER;
+                controlButtons();
+                updateFrame();
             }
         }
     }
@@ -182,31 +162,20 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    String message = "";
     	    oSubPane2.remove(backCardLabel1);
     	    oSubPane2.remove(backCardLabel2);
-    	    for(Player player:players){
-    		oSubPane2.add(new JLabel(getCardImage((player.getHand()).get(0))));
-		oSubPane2.add(new JLabel(getCardImage((player.getHand()).get(1))));
+    	    for(int i=0;i<2;i++){
+    		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
     	    }
     	    updateFrame();
 
 	    message = winningHandMessage();
-	    
-	    int winner = 0;
 
-	    for (Player player:players) {
-		if (player.winStatus == true) {
-		    int index = players.indexOf(player);
-		    if (index == 0) {
-			System.out.println("player 1");
-			message = message + ("\n\nYou win!\n\nNext round?");
-		    } else {
-			index++;
-			System.out.println("opponent");
-			message = message + ("\n\nOpponent " + index + " wins.\n\nNext round?");
-		    }
-		    winner++;
-		}
-	    }
-	    if (winner == 0){
+    	    if (winnerType == Winner.PLAYER) {
+                System.out.println("player");
+                message = message + ("\n\nYou win!\n\nNext round?");
+    	    } else if (winnerType == Winner.OPPONENT) {
+    		System.out.println("opponent");
+    		message = message + ("\n\nOpponent wins.\n\nNext round?");
+    	    } else if (winnerType == Winner.TIE){
                 System.out.println("tie");
                 message = message + ("\n\nTie \n\nNext round?");
     	    }
@@ -218,28 +187,23 @@ final class PokerSinglePlayer extends PokerGameGui {
     		// Restart
 		mainFrame.dispose();
 		PokerSinglePlayer singlePlayerReplay;
-		int Continue = 0;
 
 		// Check if players have enough chips.	
 		// Create new game.
-		for (Player player:players) {
-		    if (player.getChips() < 5){
-		    	JOptionPane.showMessageDialog(null, "Resetting chips...");
-		    	singlePlayerReplay = new PokerSinglePlayer();
-		    	singlePlayerReplay.go();
-			Continue++;
-		    }
+		
+		if(player.getChips() < 5 || opponent.getChips() < 5){
+		    JOptionPane.showMessageDialog(null, "Resetting chips...");
+		    singlePlayerReplay = new PokerSinglePlayer();
+		    singlePlayerReplay.go();
 		}
-		if (Continue == 0) {
+		else {
 		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
 		    singlePlayerReplay.go();
 		}
-	    }
-	    else if (option == JOptionPane.NO_OPTION) {
-		for (Player player:players) {
-		    if(player.getChips() < 5) {
-		         gameOver("GAME OVER! No chips left!");
-		    }
+	       
+	    } else if (option == JOptionPane.NO_OPTION) {
+		if(player.getChips() < 5 || opponent.getChips() < 5) {
+		    gameOver("GAME OVER! No chips left!");
 		}
 		gameOver("GAME OVER! Thanks for playing.\n\n");
 	    } 
