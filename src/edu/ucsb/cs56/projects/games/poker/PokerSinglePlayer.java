@@ -90,59 +90,38 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Changes between you and the AI
      */
     public void changeTurn() {
-        if (turn == 0) {
+	if (turn < 3) 
+	   turn++;
+	else
+	   turn = 0;
+	int number = turn++;
+	Player current = players.get(turn);
+        if (current.type == 0) {
             if (responding == true) {
-                turn = 1;
                 controlButtons();
-                message = "player 2 is thinking...";
+                message = "computer " + number + " is thinking...";
                 updateFrame();		
                 timer.restart();
                 } else {
                     updateFrame();
                     nextStep();
                     if (step != Step.SHOWDOWN) {
-                        turn = 1;
                         controlButtons();
-                        prompt = "player 2's Turn.";
-                        message = "player 2 is thinking...";
+                        prompt = "computer " + number + "'s Turn.";
+                        message = "computer " + number + " is thinking...";
                         updateFrame();
                         timer.restart();
                     }
                 }
         } else {
             if (responding == true) {
-                if (turn < 3) {
-		    turn++;
-   		    controlButtons();
-        	    message = "player 2 is thinking...";
-               	    updateFrame();
-               	    timer.restart();
-		}
-		else {
-			turn = 0;
-                	controlButtons();
-                	responding = false;
-                	prompt = "What will you do?";
-			updateFrame();
-		}
+		controlButtons();
+		responding = false;
+		prompt = "Player " + number + "'s turn. What will you do?";             	updateFrame();
             } else {
-		if (turn < 3) {
-		    updateFrame();
-                    nextStep();
-                    turn += 2;
-                    controlButtons();
-                    prompt = "player " + turn + "'s Turn.";
-                    message = "player " + turn + " is thinking...";
-		    turn--;
-                    updateFrame();
-                    timer.restart();
-		}
-		else {
-		    prompt = "What will you do?";
-    		    turn = 0;
+		    prompt = "Player " + number + "'s turn. What will you do?";
     		    controlButtons();
     		    updateFrame();
-		}
             }
         }
     }
@@ -195,13 +174,14 @@ final class PokerSinglePlayer extends PokerGameGui {
 	    for (Player player:players) {
 		if (player.winStatus == true) {
 		    int index = players.indexOf(player);
-		    if (index == 0) {
-			System.out.println("player 1");
-			message = message + ("\n\nYou win!\n\nNext round?");
+		    index++;
+		    if (player.type == 1) {
+			System.out.println("player");
+			message = message + ("\n\nPlayer " + index + " wins!\n\nNext round?");
 		    } else {
 			index++;
-			System.out.println("opponent");
-			message = message + ("\n\nOpponent " + index + " wins.\n\nNext round?");
+			System.out.println("computer");
+			message = message + ("\n\nComputer " + index + " wins.\n\nNext round?");
 		    }
 		    winner++;
 		}
