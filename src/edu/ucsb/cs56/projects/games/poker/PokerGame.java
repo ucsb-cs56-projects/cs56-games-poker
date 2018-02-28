@@ -337,8 +337,7 @@ public class PokerGame {
 
 	else if (winner == 0) {
 	    winnerType = Winner.OPPONENT;
-            opponent.win();
-            
+            opponent.win();   
         }
 	else {
 	    winnerType = Winner.TIE;
