@@ -25,128 +25,36 @@ public class CompareHands implements Serializable{
     private ArrayList<ArrayList<Card>> hands;
 
     /**
-     * ArrayList to hold each hand's cards, index = player number's cards
-    */
-
-    //private ArrayList<Card> cards;
-
-    /*
-     * Value of player1's hand
-     */
-    private int player1Value = 0;
-
-    /*
-     * Value of player2's hand
-     */
-    private int player2Value = 0;
-
-    /**
-     * Compare Hands Constructor
-     * @param player1 first player
-     * @param player2 second player
+     * Multiplayer Compare Hands Constructor
+     * supports dynamic arraylist for any number of players
+     * @param ArrayList of all participating Players
      * @param table the cards that are on the table
      *
      */
-     /*
-    public CompareHands(Player player1, Player player2, TableCards table) {
-        cardHand1 = new ArrayList<Card>();
-        cardHand1.addAll(player1.getHand());
-        cardHand1.addAll(table.getFlopCards());
-        cardHand1.add(table.getTurnCard());
-        cardHand1.add(table.getRiverCard());
-
-        cardHand2 = new ArrayList<Card>();
-        cardHand2.addAll(player2.getHand());
-        cardHand2.addAll(table.getFlopCards());
-        cardHand2.add(table.getTurnCard());
-        cardHand2.add(table.getRiverCard());
-    }
-    */
-    /* Multiplayer Compare Hands Constructor */
-    /* Supports dynamic arraylist for any number of players */
-    // Paramaters = ArrayList of all participating Players, table
-    // constructor sets up nested arraylist
-      // arraylist holding arraylist<cards>
     public CompareHands(ArrayList<Player> Players, TableCards table) {
     	// initialize ArrayLists
     	// nested ArrayList; hands[0] = cards of player 0
     	// EX: hands = [ [card1, card2...], [card1, card2...] ]
-
     	hands = new ArrayList<ArrayList<Card>>(Players.size());
 
+      // for each player, get their hand and put it into ArrayList hands
     	for (int i = 0; i < Players.size(); i ++) {
-        // add empty cards list for each player's hand
+          // collection to store cards
           ArrayList<Card> cards = new ArrayList<Card>();
-    	    // player at current index
+    	    // get player at current index
     	    Player current = Players.get(i);
-          // get current player's hand and add to hands
+          // get current player's hand and add to cards
           cards.addAll(current.getHand());
     	    cards.addAll(table.getFlopCards());
           cards.add(table.getTurnCard());
           cards.add(table.getRiverCard());
 
+          // add player's cards into their hand
           hands.add(cards);
     	}
 
     }
 
-    /**
-     * Returns 1 if "Player 1" hand is better than "Player 2" hand
-     * Returns 0 if the opposite.
-     * Returns 2 if exact tie
-     * @return int representing round winnner
-     */
-     /*
-    public int compareHands(){
-        player1Value = calculateValue(cardHand1);
-        player2Value = calculateValue(cardHand2);
-
-        if(player1Value>player2Value)
-            return 1;
-        else if(player1Value<player2Value)
-            return 0;
-        else {
-	    // return value for below functions are T/F values, return values are lost and have no functionality here
-	    /*
-	    // player1Value and player2Value are equal (same general hand)
-            switch (player1Value) {
-                case 8:
-                    // straight flush
-                    return straightFlushTie();
-                case 7:
-                    // four of a kind
-                    return fourOfAKindTie();
-                case 6:
-                    // full house
-                    return fullHouseTie();
-                case 5:
-                    // flush
-                    return flushTie();
-                case 4:
-                    // straight
-                    return straightTie();
-                case 3:
-                    // three of a kind
-                    return threeOfAKindTie();
-                case 2:
-                    // two pair
-                    return twoPairTie();
-                case 1:
-                    // pair
-                    return pairTie();
-                case 0:
-                    // high card
-                    return highCardTie();
-                default:
-                    // should never happen
-		    return 2;
-            }
-	    */
-      /*
-	    return 2;
-        }
-    }
-    */
     /**
      * compareHands multiplayer function
      * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing)
@@ -258,19 +166,7 @@ public class CompareHands implements Serializable{
 	else
             return ("Mix");
     }
-/*
-    public String compareMessage(){
-	if (this.compareHands() == 1){
-		return (calculateValueToString(cardHand1) + " beats " + calculateValueToString(cardHand2));
-	}
-	else if (this.compareHands() == 0){
-		return (calculateValueToString(cardHand2) + " beats " + calculateValueToString(cardHand1));
-	}
-	else{
-		return ("Tie with " + calculateValueToString(cardHand1));
-	}
-    }
-    */
+
     /**
      * compareMessage for multiplayer
      * relies on compareHands of multiplayer
@@ -433,7 +329,7 @@ public class CompareHands implements Serializable{
            * @param player the cards belonging to the player
            * @return boolean
         */
-        private boolean isFullHouse(ArrayList<Card> player) {
+    private boolean isFullHouse(ArrayList<Card> player) {
         ArrayList<Integer> sortedHand=sortHand(player);
         int doubleCounter=0;
         int tripleCounter=0;

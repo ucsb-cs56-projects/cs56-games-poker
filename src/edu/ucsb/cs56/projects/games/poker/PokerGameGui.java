@@ -27,7 +27,7 @@ public class PokerGameGui extends PokerGame{
      * Text field for entering bet
      */
     protected JTextField betTextField;
-   
+
     /**
      * Button to fold
      */
@@ -82,7 +82,7 @@ public class PokerGameGui extends PokerGame{
     protected JButton exampleRulesButton;
 
     // gameOverFrame
-    
+
     /**
      * Button to return to main menu when game is over
      */
@@ -152,7 +152,7 @@ public class PokerGameGui extends PokerGame{
      * Displays message about who lost the game
      */
     protected JLabel gameOverLabel; // gameOverFrame
-   
+
     /**
      * Panel for displaying rules
      */
@@ -244,14 +244,14 @@ public class PokerGameGui extends PokerGame{
      * Panel displaying "Back to Main Menu" button
      */
     protected JPanel gameOverButtonPanel;
-   
+
     /**
      * No arg constructor for PokerGameGui that simply calls the superclass constructor
      */
     public PokerGameGui(){
-        super();		 
+        super();
     }
-    
+
     /**
      * Initial GUI setup
      * Instantiates the relevant JComponent objects (which is most of them) to their initial states
@@ -259,7 +259,7 @@ public class PokerGameGui extends PokerGame{
     public void layoutSubViews() {
         if (!gameOver) {
             Color pokerGreen = new Color(83, 157, 89);
-	    
+
             foldButton = new JButton("FOLD");
             foldButton.setEnabled(false);
             foldButton.addActionListener(new foldButtonHandler());
@@ -275,14 +275,14 @@ public class PokerGameGui extends PokerGame{
             callButton.addActionListener(new callButtonHandler());
             showdownButton = new JButton("SHOWDOWN");
             showdownButton.addActionListener(new showdownButtonHandler());
-	    
+
             /*putting the rules pictures into the game without adding a new window */
-            
+
             rulesButton = new JButton("RULES");
             rulesButton.setEnabled(true);
             rulesButton.addActionListener(new rulesButtonHandler());
             rulesPanel = new JPanel();
-            
+
             rulesPanel.setLayout(new BorderLayout());
             rulesOverviewLabel = new JLabel();
             rulesGameplay1Label = new JLabel();
@@ -292,9 +292,9 @@ public class PokerGameGui extends PokerGame{
             rulesGameplay1Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay1.png"));
             rulesGameplay2Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay2.png"));
             rulesExampleLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesExamples.png"));
-            
+
             rulesPanel.add(BorderLayout.CENTER, rulesOverviewLabel);
-            
+
             overviewRulesButton = new JButton("Overview");
             overviewRulesButton.setEnabled(true);
             overviewRulesButton.addActionListener(new overviewButtonHandler() );
@@ -307,7 +307,7 @@ public class PokerGameGui extends PokerGame{
             exampleRulesButton = new JButton("Example Hands");
             exampleRulesButton.setEnabled(true);
             exampleRulesButton.addActionListener(new exampleButtonHandler() );
-            
+
             rulesNextPageButtons = new JPanel();
             rulesNextPageButtons.setLayout(new BoxLayout(rulesNextPageButtons, BoxLayout.X_AXIS));
             rulesNextPageButtons.add(overviewRulesButton);
@@ -315,11 +315,11 @@ public class PokerGameGui extends PokerGame{
             rulesNextPageButtons.add(gameplayRulesButton2);
             rulesNextPageButtons.add(exampleRulesButton);
             rulesNextPageButtons.setBackground(pokerGreen);
-            
+
             rulesPanel.add(BorderLayout.SOUTH, rulesNextPageButtons);
             rulesPanel.setBackground(pokerGreen);
             rulesPanel.setVisible(false);
-            
+
             opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
             oSubPane1 = new JPanel();
@@ -327,7 +327,7 @@ public class PokerGameGui extends PokerGame{
             oSubPane2 = new JPanel();
             oSubPane3 = new JPanel();
             oSubPane3.setLayout(new BorderLayout());
-	    
+
             opponentChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
             opponentWinsLabel = new JLabel();
             opponentWinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
@@ -340,7 +340,7 @@ public class PokerGameGui extends PokerGame{
             opponentPanel.add(BorderLayout.WEST, oSubPane1);
             opponentPanel.add(BorderLayout.CENTER, oSubPane2);
             opponentPanel.add(BorderLayout.EAST, oSubPane3);
-	    
+
             optionArea = new JPanel();
             optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
             optionArea.add(betButton);
@@ -444,7 +444,7 @@ public class PokerGameGui extends PokerGame{
     }
 
     /**
-     * Method that updates the panels in the frame based on the current game state 
+     * Method that updates the panels in the frame based on the current game state
      */
     public void updateFrame() {
         if (step == Step.FLOP) {
@@ -557,7 +557,7 @@ public class PokerGameGui extends PokerGame{
             pot += opponent.getChips();
             player.bet(opponent.getChips());
         }
-        
+
         /**
          * Updates the GUI elements that are affected by the
          * bet action.
@@ -681,7 +681,7 @@ public class PokerGameGui extends PokerGame{
         /**
          * @param e action event
          */
-        public void actionPerformed(ActionEvent e) {	    
+        public void actionPerformed(ActionEvent e) {
             rulesPanel.remove(rulesGameplay1Label);
             rulesPanel.remove(rulesGameplay2Label);
             rulesPanel.remove(rulesOverviewLabel);
@@ -699,8 +699,8 @@ public class PokerGameGui extends PokerGame{
         /**
          * @param e action event
          */
-        public void actionPerformed(ActionEvent e) {	    
-         
+        public void actionPerformed(ActionEvent e) {
+
             rulesPanel.remove(rulesGameplay1Label);
             rulesPanel.remove(rulesGameplay2Label);
             rulesPanel.remove(rulesOverviewLabel);
@@ -718,7 +718,7 @@ public class PokerGameGui extends PokerGame{
         /**
          * @param e action event
          */
-        public void actionPerformed(ActionEvent e) {	 
+        public void actionPerformed(ActionEvent e) {
             rulesPanel.remove(rulesGameplay1Label);
             rulesPanel.remove(rulesGameplay2Label);
             rulesPanel.remove(rulesOverviewLabel);
@@ -736,7 +736,7 @@ public class PokerGameGui extends PokerGame{
     protected void gameOver(String label) {
         gameOverFrame = new JFrame();
         gameOverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
+
 	Color gameOverGreen = new Color(0,153,76);
 	gameOverFrame.setBackground(gameOverGreen);
 
