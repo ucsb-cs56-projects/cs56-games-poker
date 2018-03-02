@@ -78,7 +78,7 @@ public class PokerGameMult extends PokerGame {
     protected int pot;
 
     // Variables maybe used ---- Eventually this should not be in existence
-    
+
     /**
      * The current bet
      */
@@ -144,7 +144,7 @@ public class PokerGameMult extends PokerGame {
      * Whether or not someone has gone all in
      */
     protected boolean allIn = false;
-    
+
     /** TODO: Change for multiplayer
      * No arg constructor that initializes a new deck.
      */
@@ -167,7 +167,7 @@ public class PokerGameMult extends PokerGame {
 	this.table = new TableCards(deck);
 	pot = 0;
     }
-    
+
     // Getters and setters for various members
 
     /**
@@ -285,7 +285,7 @@ public class PokerGameMult extends PokerGame {
     public void fold() {
         int activePlayers = 0;
 	for (Player player:players) {
-	    if (player.status == 1) { 
+	    if (player.status == 1) {
 		activePlayers +=1;
 		player.winStatus = true;
 	    }
@@ -309,7 +309,7 @@ public class PokerGameMult extends PokerGame {
      */
     protected void collectPot() {
         for (Player player:players) {
-    	    if (player.winStatus == true) {	
+    	    if (player.winStatus == true) {
 		if (player.getType() == 1) {
 	    	    System.out.println("Player " + players.indexOf(player));
 		    System.out.println(String.format("%d", pot));
@@ -334,14 +334,14 @@ public class PokerGameMult extends PokerGame {
             player.setChips(playerChips);
         }
     }
-	
+
     /** TODO: Change for multiplayer
      * Method to determine the winner of the game
      */
     // Possibly fix this
- 
+
     public void determineWinner() {
-        CompareHands comparison = new CompareHands(player, opponent, table);
+        CompareHands comparison = new CompareHands(players, table);
         int win = comparison.compareHands();
 //assume compareHands() returns player index of winning player
         Player winner = players.get(win);
@@ -350,7 +350,7 @@ public class PokerGameMult extends PokerGame {
     }
 
     public String winningHandMessage(){
-	CompareHands comparison = new CompareHands(player, opponent, table);
+	CompareHands comparison = new CompareHands(players, table);
 	return comparison.compareMessage();
     }
     /**
