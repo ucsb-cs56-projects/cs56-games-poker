@@ -68,7 +68,7 @@ final class PokerSinglePlayer extends PokerGameGui {
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.
-            timer = new Timer(timer_value, e -> turnDecider(rng) );
+            timer = new Timer(timer_value, e -> turnDecider());
             timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
             updateFrame(); //function is inside of PokerGameGui
             timer.restart();
@@ -79,8 +79,8 @@ final class PokerSinglePlayer extends PokerGameGui {
     /**
      * Method that directs the turn to who it needs to go to
      */
-    public void turnDecider (int index) {
-        Player currentTurn = players.get(index);
+    public void turnDecider () {
+        Player currentTurn = players.get(turn);
 	currentTurn.takeTurn();
     }
 

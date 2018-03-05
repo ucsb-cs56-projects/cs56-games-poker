@@ -524,13 +524,13 @@ public class PokerGameGui extends PokerGameMult{
             callButton.setEnabled(true);
             foldButton.setEnabled(true);
         }
-        else if (turn == Turn.PLAYER && responding) {
+        else if (turn == 0 && responding) {
             betButton.setEnabled(false);
             betTextField.setEnabled(false);
             checkButton.setEnabled(false);
             callButton.setEnabled(true);
             foldButton.setEnabled(true);
-        } else if (turn == Turn.PLAYER) {
+        } else if (turn == 0) {
             betButton.setEnabled(true);
             betTextField.setEnabled(true);
             checkButton.setEnabled(true);
@@ -557,19 +557,25 @@ public class PokerGameGui extends PokerGameMult{
          */
         public void actionPerformed(ActionEvent e) {
             String inputText = betTextField.getText();
+	    int placeHolder = 0;
             if (!inputText.equals("")) {
                 bet = Integer.parseInt(inputText);
-                if (bet<=0) {
+		for (Player player:players) {
+		    if(player.getChips() - bet >=0) {
+			placeHolder++;
+		    }
+		}
+		if (bet<=0) {
                     prompt = "Enter a valid bet!";
                 }
-                else if ((player.getChips() - bet >= 0) && (opponent.getChips() - bet >= 0)) {
+                else if (placeHolder==4) {
                     pot += bet;
                     player.bet(bet);
                     prompt = "Player bets " + bet + ".";
                     updateBetGUIElements();
                     checkPassTurnUpdate();
                 }
-                else if (((turn == Turn.PLAYER) && (player.getChips() < bet)) || ((turn == Turn.OPPONENT) && (opponent.getChips() < bet))) {
+                else if (((turn == 0) && ((players.get(0)).getChips() < bet)) || ((turn >= 1) && ((players.get(turn)).getChips() < bet))) {
                     prompt = "Not enough chips!";
                 }
                 else {
@@ -590,10 +596,17 @@ public class PokerGameGui extends PokerGameMult{
          * Handles the betting functionality for an all-in scenario
          */
         private void allInBet() {
-            prompt = "Opponent only has " + opponent.getChips() + " chips. Your bet is limited to ";
-            prompt += opponent.getChips() + " chips.If this bet is called, it will be an all in.";
-            pot += opponent.getChips();
-            player.bet(opponent.getChips());
+  	    int min = (players.get(0)).getChips();
+	    int temp;
+	    for (Player player:players) {
+		temp = player.getChips();
+		if(temp < min)
+		   min = temp;
+	    }
+            prompt = "Opponent only has " + min + " chips. Your bet is limited to ";
+            prompt += min + " chips.If this bet is called, it will be an all in.";
+            pot += min;
+            player.bet(min);
         }
 
         /**
