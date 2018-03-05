@@ -270,6 +270,7 @@ public class PokerGameGui extends PokerGame{
             showdownButton.addActionListener(new showdownButtonHandler());
 
             /*putting the rules pictures into the game without adding a new window */
+            // maybe better as a popup scroll window
 
             rulesButton = new JButton("RULES");
             rulesButton.setEnabled(true);
