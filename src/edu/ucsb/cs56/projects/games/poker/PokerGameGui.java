@@ -160,6 +160,7 @@ public class PokerGameGui extends PokerGame{
     /**
      * Panel for displaying rules
      */
+    protected JOptionPane Rules;
     protected JPanel rulesPanel;
 
     /**
@@ -313,6 +314,7 @@ public class PokerGameGui extends PokerGame{
             rulesPanel.add(BorderLayout.SOUTH, rulesNextPageButtons);
             rulesPanel.setBackground(pokerGreen);
             rulesPanel.setVisible(false);
+
 
             opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
@@ -690,7 +692,18 @@ public class PokerGameGui extends PokerGame{
          * @param e action event
          */
         public void actionPerformed(ActionEvent e) {
-            rulesPanel.setVisible(!rulesPanel.isVisible() );
+            //rulesPanel.setVisible(!rulesPanel.isVisible() );
+            rulesOverviewLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesOverview.png"));
+            rulesGameplay1Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay1.png"));
+            rulesGameplay2Label.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesGamePlay2.png"));
+            rulesExampleLabel.setIcon(new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesExamples.png"));
+            ImageIcon icon = new ImageIcon("src/edu/ucsb/cs56/projects/games/poker/rules/rulesOverview.png");
+                  JOptionPane.showMessageDialog(
+                          null,
+                          "",
+                          "Rules", JOptionPane.INFORMATION_MESSAGE,
+                          icon);
+                          JOptionPane.insertTab("Hello","Test");
         }
     }
 
