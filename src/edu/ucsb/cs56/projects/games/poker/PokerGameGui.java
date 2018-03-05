@@ -116,7 +116,9 @@ public class PokerGameGui extends PokerGame{
     /**
      * Displays opponent's winnings if opponent wins
      */
-    protected JLabel opponentWinsLabel;
+    protected JLabel opponent1WinsLabel;
+    protected JLabel opponent2WinsLabel;
+    protected JLabel opponent3WinsLabel;
 
     /**
      * Displays player's chips
@@ -126,7 +128,9 @@ public class PokerGameGui extends PokerGame{
     /**
      * Displays opponent's chips
      */
-    protected JLabel opponentChipsLabel;
+    protected JLabel opponent1ChipsLabel;
+    protected JLabel opponent2ChipsLabel;
+    protected JLabel opponent3ChipsLabel;
 
     /**
      * Displays current pot
@@ -146,7 +150,7 @@ public class PokerGameGui extends PokerGame{
     /**
      * Image of back of card
      */
-    protected JLabel backCardLabel1, backCardLabel2;
+    protected JLabel backCardLabel1, backCardLabel2, backCardLabel3, backCardLabel4, backCardLabel5, backCardLabel6;
 
     /**
      * Displays message about who lost the game
@@ -188,19 +192,8 @@ public class PokerGameGui extends PokerGame{
      */
     protected JPanel optionArea;
 
-    /**
-     * Panel holding JComponents displaying the opponent's chips
-     */
-	protected JPanel oSubPane1;
-
-    /**
-     * Panel where the opponent's cards are displayed
-     */
+    protected JPanel oSubPane1;
     protected JPanel oSubPane2;
-
-    /**
-     * Panel displaying each user's wins
-     */
     protected JPanel oSubPane3;
 
     /**
@@ -322,24 +315,37 @@ public class PokerGameGui extends PokerGame{
 
             opponentPanel = new JPanel();
             opponentPanel.setLayout(new BorderLayout());
-            oSubPane1 = new JPanel();
-            oSubPane1.setLayout(new BoxLayout(oSubPane1, BoxLayout.Y_AXIS));
-            oSubPane2 = new JPanel();
-            oSubPane3 = new JPanel();
-            oSubPane3.setLayout(new BorderLayout());
 
-            opponentChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
-            opponentWinsLabel = new JLabel();
-            opponentWinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
-            playerWinsLabel = new JLabel();
-            playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
-            oSubPane1.add(new JLabel("OPPONENT"));
-            oSubPane1.add(opponentChipsLabel);
-            oSubPane3.add(BorderLayout.NORTH, playerWinsLabel);
-            oSubPane3.add(BorderLayout.SOUTH, opponentWinsLabel);
+            // slanted opponent's cards
+            oSubPane1 = new JPanel();
+            //oSubPane1.setLayout(new FlowLayout());
+            //oSubPane1.setLayout(new BorderLayout());
+            oSubPane2 = new JPanel();
+            // uppright cards
+            //oSubPane2.setLayout(new FlowLayout());
+            //oSubPane2.setLayout(new BorderLayout());
+            oSubPane3 = new JPanel();
+            // slanted opponent's cards
+            //oSubPane3.setLocation(new FlowLayout());
+            //oSubPane1.setLayout(new BorderLayout());
+
             opponentPanel.add(BorderLayout.WEST, oSubPane1);
             opponentPanel.add(BorderLayout.CENTER, oSubPane2);
-            opponentPanel.add(BorderLayout.EAST, oSubPane3);
+            opponentPanel.add(BorderLayout.EAST,oSubPane3);
+
+
+            opponent1ChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+            opponent1WinsLabel = new JLabel();
+            opponent1WinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+            opponent2ChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+            opponent2WinsLabel = new JLabel();
+            opponent2WinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+            opponent3ChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+            opponent3WinsLabel = new JLabel();
+            opponent3WinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+            playerWinsLabel = new JLabel();
+            playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
+
 
             optionArea = new JPanel();
             optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
@@ -350,6 +356,13 @@ public class PokerGameGui extends PokerGame{
             optionArea.add(foldButton);
             optionArea.add(rulesButton);
 
+            backCardLabel1 = new JLabel(backCardImage);
+            backCardLabel2 = new JLabel(backCardImage);
+            backCardLabel3 = new JLabel(backCardImage);
+            backCardLabel4 = new JLabel(backCardImage);
+            backCardLabel5 = new JLabel(backCardImage);
+            backCardLabel6 = new JLabel(backCardImage);
+
             playerPanel = new JPanel();
             playerPanel.setLayout(new BorderLayout());
             pSubPane1 = new JPanel();
@@ -358,17 +371,29 @@ public class PokerGameGui extends PokerGame{
             pSubPane3 = new JPanel();
 
             playerChipsLabel = new JLabel(String.format("Chips: %d", player.getChips()));
-            pSubPane1.add(new JLabel("PLAYER"));
-            pSubPane1.add(playerChipsLabel);
+
+
             pSubPane3.add(optionArea);
+            // message area
             playerPanel.add(BorderLayout.WEST, pSubPane1);
             playerPanel.add(BorderLayout.CENTER, pSubPane2);
             playerPanel.add(BorderLayout.EAST, pSubPane3);
 
-            backCardLabel1 = new JLabel(backCardImage);
-            backCardLabel2 = new JLabel(backCardImage);
-            oSubPane2.add(backCardLabel1);
-            oSubPane2.add(backCardLabel2);
+            oSubPane1.add(backCardLabel1);
+            oSubPane1.add(backCardLabel2);
+            oSubPane1.add(opponent1ChipsLabel);
+
+            oSubPane2.add(backCardLabel3);
+            oSubPane2.add(backCardLabel4);
+            oSubPane2.add(opponent2ChipsLabel);
+
+
+
+            oSubPane3.add(backCardLabel5);
+            oSubPane3.add(backCardLabel6);
+            oSubPane3.add(opponent3ChipsLabel);
+
+
             for (int i = 0; i < 2; i++) {
                 pSubPane2.add(new JLabel(getCardImage((player.getHand()).get(i))));
             }
@@ -414,6 +439,13 @@ public class PokerGameGui extends PokerGame{
             messagePanel.add(showdownButton);
             messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
+            // adding into mainFrame Panels
+            pSubPane1.add(messagePanel);
+
+
+
+
+
             oSubPane1.setBackground(pokerGreen);
             oSubPane2.setBackground(pokerGreen);
             oSubPane3.setBackground(pokerGreen);
@@ -428,16 +460,18 @@ public class PokerGameGui extends PokerGame{
             riverPane.setBackground(pokerGreen);
 
 
+
             mainFrame = new JFrame("Poker Game");
-            mainFrame.setSize(new Dimension(1000, 600));
+            mainFrame.setSize(new Dimension(1100, 700));
             mainFrame.setLayout(new BorderLayout() );
             mainFrame.setResizable(false);
             mainFrame.setLocation(250, 250);
+            mainFrame.getRootPane().setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, pokerGreen));
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             mainFrame.getContentPane().add(BorderLayout.NORTH, opponentPanel);
             mainFrame.getContentPane().add(BorderLayout.SOUTH, playerPanel);
             mainFrame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-            mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
+            //mainFrame.getContentPane().add(BorderLayout.EAST, messagePanel);
             mainFrame.getContentPane().add(BorderLayout.WEST, rulesPanel);
             mainFrame.setVisible(true);
         }
@@ -460,7 +494,9 @@ public class PokerGameGui extends PokerGame{
         gameMessage.setText(message);
         playerPrompt.setText(prompt);
         potLabel.setText(String.format("Pot: %d", pot));
-        opponentChipsLabel.setText(String.format("Chips: %d", opponent.getChips()));
+        opponent1ChipsLabel.setText(String.format("Chips: %d", opponent.getChips()));
+        opponent2ChipsLabel.setText(String.format("Chips: %d", opponent.getChips()));
+        opponent3ChipsLabel.setText(String.format("Chips: %d", opponent.getChips()));
         playerChipsLabel.setText(String.format("Chips: %d", player.getChips()));
         opponentPanel.revalidate();
         playerPanel.revalidate();
