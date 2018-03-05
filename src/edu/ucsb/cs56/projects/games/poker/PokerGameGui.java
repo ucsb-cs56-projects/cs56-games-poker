@@ -397,6 +397,7 @@ public class PokerGameGui extends PokerGame{
             for (int i = 0; i < 2; i++) {
                 pSubPane2.add(new JLabel(getCardImage((player.getHand()).get(i))));
             }
+            pSubPane2.add(playerChipsLabel);
 
             centerPanel = new JPanel();
             centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
