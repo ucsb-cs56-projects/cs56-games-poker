@@ -678,6 +678,10 @@ public class PokerGameGui extends PokerGame{
          * @param e action event
          */
         public void actionPerformed(ActionEvent e) {
+          // BUG: REFACTORING AFFECTED THESE FUNCTIONS
+          // PokerGame::determineWinner
+          // PokerGame::collectPot
+          //PokerSinglePlayer::showWinnerAlert
             determineWinner();
             collectPot();
             showWinnerAlert();
@@ -703,7 +707,7 @@ public class PokerGameGui extends PokerGame{
                           "",
                           "Rules", JOptionPane.INFORMATION_MESSAGE,
                           icon);
-                          JOptionPane.insertTab("Hello","Test");
+
         }
     }
 

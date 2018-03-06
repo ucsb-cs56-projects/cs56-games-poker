@@ -327,8 +327,9 @@ public class PokerGame {
      * Method to determine the winner of the game
      */
     // Possibly fix this
- // BUG HERE FOR SHOWDOWN BUTTON, CHANGE TO COMPAREHAHNDS DECLARATION OF comparison
- // MUST HAVE ARGUMENTS OF TYPE (ArrayList, TableCards)
+ // BUG HERE FOR SHOWDOWN BUTTON, CHANGE COMPAREHAHNDS DECLARATION OF comparison
+ // MUST HAVE ARGUMENTS OF TYPE (ArrayList, TableCards) BC OF CONSTRUCTOR CHANGE
+ //   PLACEHOLDER FOR NOW
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);
         int winner = comparison.compareHands();
@@ -336,15 +337,15 @@ public class PokerGame {
         if (winner == 1) {
             winnerType = Winner.PLAYER;
 	    player.win();
-	}
+      	}
 
-	else if (winner == 0) {
-	    winnerType = Winner.OPPONENT;
-            opponent.win();
-        }
-	else {
-	    winnerType = Winner.TIE;
-	}
+      	else if (winner == 0) {
+      	    winnerType = Winner.OPPONENT;
+                  opponent.win();
+              }
+      	else {
+      	    winnerType = Winner.TIE;
+      	}
     }
 
     // BUG HERE AS WELL, ARGUMENT TYPES!
