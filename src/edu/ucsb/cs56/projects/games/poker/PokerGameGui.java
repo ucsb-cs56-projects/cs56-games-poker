@@ -326,21 +326,27 @@ public class PokerGameGui extends PokerGame{
             //oSubPane2.setLayout(new FlowLayout());
             //oSubPane2.setLayout(new BorderLayout());
             oSubPane3 = new JPanel();
+            // slanted opponent's cards
+            //oSubPane3.setLocation(new FlowLayout());
+            //oSubPane1.setLayout(new BorderLayout());
 
-            oSubPane3.setLayout(new BorderLayout());
-
-            opponentChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
-            opponentWinsLabel = new JLabel();
-            opponentWinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
-            playerWinsLabel = new JLabel();
-            playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
-            oSubPane1.add(new JLabel("OPPONENT"));
-            oSubPane1.add(opponentChipsLabel);
-            oSubPane3.add(BorderLayout.NORTH, playerWinsLabel);
-            oSubPane3.add(BorderLayout.SOUTH, opponentWinsLabel);
             opponentPanel.add(BorderLayout.WEST, oSubPane1);
             opponentPanel.add(BorderLayout.CENTER, oSubPane2);
-            opponentPanel.add(BorderLayout.EAST, oSubPane3);
+            opponentPanel.add(BorderLayout.EAST,oSubPane3);
+
+
+            opponent1ChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+            opponent1WinsLabel = new JLabel();
+            opponent1WinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+            opponent2ChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+            opponent2WinsLabel = new JLabel();
+            opponent2WinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+            opponent3ChipsLabel = new JLabel(String.format("Chips: %d", opponent.getChips()));
+            opponent3WinsLabel = new JLabel();
+            opponent3WinsLabel.setText(String.format("Opponent wins: %d", opponent.getWins()));
+            playerWinsLabel = new JLabel();
+            playerWinsLabel.setText(String.format("Player wins: %d", player.getWins()));
+
 
             optionArea = new JPanel();
             optionArea.setLayout(new BoxLayout(optionArea, BoxLayout.Y_AXIS));
