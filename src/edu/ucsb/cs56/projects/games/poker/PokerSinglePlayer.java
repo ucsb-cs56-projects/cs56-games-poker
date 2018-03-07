@@ -49,14 +49,15 @@ final class PokerSinglePlayer extends PokerGameGui {
        Player opponent = players.get(1);
        opponent.setChips(oChips);
      }
-/*
-    public PokerSinglePlayer(int pChips, int oChips){
+
+    public PokerSinglePlayer(int pChips, int o1Chips, int o2Chips, int o3Chips){
         players.get(0).setChips(pChips);
-        players.get(1).setChips(oChips);
-        players.get(0).setDelegate(this);
-        players.get(1).setDelegate(this);
+        players.get(1).setChips(o1Chips);
+	players.get(2).setChips(o2Chips);
+	players.get(3).setChips(o3Chips);
+        for(Player player:players)
+	    player.setDelegate(this);
     }
-*/
 
     /**
      * Starts game between you and AI
@@ -265,7 +266,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    }
 		}
 		if (Continue == 0) {
-		    singlePlayerReplay = new PokerSinglePlayer((players.get(0)).getChips(),(players.get(1)).getChips());
+		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(),players.get(2).getChips(),players.get(3).getChips());
 		    singlePlayerReplay.go();
 		}
 	    }
