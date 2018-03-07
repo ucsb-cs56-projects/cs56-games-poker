@@ -138,7 +138,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 */
                 turn++;
 		controlButtons();
-                message = "computer " + (turn) + " is thinking...";
+                message = "computer " + (turn+1) + " is thinking...";
                 updateFrame();		
                 timer.restart();
                 } else {
@@ -149,8 +149,8 @@ final class PokerSinglePlayer extends PokerGameGui {
                     if (step != Step.SHOWDOWN) {
 			turn++;
                         controlButtons();
-                        prompt = "computer " + (turn) + "'s Turn.";
-                        message = "computer " + (turn) + " is thinking...";
+                        prompt = "computer " + (turn+1) + "'s Turn.";
+                        message = "computer " + (turn+1) + " is thinking...";
                         updateFrame();
                         timer.restart();
                     }
@@ -231,12 +231,11 @@ final class PokerSinglePlayer extends PokerGameGui {
 	    for (Player player:players) {
 		if (player.winStatus == true) {
 		    int index = players.indexOf(player);
-		    index++;
+		    index += 1;
 		    if (player.type == 1) {
 			System.out.println("player");
 			message = message + ("\n\nPlayer " + index + " wins!\n\nNext round?");
 		    } else {
-			index++;
 			System.out.println("computer");
 			message = message + ("\n\nComputer " + index + " wins.\n\nNext round?");
 		    }
