@@ -361,11 +361,14 @@ public class PokerGameMult {
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);
         int win = comparison.compareHands();
-        winnerIdx = win;
 //assume compareHands() returns player index of winning player
-        Player winner = players.get(win);
-      	winner.win();
-      	winner.winStatus = true;
+	if(win < 0)
+	     return;
+	else {
+	     Player winner = players.get(win);
+      	     winner.win();
+      	     winner.winStatus = true;
+	}
     }
 
     public String winningHandMessage(){
