@@ -46,6 +46,8 @@ final class PokerSinglePlayer extends PokerGameGui {
         player.setChips(pChips);
         player.setDelegate(this);
        }
+       Player opponent = players.get(1);
+       opponent.setChips(oChips);
      }
 /*
     public PokerSinglePlayer(int pChips, int oChips){
@@ -263,7 +265,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    }
 		}
 		if (Continue == 0) {
-		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
+		    singlePlayerReplay = new PokerSinglePlayer((players.get(0)).getChips(),(players.get(1)).getChips());
 		    singlePlayerReplay.go();
 		}
 	    }

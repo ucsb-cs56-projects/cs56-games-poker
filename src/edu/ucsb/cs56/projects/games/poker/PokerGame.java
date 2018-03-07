@@ -232,8 +232,8 @@ public class PokerGame {
      * Sets up the player's and opponent's hand.
      */
     public void setUp() {
-        player.setDelegate(this);
-        opponent.setDelegate(this);
+    //    player.setDelegate(this);
+      //  opponent.setDelegate(this);
         if (player.getChips() >= 5 && opponent.getChips() >= 5) {
             player.bet(5);
             opponent.bet(5);
