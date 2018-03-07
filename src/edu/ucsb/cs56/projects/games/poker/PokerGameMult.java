@@ -12,16 +12,18 @@ import java.util.ArrayList;
 /**
  * Class that represents a Texas Holdem' Style Poker Game.
  */
-public class PokerGameMult extends PokerGame {
+public class PokerGameMult {
     // PokerGame States
 
     /**
      * enum representing the game winner
      */
-    public enum Winner {
+     // if OPPONENT, loop through
+    public enum Result {
         PLAYER, OPPONENT, TIE, NEW_GAME
             };
 
+    public boolean Fold = false;
 
     /**
      * enum representing the game step
@@ -51,6 +53,8 @@ public class PokerGameMult extends PokerGame {
      * ArrayList holding the game's current players
      */
     protected ArrayList<Player> players;
+    protected Player winner;
+    protected int winnerIdx;
 
     /**
      * The user playing the game
@@ -97,7 +101,7 @@ public class PokerGameMult extends PokerGame {
     /**
      * The round winner
      */
-    protected Winner winnerType = Winner.NEW_GAME;
+    protected Result resultType = Result.NEW_GAME;
     /**
      * Variable representing the game winner
      * winner = 0 : players[0] is the winner
@@ -150,22 +154,35 @@ public class PokerGameMult extends PokerGame {
      */
     // FIX THIS OR FIX setUp() METHOD
     public PokerGameMult() {
+      this.deck = new Deck();
+	//int AIs = 4 - player; //Assuming multiplayer only supports 4 people
+      players = new ArrayList<Player>();
+	    players.add(new User(500, deck));
+	     for (int i = 0; i < 4; i++) {
+	    players.add(new OpponentAI(500, deck));
+    }
+	     this.table = new TableCards(deck);
+	      pot = 0;
+      /* temp
         this.deck = new Deck();
-        this.players.add(new User(500, deck));
-        this.players.add(new OpponentAI(500, deck));
+        players = new ArrayList<Player>();
+        players.add(new User(500, deck));
+        players.add(new OpponentAI(500, deck));
         this.table = new TableCards(deck);
         pot = 0;
+        */
     }
 
    public PokerGameMult(int player) {
-	this.deck = new Deck();
-	int AIs = 4 - player; //Assuming multiplayer only supports 4 people
-	for (int i = 0; i < player; i++)
-	    this.players.add(new User(500, deck));
-	for (int i = 0; i < AIs; i++)
-	    this.players.add(new OpponentAI(500, deck));
-	this.table = new TableCards(deck);
-	pot = 0;
+	    this.deck = new Deck();
+	//int AIs = 4 - player; //Assuming multiplayer only supports 4 people
+      players = new ArrayList<Player>();
+	    players.add(new User(500, deck));
+	     for (int i = 0; i < 4; i++) {
+	    players.add(new OpponentAI(500, deck));
+    }
+	     this.table = new TableCards(deck);
+	      pot = 0;
     }
 
     // Getters and setters for various members
@@ -206,7 +223,7 @@ public class PokerGameMult extends PokerGame {
      * Returns the game's current step
      * @return the current step
      */
-   /* public Step getStep() {
+     public Step getStep() {
         return step;
     }
 
@@ -293,10 +310,11 @@ public class PokerGameMult extends PokerGame {
 	if (activePlayers <= 1) {
         	collectPot();
         	showWinnerAlert();
+          Fold = true;
 	// Reset player win flag
 
         // deck.reShuffle();
-    	    winnerType = Winner.NEW_GAME;
+    	    resultType = Result.NEW_GAME;
 	}
 	else {
 		for (Player player:players)
@@ -310,20 +328,20 @@ public class PokerGameMult extends PokerGame {
     protected void collectPot() {
         for (Player player:players) {
     	    if (player.winStatus == true) {
-		if (player.getType() == 1) {
-	    	    System.out.println("Player " + players.indexOf(player));
-		    System.out.println(String.format("%d", pot));
-		}
-		else if (player.getType() == 0) {
-		     System.out.println("Opponent");
-                     System.out.println(String.format("%d", pot));
-		}
-		int playerChips = player.getChips();
-		playerChips += pot;
-		player.setChips(playerChips);
-		player.win();
-		return;
-	    }
+        		if (player.getType() == 1) {
+        	    	    System.out.println("Player " + players.indexOf(player));
+        		    System.out.println(String.format("%d", pot));
+        		}
+        		else if (player.getType() == 0) {
+        		     System.out.println("Opponent");
+                             System.out.println(String.format("%d", pot));
+        		}
+        		int playerChips = player.getChips();
+        		playerChips += pot;
+        		player.setChips(playerChips);
+        		player.win();
+        		return;
+        }
 	}
         System.out.println("Tie");
         System.out.println(String.format("%d", pot));
@@ -343,15 +361,16 @@ public class PokerGameMult extends PokerGame {
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);
         int win = comparison.compareHands();
+        winnerIdx = win;
 //assume compareHands() returns player index of winning player
         Player winner = players.get(win);
-	winner.win();
-	winner.winStatus = true;
+      	winner.win();
+      	winner.winStatus = true;
     }
 
     public String winningHandMessage(){
-	CompareHands comparison = new CompareHands(players, table);
-	return comparison.compareMessage();
+    	CompareHands comparison = new CompareHands(players, table);
+    	return comparison.compareMessage();
     }
     /**
      * Method to pass the turn from opponent to player, or player to opponent
