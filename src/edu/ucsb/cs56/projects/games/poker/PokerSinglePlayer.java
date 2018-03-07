@@ -69,7 +69,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 
         if(!gameOver){
             step = Step.BLIND; //This is the first step in the game.
-	    int currentPlayers = players.size();
+	   /* int currentPlayers = players.size();
             int rng = (int) (Math.random()*currentPlayers); //generate random num 0-4 
 	    Player first = players.get(rng);
 	    first.turn = true;
@@ -81,6 +81,9 @@ final class PokerSinglePlayer extends PokerGameGui {
             }
 	    else 
 		prompt = "player " + rng + " goes first!";
+		*/
+	    players.get(0).turn = true;
+	    turn = 0;
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.
@@ -88,7 +91,7 @@ final class PokerSinglePlayer extends PokerGameGui {
             timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
             updateFrame(); //function is inside of PokerGameGui
             timer.restart();
-	    first.turn = false;
+	    players.get(0).turn = false;
         }
     }
 
@@ -133,7 +136,9 @@ final class PokerSinglePlayer extends PokerGameGui {
                 timer.restart();
                 } else {
                     updateFrame();
-                    nextStep();
+		    if (turn == (players.size() - 1)) {
+			nextStep();
+		    }
                     if (step != Step.SHOWDOWN) {
                         controlButtons();
                         prompt = "computer " + number + "'s Turn.";
