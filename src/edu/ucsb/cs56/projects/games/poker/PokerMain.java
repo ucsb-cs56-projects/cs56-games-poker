@@ -23,7 +23,7 @@ public class PokerMain {
     /**
       * Button to start a multiplayer games
     */
-    JButton multiPlayerButton;
+//    JButton multiPlayerButton;
 
     /**
      * Currently unused

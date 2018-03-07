@@ -67,7 +67,7 @@ final class PokerSinglePlayer extends PokerGameGui {
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.
-            timer = new Timer(timer_value, e -> turnDecider() );
+	    // timer = new Timer(timer_value, e -> turnDecider());
             timer.setRepeats(false); //We want the timer to go off once. We will restart it as needed instead.
             updateFrame(); //function is inside of PokerGameGui
             timer.restart();
@@ -78,12 +78,8 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Method that directs the turn to who it needs to go to
      */
     public void turnDecider () {
-        if (turn == Turn.PLAYER) {
-            player.takeTurn();
-        }
-        else {
-            opponent.takeTurn();
-        }
+        Player currentTurn = players.get(turn);
+	currentTurn.takeTurn();
     }
 
     
@@ -92,37 +88,38 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Changes between you and the AI
      */
     public void changeTurn() {
-        if (turn == Turn.PLAYER) {
+	if (turn < 3) 
+	   turn++;
+	else
+	   turn = 0;
+	int number = turn++;
+	Player current = players.get(turn);
+        if (current.type == 0) {
             if (responding == true) {
-                turn = Turn.OPPONENT;
                 controlButtons();
-                message = "opponent is thinking...";
+                message = "computer " + number + " is thinking...";
                 updateFrame();		
                 timer.restart();
                 } else {
                     updateFrame();
                     nextStep();
                     if (step != Step.SHOWDOWN) {
-                        turn = Turn.OPPONENT;
                         controlButtons();
-                        prompt = "opponent Turn.";
-                        message = "opponent is thinking...";
+                        prompt = "computer " + number + "'s Turn.";
+                        message = "computer " + number + " is thinking...";
                         updateFrame();
                         timer.restart();
                     }
                 }
         } else if (turn == Turn.OPPONENT) {
             if (responding == true) {
-                turn = Turn.PLAYER;
-                controlButtons();
-                responding = false;
-                prompt = "What will you do?";
-                updateFrame();
+		controlButtons();
+		responding = false;
+		prompt = "Player " + number + "'s turn. What will you do?";             	updateFrame();
             } else {
-                prompt = "What will you do?";
-                turn = Turn.PLAYER;
-                controlButtons();
-                updateFrame();
+		    prompt = "Player " + number + "'s turn. What will you do?";
+    		    controlButtons();
+    		    updateFrame();
             }
         }
     }
@@ -166,8 +163,25 @@ final class PokerSinglePlayer extends PokerGameGui {
     		oSubPane2.add(new JLabel(getCardImage((opponent.getHand()).get(i))));
     	    }
     	    updateFrame();
-	    if (!Fold) {	      
-		message = winningHandMessage();
+
+	    message = winningHandMessage();
+	    
+	    int winner = 0;
+
+	    for (Player player:players) {
+		if (player.winStatus == true) {
+		    int index = players.indexOf(player);
+		    index++;
+		    if (player.type == 1) {
+			System.out.println("player");
+			message = message + ("\n\nPlayer " + index + " wins!\n\nNext round?");
+		    } else {
+			index++;
+			System.out.println("computer");
+			message = message + ("\n\nComputer " + index + " wins.\n\nNext round?");
+		    }
+		    winner++;
+		}
 	    }
 	    else {
 		message = ("Folded!");
