@@ -27,6 +27,7 @@ final class PokerSinglePlayer extends PokerGameGui {
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
     public PokerSinglePlayer(){
+	super();
 	for(Player player:players)
 	    player.setDelegate(this);
 /*
@@ -42,6 +43,7 @@ final class PokerSinglePlayer extends PokerGameGui {
      * @param oChips the opponent's chips
      */
      public PokerSinglePlayer(int pChips, int oChips){
+	super();
 	for(Player player:players) {
         player.setChips(pChips);
         player.setDelegate(this);
@@ -51,7 +53,8 @@ final class PokerSinglePlayer extends PokerGameGui {
      }
 
     public PokerSinglePlayer(int pChips, int o1Chips, int o2Chips, int o3Chips){
-        players.get(0).setChips(pChips);
+        super();
+	players.get(0).setChips(pChips);
         players.get(1).setChips(o1Chips);
 	players.get(2).setChips(o2Chips);
 	players.get(3).setChips(o3Chips);
@@ -117,15 +120,15 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Method to activate the opponent AI on turn change.
      * Changes between you and the AI
      */
-    public void changeTurn() {
+    public void changeTurn() {/*
 	if (turn < 3) 
 	   turn++;
 	else
-	   turn = 0;
-	int number = turn;
-	Player current = players.get(turn-1);
-        if (current.type == 0) {
-            if (responding == true) {
+	   turn = 0; */
+	int number = turn + 1;
+	Player current = players.get(turn);
+        if (turn > 0) {
+           if (responding == true) {
 		    /*
         if (turn == 0) {
             if (responding == true) {
@@ -133,6 +136,10 @@ final class PokerSinglePlayer extends PokerGameGui {
 */
                 controlButtons();
                 message = "computer " + number + " is thinking...";
+		if (turn == players.size()-1)
+                        turn = 0;
+                else
+                        turn++;
                 updateFrame();		
                 timer.restart();
                 } else {
@@ -144,6 +151,10 @@ final class PokerSinglePlayer extends PokerGameGui {
                         controlButtons();
                         prompt = "computer " + number + "'s Turn.";
                         message = "computer " + number + " is thinking...";
+			if (turn == players.size()-1)
+                            turn = 0;
+                	else
+                            turn++;
                         updateFrame();
                         timer.restart();
                     }
@@ -152,10 +163,13 @@ final class PokerSinglePlayer extends PokerGameGui {
             if (responding == true) {
 		controlButtons();
 		responding = false;
-		prompt = "Player " + number + "'s turn. What will you do?";             	updateFrame();
+		prompt = "Player " + number + "'s turn. What will you do?";
+		turn++;
+		updateFrame();
             } else {
 		    prompt = "Player " + number + "'s turn. What will you do?";
-    		    controlButtons();
+    		    turn++;
+		    controlButtons();
     		    updateFrame();
             }
         }
