@@ -117,7 +117,7 @@ public class PokerMain {
         public void actionPerformed(ActionEvent event) {
             Object src = event.getSource();
             if (src == singlePlayerButton) {
-                PokerSinglePlayer singlePlayer = new PokerSinglePlayer(500, 500);
+                PokerSinglePlayer singlePlayer = new PokerSinglePlayer();
                 singlePlayer.go();
             }
             /*
