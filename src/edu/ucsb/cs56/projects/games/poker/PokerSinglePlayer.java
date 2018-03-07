@@ -104,7 +104,10 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Method that directs the turn to who it needs to go to
      */
     public void turnDecider () {
-	players.get(turn).takeTurn();
+	if(players.get(turn).status == 0)
+		this.changeTurn();
+	else
+		players.get(turn).takeTurn();
 /*
         if (turn == 0) {
             players.get(0).takeTurn();

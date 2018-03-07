@@ -77,8 +77,8 @@ public class OpponentAI extends Player implements Serializable {
                 this.bet(bet);
                 delegate.setBet(0);
                 delegate.setResponding(false);
-                delegate.nextStep();
                 delegate.updateFrame();
+		delegate.changeTurn();
                 delegate.restartTimer();
             } else {
                 delegate.setMessage("opponent folds.");
