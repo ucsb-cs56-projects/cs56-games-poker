@@ -125,50 +125,45 @@ final class PokerSinglePlayer extends PokerGameGui {
 	   turn++;
 	else
 	   turn = 0; */
-	int number = turn + 1;
 	Player current = players.get(turn);
-        if (turn > 0) {
+        if (turn < players.size()-1) {
            if (responding == true) {
 		    /*
         if (turn == 0) {
             if (responding == true) {
                 turn = 1;
 */
-                controlButtons();
-                message = "computer " + number + " is thinking...";
-		if (turn == players.size()-1)
-                        turn = 0;
-                else
-                        turn++;
+                turn++;
+		controlButtons();
+                message = "computer " + (turn) + " is thinking...";
                 updateFrame();		
                 timer.restart();
                 } else {
                     updateFrame();
-		    if (turn == (players.size() - 1)) {
+		    /*if (turn == (players.size() - 1)) {
 			nextStep();
-		    }
+		    } */
                     if (step != Step.SHOWDOWN) {
+			turn++;
                         controlButtons();
-                        prompt = "computer " + number + "'s Turn.";
-                        message = "computer " + number + " is thinking...";
-			if (turn == players.size()-1)
-                            turn = 0;
-                	else
-                            turn++;
+                        prompt = "computer " + (turn) + "'s Turn.";
+                        message = "computer " + (turn) + " is thinking...";
                         updateFrame();
                         timer.restart();
                     }
                 }
         } else {
             if (responding == true) {
+		turn = 0;
 		controlButtons();
 		responding = false;
-		prompt = "Player " + number + "'s turn. What will you do?";
-		turn++;
+		prompt = "Player 1's turn. What will you do?";
 		updateFrame();
             } else {
-		    prompt = "Player " + number + "'s turn. What will you do?";
-    		    turn++;
+		    updateFrame();
+		    nextStep();
+		    prompt = "Player 1's turn. What will you do?";
+    		    turn = 0;
 		    controlButtons();
     		    updateFrame();
             }
