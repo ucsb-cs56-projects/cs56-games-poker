@@ -38,25 +38,25 @@ public class OpponentAI extends Player implements Serializable {
         int betAmount = 5 * dValue;
         int bet = delegate.getCurrentBet();
 
-        if (delegate.getStep() == PokerGame.Step.BLIND) {
+        if (delegate.getStep() == PokerGameMult.Step.BLIND) {
             if (dValue >= 1) {
                 shouldBet = true;
             }
-        } else if (delegate.getStep() == PokerGame.Step.FLOP) {
+        } else if (delegate.getStep() == PokerGameMult.Step.FLOP) {
             if (dValue >= 3) {
                 shouldBet = true;
             }
             if ((dValue == 0 && delegate.getCurrentBet() >= 20)) {
                 shouldCall = false;
             }
-        } else if (delegate.getStep() == PokerGame.Step.TURN) {
+        } else if (delegate.getStep() == PokerGameMult.Step.TURN) {
             if (dValue >= 4) {
                 shouldBet = true;
             }
             if ((dValue < 2 && delegate.getCurrentBet() > 20)) {
                 shouldCall = false;
             }
-        } else if (delegate.getStep() == PokerGame.Step.RIVER) {
+        } else if (delegate.getStep() == PokerGameMult.Step.RIVER) {
             if (dValue >= 4) {
                 shouldBet = true;
             }
@@ -84,8 +84,8 @@ public class OpponentAI extends Player implements Serializable {
                 delegate.setMessage("opponent folds.");
                 this.foldHand();
             }
-        } else if (shouldBet && delegate.getStep() != PokerGame.Step.SHOWDOWN) {
-            if ((this.getChips() - betAmount >= 0) && (delegate.player.getChips() - betAmount >= 0)) {
+        } else if (shouldBet && delegate.getStep() != PokerGameMult.Step.SHOWDOWN) {
+            if ((this.getChips() - betAmount >= 0) && (delegate.players.get(0).getChips() - betAmount >= 0)) {
                 delegate.setBet(betAmount);
                 bet = betAmount;
                 delegate.addToPot(bet);
@@ -99,7 +99,7 @@ public class OpponentAI extends Player implements Serializable {
                 delegate.updateFrame();
                 delegate.changeTurn();
             }
-        } else if (delegate.getStep() != PokerGame.Step.SHOWDOWN) {
+        } else if (delegate.getStep() != PokerGameMult.Step.SHOWDOWN) {
             delegate.setMessage("opponent checks.");
             delegate.updateFrame();
             delegate.changeTurn();

@@ -75,7 +75,7 @@ public class PokerMain {
         singlePlayerButton.addActionListener(listener);
         panel.add(singlePlayerButton);
 
-        multiPlayerButton = new JButton("Play MultiPlayer");
+        multiPlayerButton = new JButton("Play Multi Player");
         multiPlayerButton.addActionListener(listener);
         panel.add(multiPlayerButton);
 
@@ -119,6 +119,10 @@ public class PokerMain {
             if (src == singlePlayerButton) {
                 PokerSinglePlayer singlePlayer = new PokerSinglePlayer();
                 singlePlayer.go();
+            }
+            if (src == multiPlayerButton) {
+              PokerSinglePlayer multiPlayer = new PokerSinglePlayer(500,500);
+              multiPlayer.go();
             }
             /*
             else if (src == serverButton) {
