@@ -183,17 +183,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    winner++;
 		}
 	    }
-	    else {
-		message = ("Folded!");
-	    }
-	   
-    	    if (winnerType == Winner.PLAYER) {
-                System.out.println("player");	    
-                message = message + ("\n\nYou win!\n\nNext round?");
-    	    } else if (winnerType == Winner.OPPONENT) {
-    		System.out.println("opponent");
-    		message = message + ("\n\nOpponent wins.\n\nNext round?");
-    	    } else if (winnerType == Winner.TIE){
+	    if (winner == 0){
                 System.out.println("tie");
                 message = message + ("\n\nTie \n\nNext round?");
     	    }
@@ -205,23 +195,28 @@ final class PokerSinglePlayer extends PokerGameGui {
     		// Restart
 		mainFrame.dispose();
 		PokerSinglePlayer singlePlayerReplay;
+		int Continue = 0;
 
 		// Check if players have enough chips.	
 		// Create new game.
-		
-		if(player.getChips() < 5 || opponent.getChips() < 5){
-		    JOptionPane.showMessageDialog(null, "Resetting chips...");
-		    singlePlayerReplay = new PokerSinglePlayer();
-		    singlePlayerReplay.go();
+		for (Player player:players) {
+		    if (player.getChips() < 5){
+		    	JOptionPane.showMessageDialog(null, "Resetting chips...");
+		    	singlePlayerReplay = new PokerSinglePlayer();
+		    	singlePlayerReplay.go();
+			Continue++;
+		    }
 		}
-		else {
+		if (Continue == 0) {
 		    singlePlayerReplay = new PokerSinglePlayer(player.getChips(),opponent.getChips());
 		    singlePlayerReplay.go();
 		}
-	       
-	    } else if (option == JOptionPane.NO_OPTION) {
-		if(player.getChips() < 5 || opponent.getChips() < 5) {
-		    gameOver("GAME OVER! No chips left!");
+	    }
+	    else if (option == JOptionPane.NO_OPTION) {
+		for (Player player:players) {
+		    if(player.getChips() < 5) {
+		         gameOver("GAME OVER! No chips left!");
+		    }
 		}
 		gameOver("GAME OVER! Thanks for playing.\n\n");
 	    } 
