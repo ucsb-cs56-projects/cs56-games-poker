@@ -73,7 +73,7 @@ final class PokerSinglePlayer extends PokerGameGui {
         if(!gameOver){
             step = Step.BLIND; //This is the first step in the game.
 	   /* int currentPlayers = players.size();
-            int rng = (int) (Math.random()*currentPlayers); //generate random num 0-4 
+            int rng = (int) (Math.random()*currentPlayers); //generate random num 0-4
 	    Player first = players.get(rng);
 	    first.turn = true;
 	    turn = rng;
@@ -82,7 +82,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		message = "player 1 goes first!";
                 prompt = "what will you do?";
             }
-	    else 
+	    else
 		prompt = "player " + rng + " goes first!";
 		*/
 	    players.get(0).turn = true;
@@ -124,7 +124,7 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Changes between you and the AI
      */
     public void changeTurn() {/*
-	if (turn < 3) 
+	if (turn < 3)
 	   turn++;
 	else
 	   turn = 0; */
@@ -138,8 +138,8 @@ final class PokerSinglePlayer extends PokerGameGui {
 */
                 turn++;
 		controlButtons();
-                message = "computer " + (turn+1) + " is thinking...";
-                updateFrame();		
+                message = "opponent " + (turn+1) + " is thinking...";
+                updateFrame();
                 timer.restart();
                 } else {
                     updateFrame();
@@ -149,8 +149,8 @@ final class PokerSinglePlayer extends PokerGameGui {
                     if (step != Step.SHOWDOWN) {
 			turn++;
                         controlButtons();
-                        prompt = "computer " + (turn+1) + "'s Turn.";
-                        message = "computer " + (turn+1) + " is thinking...";
+                        prompt = "opponent " + (turn+1) + "'s Turn.";
+                        message = "opponent " + (turn+1) + " is thinking...";
                         updateFrame();
                         timer.restart();
                     }
@@ -216,6 +216,7 @@ final class PokerSinglePlayer extends PokerGameGui {
           // BUG: chips not added or decreased properly
           oSubPane2.remove(opponent2ChipsLabel);
           // change opponent.getHand
+          // CAN REIMPLEMENT INTO FOR (Players player: players) for flexibility
     	    for(int i=0;i<2;i++){
     		      oSubPane1.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
               oSubPane2.add(new JLabel(getCardImage((players.get(2).getHand()).get(i))));
@@ -225,7 +226,7 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    updateFrame();
 
 	    message = winningHandMessage();
-	    
+
 	    int winner = 0;
 
 	    for (Player player:players) {
@@ -234,10 +235,10 @@ final class PokerSinglePlayer extends PokerGameGui {
 		    index += 1;
 		    if (player.type == 1) {
 			System.out.println("player");
-			message = message + ("\n\nPlayer " + index + " wins!\n\nNext round?");
+			message = message + ("\n\nPlayer " + (index) + " wins!\n\nNext round?");
 		    } else {
-			System.out.println("computer");
-			message = message + ("\n\nComputer " + index + " wins.\n\nNext round?");
+			System.out.println("opponent");
+			message = message + ("\n\nOpponent " + (index-1) + " wins.\n\nNext round?");
 		    }
 		    winner++;
 		}

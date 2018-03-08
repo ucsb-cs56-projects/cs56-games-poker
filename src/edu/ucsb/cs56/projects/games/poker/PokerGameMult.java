@@ -366,8 +366,9 @@ public class PokerGameMult {
 	     return;
 	else {
 	     Player winner = players.get(win);
-      	     winner.win();
-      	     winner.winStatus = true;
+      	     players.get(win).win();
+      	     players.get(win).winStatus = true;
+
 	}
     }
 
