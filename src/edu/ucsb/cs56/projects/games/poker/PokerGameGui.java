@@ -242,11 +242,21 @@ public class PokerGameGui extends PokerGameMult{
      */
     protected JPanel gameOverButtonPanel;
 
+    protected boolean multiPlayer = false;
+
     /**
      * No arg constructor for PokerGameGui that simply calls the superclass constructor
      */
+     // Single Player
     public PokerGameGui(){
         super();
+    }
+    // MultiPlayer
+    public PokerGameGui(int player) {
+      super(player);
+      multiPlayer = true;
+
+
     }
 
     /**
@@ -336,12 +346,17 @@ public class PokerGameGui extends PokerGameMult{
             opponent1ChipsLabel = new JLabel(String.format("Chips: %d", players.get(1).getChips()));
             opponent1WinsLabel = new JLabel();
             opponent1WinsLabel.setText(String.format("Opponent 1 wins: %d", players.get(1).getWins()));
-            opponent2ChipsLabel = new JLabel(String.format("Chips: %d", players.get(2).getChips()));
-            opponent2WinsLabel = new JLabel();
-            opponent2WinsLabel.setText(String.format("Opponent 2 wins: %d", players.get(2).getWins()));
-            opponent3ChipsLabel = new JLabel(String.format("Chips: %d", players.get(3).getChips()));
-            opponent3WinsLabel = new JLabel();
-            opponent3WinsLabel.setText(String.format("Opponent 3 wins: %d", players.get(3).getWins()));
+            if (multiPlayer == true)
+            {
+              opponent2ChipsLabel = new JLabel(String.format("Chips: %d", players.get(2).getChips()));
+              opponent2WinsLabel = new JLabel();
+              opponent2WinsLabel.setText(String.format("Opponent 2 wins: %d", players.get(2).getWins()));
+              opponent3ChipsLabel = new JLabel(String.format("Chips: %d", players.get(3).getChips()));
+              opponent3WinsLabel = new JLabel();
+              opponent3WinsLabel.setText(String.format("Opponent 3 wins: %d", players.get(3).getWins()));
+
+            }
+
             playerWinsLabel = new JLabel();
             playerWinsLabel.setText(String.format("Player wins: %d", players.get(0).getWins()));
 
@@ -359,10 +374,14 @@ public class PokerGameGui extends PokerGameMult{
             wSubPanel.add(newline1);
             wSubPanel.add(opponent1WinsLabel);
             wSubPanel.add(newline2);
-            wSubPanel.add(opponent2WinsLabel);
-            wSubPanel.add(newline3);
-            wSubPanel.add(opponent3WinsLabel);
-            wSubPanel.add(newline);
+            if (multiPlayer == true)
+            {
+              wSubPanel.add(opponent2WinsLabel);
+              wSubPanel.add(newline3);
+              wSubPanel.add(opponent3WinsLabel);
+              wSubPanel.add(newline);
+            }
+
             wSubPanel.setBackground(pokerGreen);
 
             winnerPanel.add(BorderLayout.SOUTH, wSubPanel);
@@ -401,23 +420,39 @@ public class PokerGameGui extends PokerGameMult{
             playerPanel.add(BorderLayout.CENTER, pSubPane2);
             playerPanel.add(BorderLayout.EAST, pSubPane3);
 
-            JLabel opponent1name = new JLabel("OPPONENT 1");
             JLabel opponent2name = new JLabel("OPPONENT 2");
-            JLabel opponent3name = new JLabel("OPPONENT 3");
-            oSubPane1.add(backCardLabel1);
-            oSubPane1.add(backCardLabel2);
-            oSubPane1.add(opponent1name);
-            oSubPane1.add(opponent1ChipsLabel);
 
-            oSubPane2.add(backCardLabel3);
-            oSubPane2.add(backCardLabel4);
-            oSubPane2.add(opponent2name);
-            oSubPane2.add(opponent2ChipsLabel);
+            if (multiPlayer == true)
+            {
+              JLabel opponent1name = new JLabel("OPPONENT 1");
+              JLabel opponent3name = new JLabel("OPPONENT 3");
+              oSubPane1.add(backCardLabel1);
+              oSubPane1.add(backCardLabel2);
+              oSubPane1.add(opponent1name);
+              oSubPane1.add(opponent1ChipsLabel);
 
-            oSubPane3.add(backCardLabel5);
-            oSubPane3.add(backCardLabel6);
-            oSubPane3.add(opponent3name);
-            oSubPane3.add(opponent3ChipsLabel);
+              oSubPane2.add(backCardLabel3);
+              oSubPane2.add(backCardLabel4);
+              oSubPane2.add(opponent2name);
+              oSubPane2.add(opponent2ChipsLabel);
+
+              oSubPane3.add(backCardLabel5);
+              oSubPane3.add(backCardLabel6);
+              oSubPane3.add(opponent3name);
+              oSubPane3.add(opponent3ChipsLabel);
+            }
+            else if (multiPlayer == false)
+            {
+              JLabel opponentname = new JLabel("OPPONENT 1");
+              oSubPane2.add(backCardLabel3);
+              oSubPane2.add(backCardLabel4);
+              oSubPane2.add(opponentname);
+              oSubPane2.add(opponent1ChipsLabel);
+
+            }
+
+
+
 
 
             for (int i = 0; i < 2; i++) {

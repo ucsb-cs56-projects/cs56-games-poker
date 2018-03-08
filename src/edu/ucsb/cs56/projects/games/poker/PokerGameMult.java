@@ -153,14 +153,16 @@ public class PokerGameMult {
      * No arg constructor that initializes a new deck.
      */
     // FIX THIS OR FIX setUp() METHOD
+    // Single Player
     public PokerGameMult() {
       this.deck = new Deck();
 	//int AIs = 4 - player; //Assuming multiplayer only supports 4 people
       players = new ArrayList<Player>();
-	    players.add(new User(500, deck));
-	     for (int i = 0; i < 4; i++) {
+	    //players.add(new User(500, deck));
+	     //for (int i = 0; i < 4; i++) {
+       players.add(new User(500,deck));
 	    players.add(new OpponentAI(500, deck));
-    }
+    //}
 	     this.table = new TableCards(deck);
 	      pot = 0;
       /* temp
@@ -172,10 +174,11 @@ public class PokerGameMult {
         pot = 0;
         */
     }
+    // Multiplayer
 
    public PokerGameMult(int player) {
 	    this.deck = new Deck();
-	//int AIs = 4 - player; //Assuming multiplayer only supports 4 people
+	    //int AIs = 4 - player; //Assuming multiplayer only supports 4 people
       players = new ArrayList<Player>();
 	    players.add(new User(500, deck));
 	     for (int i = 0; i < 4; i++) {
