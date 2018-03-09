@@ -22,9 +22,6 @@ final class PokerSinglePlayer extends PokerGameGui {
      */
     boolean yourTurnToBet = true;
 
-
-
-
     /**
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
@@ -267,6 +264,8 @@ final class PokerSinglePlayer extends PokerGameGui {
        }
        // use activePlayers to determine number of tied players
 	    if (winner == 0){
+        System.out.println("tie");
+        message = message + ("\n\nTie \n\nNext round?");
 	/*
     	    if (!Fold) {
     		message = winningHandMessage();
@@ -283,39 +282,38 @@ final class PokerSinglePlayer extends PokerGameGui {
     		message = message + ("\n\nOpponent wins.\n\nNext round?");
       } else if (winnerIdx < 0){
 */
-                System.out.println("tie");
-                message = message + ("\n\nTie \n\nNext round?");
-    	    }
 
-    	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
+      }
+
+      int option = JOptionPane.showConfirmDialog(null, message, "Winner",
     						       JOptionPane.YES_NO_OPTION);
 
 	    if (option == JOptionPane.YES_OPTION) {
     		// Restart
-		mainFrame.dispose();
-		PokerSinglePlayer singlePlayerReplay;
-		int Continue = 0;
+    		mainFrame.dispose();
+    		PokerSinglePlayer singlePlayerReplay;
+    		int Continue = 0;
 
-		// Check if players have enough chips.
-		// Create new game.
-		for (Player player:players) {
-		    if (player.getChips() < 5){
-		    	JOptionPane.showMessageDialog(null, "Resetting chips...");
-		    	singlePlayerReplay = new PokerSinglePlayer();
-		    	singlePlayerReplay.go();
-			Continue++;
+    		// Check if players have enough chips.
+    		// Create new game.
+    		for (Player player:players) {
+    		    if (player.getChips() < 5){
+    		    	JOptionPane.showMessageDialog(null, "Resetting chips...");
+    		    	singlePlayerReplay = new PokerSinglePlayer();
+    		    	singlePlayerReplay.go();
+    			Continue++;
+    		     }
 		    }
-		}
-		if (Continue == 0) {
-		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(),players.get(2).getChips(),players.get(3).getChips());
-		    singlePlayerReplay.go();
-		}
+    		if (Continue == 0) {
+    		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(),players.get(2).getChips(),players.get(3).getChips());
+    		    singlePlayerReplay.go();
+    		}
 	    }
 	    else if (option == JOptionPane.NO_OPTION) {
-		for (Player player:players) {
-		    if(player.getChips() < 5) {
-		         gameOver("GAME OVER! No chips left!");
-		   }
+      		for (Player player:players) {
+      		    if(player.getChips() < 5) {
+      		         gameOver("GAME OVER! No chips left!");
+      		   }
 /*
 		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5){
 		    JOptionPane.showMessageDialog(null, "Resetting chips...");
@@ -331,14 +329,14 @@ final class PokerSinglePlayer extends PokerGameGui {
 		if(players.get(0).getChips() < 5 || players.get(0).getChips() < 5) {
 		    gameOver("GAME OVER! No chips left!");
 */
-		}
+		    }
 		gameOver("GAME OVER! Thanks for playing.\n\n");
-	    }
+	  }
 
-	    else {
+	  else {
     		// Quit
     		System.exit(1);
-    	    }
+    }
     	}
     }
 
