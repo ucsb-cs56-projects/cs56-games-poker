@@ -138,7 +138,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 */
                 turn++;
 		controlButtons();
-                message = "computer " + (turn+1) + " is thinking...";
+                message = "computer " + (turn) + " is thinking...";
                 updateFrame();		
                 timer.restart();
                 } else {
@@ -149,8 +149,8 @@ final class PokerSinglePlayer extends PokerGameGui {
                     if (step != Step.SHOWDOWN) {
 			turn++;
                         controlButtons();
-                        prompt = "computer " + (turn+1) + "'s Turn.";
-                        message = "computer " + (turn+1) + " is thinking...";
+                        prompt = "computer " + (turn) + "'s Turn.";
+                        message = "computer " + (turn) + " is thinking...";
                         updateFrame();
                         timer.restart();
                     }
