@@ -36,6 +36,8 @@ public class PokerGameMult {
 	PLAYER, COMPUTER
     };
 
+    static int MAXPLAYERS = 4;
+
     /**
      * enum representing which player's turn it is
      */
@@ -181,7 +183,7 @@ public class PokerGameMult {
 	    //int AIs = 4 - player; //Assuming multiplayer only supports 4 people
       players = new ArrayList<Player>();
 	    players.add(new User(500, deck));
-	     for (int i = 0; i < 3; i++) {
+	     for (int i = 0; i < MAXPLAYERS-1; i++) {
 	    players.add(new OpponentAI(500, deck));
     }
 	     this.table = new TableCards(deck);
@@ -348,7 +350,7 @@ public class PokerGameMult {
 	}
         System.out.println("Tie");
         System.out.println(String.format("%d", pot));
-	int chipsGained = pot/4;
+	int chipsGained = pot/MAXPLAYERS;
         for (Player player:players) {
 	    int playerChips = player.getChips();
             playerChips += chipsGained;
