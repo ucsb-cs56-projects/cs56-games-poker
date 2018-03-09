@@ -128,7 +128,7 @@ public class PokerGameMult {
      * etc
      */
     //int turn;
-
+    //protected int activePlayers;
     /**
      * The back of a card
      */
@@ -175,6 +175,7 @@ public class PokerGameMult {
         this.table = new TableCards(deck);
         pot = 0;
         */
+
     }
     // Multiplayer
 
@@ -185,9 +186,10 @@ public class PokerGameMult {
 	    players.add(new User(500, deck));
 	     for (int i = 0; i < MAXPLAYERS-1; i++) {
 	    players.add(new OpponentAI(500, deck));
-    }
+      }
 	     this.table = new TableCards(deck);
 	      pot = 0;
+
     }
 
     // Getters and setters for various members
@@ -306,25 +308,36 @@ public class PokerGameMult {
     // COULD IMPROVE IMPLEMENTATION
     public void fold() {
         int activePlayers = 0;
-	for (Player player:players) {
-	    if (player.status == 1) {
-		activePlayers +=1;
-		player.winStatus = true;
-	    }
-	}
-	if (activePlayers <= 1) {
-        	collectPot();
-        	showWinnerAlert();
-          Fold = true;
-	// Reset player win flag
+        // after a player folds, check for all activePlayers in game
+      	for (Player player:players) {
+      	    if (player.status == 1) {
+          		activePlayers +=1;
+          		//player.winStatus = true;
+      	    }
+      	}
+        // if activePlayers = 1, they win.
+      	if (activePlayers <= 1) {
+          for (Player player: players)
+          {
+              if (player.status == 1)
+              {
+                winnerIdx = players.indexOf(player);
+              }
+          }
+                Fold = true;
+              	collectPot();
+              	showWinnerAlert();
 
-        // deck.reShuffle();
-    	    resultType = Result.NEW_GAME;
-	}
-	else {
-		for (Player player:players)
-			player.winStatus = false;
-	}
+      	// Reset player win flag
+
+              // deck.reShuffle();
+          	    resultType = Result.NEW_GAME;
+      	}
+        System.out.println(activePlayers + " active players remaining.");
+      	else {
+      		for (Player player:players)
+      			player.winStatus = false;
+      	}
     }
 
     /** TODO: Change for multiplayer

@@ -557,8 +557,12 @@ public class PokerGameGui extends PokerGameMult{
         playerPrompt.setText(prompt);
         potLabel.setText(String.format("Pot: %d", pot));
         opponent1ChipsLabel.setText(String.format("Chips: %d", players.get(1).getChips()));
-        opponent2ChipsLabel.setText(String.format("Chips: %d", players.get(2).getChips()));
-        opponent3ChipsLabel.setText(String.format("Chips: %d", players.get(3).getChips()));
+        if (multiPlayer == true)
+        {
+          opponent2ChipsLabel.setText(String.format("Chips: %d", players.get(2).getChips()));
+          opponent3ChipsLabel.setText(String.format("Chips: %d", players.get(3).getChips()));
+        }
+
         playerChipsLabel.setText(String.format("Chips: %d", players.get(0).getChips()));
         opponentPanel.revalidate();
         playerPanel.revalidate();
@@ -727,6 +731,16 @@ public class PokerGameGui extends PokerGameMult{
             message = "Opponents waiting for turn.";
             prompt = "You fold.";
             players.get(0).foldHand();
+            System.out.println("You Folded. ");
+            int active = 0;
+            for (Player player: players)
+            {
+              if(player.status == 1)
+              {
+                active ++;
+              }
+            }
+            System.out.println(active + " active players remaining.");
         }
     }
 

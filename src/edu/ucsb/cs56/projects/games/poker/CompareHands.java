@@ -24,6 +24,7 @@ public class CompareHands implements Serializable{
     */
     private ArrayList<ArrayList<Card>> hands;
 
+    private ArrayList<Player> players;
     /**
      * Multiplayer Compare Hands Constructor
      * supports dynamic arraylist for any number of players
@@ -48,6 +49,7 @@ public class CompareHands implements Serializable{
     	    cards.addAll(table.getFlopCards());
           cards.add(table.getTurnCard());
           cards.add(table.getRiverCard());
+          players.add(Players.get(i));
 
           // add player's cards into their hand
           hands.add(cards);
@@ -66,17 +68,27 @@ public class CompareHands implements Serializable{
 
     	for (ArrayList<Card> hand : hands) {
     	    int value = calculateValue(hand);
+          // only calculate hands of activePlayers
+          Player current = players.get(hands.indexOf(hands));
+          if (current.status == 1) {
+              if (value > max_value) {
+        		// reset max value
+            		max_value = value;
+        		// replace previous winner
+            		winner = hands.indexOf(hand);
+        	    }
+              else if (value < max_value)
+              {
+                int idx = hands.indexOf(hand);
+                // set their status as inactive
+                players.get(idx).foldHand();
+              }
+        	    // if equal hands, TIE. return -1
+        	    else if (value == max_value) {
+        		      winner = -1;
+        	    }
+          }
 
-    	    if (value > max_value) {
-    		// reset max value
-        		max_value = value;
-    		// replace previous winner
-        		winner = hands.indexOf(hand);
-    	    }
-    	    // if equal hands, TIE. return -1
-    	    else if (value == max_value) {
-    		      winner = -1;
-    	    }
     	}
     	return winner;
 

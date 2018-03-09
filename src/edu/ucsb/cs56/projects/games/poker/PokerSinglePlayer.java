@@ -23,6 +23,8 @@ final class PokerSinglePlayer extends PokerGameGui {
     boolean yourTurnToBet = true;
 
 
+
+
     /**
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
@@ -105,10 +107,10 @@ final class PokerSinglePlayer extends PokerGameGui {
      * Method that directs the turn to who it needs to go to
      */
     public void turnDecider () {
-	if(players.get(turn).status == 0)
-		this.changeTurn();
-	else
-		players.get(turn).takeTurn();
+    	if(players.get(turn).status == 0)
+    		this.changeTurn();
+    	else
+    		players.get(turn).takeTurn();
 /*
         if (turn == 0) {
             players.get(0).takeTurn();
@@ -207,43 +209,63 @@ final class PokerSinglePlayer extends PokerGameGui {
      // BUG: must refactor accordingly to fit GUI
     public void showWinnerAlert() {
     	if(!gameOver){
-    	    String message = "";
-          oSubPane1.remove(backCardLabel1);
-          oSubPane1.remove(backCardLabel2);
-    	    oSubPane2.remove(backCardLabel3);
-    	    oSubPane2.remove(backCardLabel4);
-          oSubPane3.remove(backCardLabel5);
-          oSubPane3.remove(backCardLabel6);
-          // BUG: chips not added or decreased properly
-          oSubPane2.remove(opponent2ChipsLabel);
-          // change opponent.getHand
-          // CAN REIMPLEMENT INTO FOR (Players player: players) for flexibility
-    	    for(int i=0;i<2;i++){
-    		      oSubPane1.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
-              oSubPane2.add(new JLabel(getCardImage((players.get(2).getHand()).get(i))));
-    	        oSubPane3.add(new JLabel(getCardImage((players.get(3).getHand()).get(i))));
-    	    }
-          oSubPane2.add(opponent2ChipsLabel);
-    	    updateFrame();
+        String message = "";
+        oSubPane1.remove(backCardLabel1);
+        oSubPane1.remove(backCardLabel2);
+        oSubPane2.remove(backCardLabel3);
+        oSubPane2.remove(backCardLabel4);
+        oSubPane3.remove(backCardLabel5);
+        oSubPane3.remove(backCardLabel6);
+        // BUG: chips not added or decreased properly
+        oSubPane2.remove(opponent2ChipsLabel);
 
-	    message = winningHandMessage();
+        // change opponent.getHand
+        // CAN REIMPLEMENT INTO FOR (Players player: players) for flexibility
+        for(int i=0;i<2;i++){
+            oSubPane1.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
+            oSubPane2.add(new JLabel(getCardImage((players.get(2).getHand()).get(i))));
+            oSubPane3.add(new JLabel(getCardImage((players.get(3).getHand()).get(i))));
+        }
+        oSubPane2.add(opponent2ChipsLabel);
+        updateFrame();
 
-	    int winner = 0;
+	      message = winningHandMessage();
 
-	    for (Player player:players) {
-		if (player.winStatus == true) {
-		    int index = players.indexOf(player);
-		    index += 1;
-		    if (player.type == 1) {
-			System.out.println("player");
-			message = message + ("\n\nPlayer " + (index) + " wins!\n\nNext round?");
-		    } else {
-			System.out.println("opponent");
-			message = message + ("\n\nOpponent " + (index-1) + " wins.\n\nNext round?");
-		    }
-		    winner++;
-		}
-	    }
+	      int winner = 0;
+        // if everyone folds except for one
+        if (Fold == true)
+        {
+          if (winnerIdx != 0)
+          {
+            message = message + ("\n\nPlayer " + (winnerIdx) + " wins!\n\nNext round?");
+          }
+          else
+          {
+            message =  message + ("\n\nOpponent " + (winnerIdx) + " wins.\n\nNext round?");
+          }
+
+        }
+        else
+        {
+
+        }
+
+	     for (Player player:players) {
+         if (player.winStatus == true) {
+     		    int index = players.indexOf(player);
+     		    index += 1;
+            if (player.type == 1) {
+         			System.out.println("player");
+         			message = message + ("\n\nPlayer " + (index) + " wins!\n\nNext round?");
+     		    }
+            else {
+         			System.out.println("opponent");
+         			message = message + ("\n\nOpponent " + (index-1) + " wins.\n\nNext round?");
+     		    }
+     		    winner++;
+     		}
+       }
+       // use activePlayers to determine number of tied players
 	    if (winner == 0){
 	/*
     	    if (!Fold) {
