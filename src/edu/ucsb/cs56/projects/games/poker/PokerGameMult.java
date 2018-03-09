@@ -181,7 +181,7 @@ public class PokerGameMult {
 	    //int AIs = 4 - player; //Assuming multiplayer only supports 4 people
       players = new ArrayList<Player>();
 	    players.add(new User(500, deck));
-	     for (int i = 0; i < 4; i++) {
+	     for (int i = 0; i < 3; i++) {
 	    players.add(new OpponentAI(500, deck));
     }
 	     this.table = new TableCards(deck);
