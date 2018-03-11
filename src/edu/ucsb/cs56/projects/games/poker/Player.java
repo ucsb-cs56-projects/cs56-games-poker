@@ -36,6 +36,7 @@ public abstract class Player implements Serializable {
     public boolean winStatus;
     public boolean turn;
     public int type;
+    protected int index;
 
     /**
      *Creates a Poker player with a set hand
@@ -101,6 +102,10 @@ public abstract class Player implements Serializable {
      */
     public void win() {
         wins += 1;
+    }
+    public void setIndex(int idx)
+    {
+      index = idx;
     }
 
     /**

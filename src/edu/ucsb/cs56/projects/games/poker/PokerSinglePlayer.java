@@ -29,13 +29,11 @@ final class PokerSinglePlayer extends PokerGameGui {
      * No arg constructor to create instance of PokerSinglePlayer to begin game
      */
     public PokerSinglePlayer(){
-	super();
-	for(Player player:players)
-	    player.setDelegate(this);
-/*
-        players.get(0).setDelegate(this);
-        players.get(1).setDelegate(this);
-*/
+	    super();
+    	for(Player player:players) {
+    	    player.setDelegate(this);
+        }
+
     }
 
     /**

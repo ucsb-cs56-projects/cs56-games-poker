@@ -173,6 +173,10 @@ public class PokerGameMult {
 	     this.table = new TableCards(deck);
 	      pot = 0;
 
+        for (int i = 0; i < players.size(); i++) {
+          players.get(i).setIndex(i);
+        }
+
     }
 
     // Getters and setters for various members

@@ -26,6 +26,7 @@ public class OpponentAI extends Player implements Serializable {
         super(chips, deck);
 	this.type = 0;
     }
+    
 
     /**
      * Instructs the program to wait for user input and update the
@@ -71,7 +72,7 @@ public class OpponentAI extends Player implements Serializable {
                     delegate.setBet(this.getChips());
                 }
                 else {
-                    delegate.setMessage("opponent calls.");
+                    delegate.setMessage("opponent " + index +" calls.");
                 }
                 delegate.addToPot(bet);
                 this.bet(bet);
@@ -95,12 +96,12 @@ public class OpponentAI extends Player implements Serializable {
                 delegate.updateFrame();
                 delegate.changeTurn();
             } else {
-                delegate.setMessage("opponent checks.");
+                delegate.setMessage("opponent " + index + " checks.");
                 delegate.updateFrame();
                 delegate.changeTurn();
             }
         } else if (delegate.getStep() != PokerGameMult.Step.SHOWDOWN) {
-            delegate.setMessage("opponent checks.");
+            delegate.setMessage("opponent " + index + " checks.");
             delegate.updateFrame();
             System.out.println("OPP 3");
             delegate.changeTurn();
