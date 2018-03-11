@@ -69,20 +69,23 @@ public class OpponentAI extends Player implements Serializable {
             if (shouldCall) {
                 if (delegate.isAllIn()) {
                     delegate.setMessage("opponent " + index + " goes all in, no more bets will be allowed");
+                    System.out.println("opponent " + index + " goes all in.");
                     delegate.setBet(this.getChips());
                 }
                 else {
                     delegate.setMessage("opponent " + index + " calls.");
+                    System.out.println("opponent " + index + " calls.");
                 }
                 delegate.addToPot(bet);
                 this.bet(bet);
                 delegate.setBet(0);
                 delegate.setResponding(false);
                 delegate.updateFrame();
-
+                delegate.changeTurn();
                 delegate.restartTimer();
             } else {
                 delegate.setMessage("opponent " + index + " folds.");
+                System.out.println("opponent " + index + " folds.");
                 this.foldHand();
             }
         } else if (shouldBet && delegate.getStep() != PokerGameMult.Step.SHOWDOWN) {
@@ -93,15 +96,18 @@ public class OpponentAI extends Player implements Serializable {
                 this.bet(bet);
                 delegate.setResponding(true);
                 delegate.setMessage("opponent bets " + bet + " chips.");
+                System.out.println("opponent " + index + " bets " + bet + " chips.");
                 delegate.updateFrame();
                 delegate.changeTurn();
             } else {
                 delegate.setMessage("opponent " + index + " checks.");
+                System.out.println("opponent " + index + " checks.");
                 delegate.updateFrame();
                 delegate.changeTurn();
             }
         } else if (delegate.getStep() != PokerGameMult.Step.SHOWDOWN) {
             delegate.setMessage("opponent " + index + " checks.");
+            System.out.println("opponent " + index + " checks.");
             delegate.updateFrame();
             delegate.changeTurn();
         }

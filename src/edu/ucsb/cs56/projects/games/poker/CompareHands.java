@@ -37,7 +37,7 @@ public class CompareHands implements Serializable{
           ArrayList<Card> cards = new ArrayList<Card>();
     	    // get player at current index
     	    Player current = Players.get(i);
-          players.add(current);
+
           // get current player's hand and add to cards
           cards.addAll(current.getHand());
     	    cards.addAll(table.getFlopCards());

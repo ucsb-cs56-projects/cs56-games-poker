@@ -129,13 +129,13 @@ final class PokerSinglePlayer extends PokerGameGui {
                 updateFrame();
                 timer.restart();
                 }
-                else {
+            else {
                   updateFrame();
-                  nextStep();
+                  //nextStep();
                   if (step != Step.SHOWDOWN) {
                       turn++;
                       controlButtons();
-
+                      System.out.println("Opponent " + turn + "'s turn.");
                       prompt = "opponent " + (turn) + "'s Turn.";
                       //message = "opponent " + (turn) + " is thinking...";
                       updateFrame();
@@ -173,15 +173,25 @@ final class PokerSinglePlayer extends PokerGameGui {
 
                 controlButtons();
                 updateFrame();
-                timer.restart();
+                //timer.restart();
 
             }
         }
     }
-    public void userTurn()
-    {
-      controlButtons();
-      updateFrame();
+
+    public void nextStep() {
+        if (step == Step.BLIND) { // Most like able to skip/remove this step
+            step = Step.FLOP;
+        } else if (step == Step.FLOP) {
+            step = Step.TURN;
+        } else if (step == Step.TURN) {
+            step = Step.RIVER;
+        } else {
+            step = Step.SHOWDOWN;
+            message = "All bets are in.";
+            prompt = "Determine Winner: ";
+            controlButtons();
+        }
     }
     public void showWinnerAlert() {
       if(!gameOver){
@@ -247,20 +257,16 @@ final class PokerSinglePlayer extends PokerGameGui {
     		// Restart
 		mainFrame.dispose();
 		PokerSinglePlayer singlePlayerReplay;
-    PokerSinglePlayer multiPlayerReplay;
+
 
 		// Check if players have enough chips.
 		// Create new game.
 
 		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5){
 		    JOptionPane.showMessageDialog(null, "Resetting chips...");
-          multiPlayerReplay = new PokerSinglePlayer();
-          singlePlayerReplay = new PokerSinglePlayer(500,500);
 
-		    if (multiPlayer == true)
-        {
-          multiPlayerReplay.go();
-        }
+          singlePlayerReplay = new PokerSinglePlayer();
+
 		    singlePlayerReplay.go();
 		}
 		else {
@@ -281,7 +287,11 @@ final class PokerSinglePlayer extends PokerGameGui {
     	    }
     	}
     }
-
+    public void userTurn()
+    {
+      controlButtons();
+      updateFrame();
+    }
     /**
      * Restarts the timer controlling turnDecider()
      */

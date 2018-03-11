@@ -142,26 +142,16 @@ public class PokerGameMult {
     // Single Player
     public PokerGameMult() {
       this.deck = new Deck();
-	//int AIs = 4 - player; //Assuming multiplayer only supports 4 people
       players = new ArrayList<Player>();
-	    //players.add(new User(500, deck));
-	     //for (int i = 0; i < 4; i++) {
        players.add(new User(500,deck));
 	    players.add(new OpponentAI(500, deck));
       for (int i = 0; i < players.size(); i++) {
         players.get(i).setIndex(i);
       }
-    //}
+
 	     this.table = new TableCards(deck);
 	      pot = 0;
-      /* temp
-        this.deck = new Deck();
-        players = new ArrayList<Player>();
-        players.add(new User(500, deck));
-        players.add(new OpponentAI(500, deck));
-        this.table = new TableCards(deck);
-        pot = 0;
-        */
+
 
     }
     // Multiplayer
@@ -297,8 +287,10 @@ public class PokerGameMult {
      */
     // COULD IMPROVE IMPLEMENTATION
     protected int lowestTurn = 0;
+
     public void fold() {
-      lowestTurn++;
+        // temp iterator
+        lowestTurn++;
         activePlayers = 0;
         // after a player folds, check for all activePlayers in game
       	for (Player player:players) {
@@ -307,6 +299,12 @@ public class PokerGameMult {
           		//player.winStatus = true;
       	    }
       	}
+        if (turn != 0)
+        {
+          System.out.println("Opponent " + (turn) + " folds.");
+        }
+
+        System.out.println(activePlayers + " active players remaining.");
         // if activePlayers = 1, they win.
       	if (activePlayers == 1) {
           for (Player player: players)
@@ -326,16 +324,16 @@ public class PokerGameMult {
           	    resultType = Result.NEW_GAME;
       	}
 
-      	else {
-      		for (Player player:players)
+      	if (activePlayers > 1) {
+      		for (Player player:players) {
       			player.winStatus = false;
-            //players.get(turn + 1).takeTurn();
+          }
+          turn++;
+          players.get(turn).takeTurn();
+
       	}
-        if (turn != 0)
-        {
-          System.out.println("Opponent " + (turn) + " folds.");
-        }
-        System.out.println(activePlayers + " active players remaining.");
+
+
 
     }
 
