@@ -148,6 +148,9 @@ public class PokerGameMult {
 	     //for (int i = 0; i < 4; i++) {
        players.add(new User(500,deck));
 	    players.add(new OpponentAI(500, deck));
+      for (int i = 0; i < players.size(); i++) {
+        players.get(i).setIndex(i);
+      }
     //}
 	     this.table = new TableCards(deck);
 	      pot = 0;
@@ -326,13 +329,14 @@ public class PokerGameMult {
       	else {
       		for (Player player:players)
       			player.winStatus = false;
+            //players.get(turn + 1).takeTurn();
       	}
         if (turn != 0)
         {
           System.out.println("Opponent " + (turn) + " folds.");
         }
         System.out.println(activePlayers + " active players remaining.");
-        players.get(turn+1).takeTurn();
+
     }
 
     /** TODO: Change for multiplayer

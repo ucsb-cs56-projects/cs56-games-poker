@@ -133,10 +133,9 @@ final class PokerSinglePlayer extends PokerGameGui {
                   updateFrame();
                   nextStep();
                   if (step != Step.SHOWDOWN) {
-                      System.out.println(turn + " HERE 3" );
                       turn++;
                       controlButtons();
-                      System.out.println(turn + " HERE 4" );
+
                       prompt = "opponent " + (turn) + "'s Turn.";
                       //message = "opponent " + (turn) + " is thinking...";
                       updateFrame();
@@ -158,18 +157,16 @@ final class PokerSinglePlayer extends PokerGameGui {
                     prompt = "opponent " + (turn) + "'s Turn.";
 
                 }
-
                 updateFrame();
             } else {
-                //updateFrame();
-                //nextStep();
-
+              updateFrame();
+              nextStep();
+                turn = lowestTurn;
                 if (lowestTurn == 0)
                 {
                   prompt = "Player's turn. What will you do?";
                 }
-                turn = lowestTurn;
-                if (lowestTurn != 0)
+                else if (lowestTurn != 0)
                 {
                     prompt = "opponent " + (turn) + "'s Turn.";
                 }
@@ -185,6 +182,104 @@ final class PokerSinglePlayer extends PokerGameGui {
     {
       controlButtons();
       updateFrame();
+    }
+    public void showWinnerAlert() {
+      if(!gameOver){
+    	    String message = "";
+          oSubPane1.remove(backCardLabel1);
+          oSubPane1.remove(backCardLabel2);
+    	    oSubPane2.remove(backCardLabel3);
+    	    oSubPane2.remove(backCardLabel4);
+          oSubPane3.remove(backCardLabel5);
+          oSubPane3.remove(backCardLabel6);
+
+    	    for(int i=0;i<2;i++){
+            if (multiPlayer == true)
+            {
+              oSubPane1.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
+              oSubPane2.add(new JLabel(getCardImage((players.get(2).getHand()).get(i))));
+    	        oSubPane3.add(new JLabel(getCardImage((players.get(3).getHand()).get(i))));
+             }
+            else {
+              oSubPane2.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
+            }
+
+    	    }
+          if (multiPlayer == true)
+          {
+            oSubPane1.remove(opponent1ChipsLabel);
+            oSubPane1.add(opponent1ChipsLabel);
+            oSubPane2.remove(opponent2ChipsLabel);
+            oSubPane2.add(opponent2ChipsLabel);
+            oSubPane3.remove(opponent3ChipsLabel);
+            oSubPane3.add(opponent3ChipsLabel);
+
+          }
+          else {
+            oSubPane2.remove(opponent1ChipsLabel);
+            oSubPane2.add(opponent1ChipsLabel);
+
+          }
+
+    	    updateFrame();
+    	    if (!Fold) {
+    		message = winningHandMessage();
+    	    }
+    	    else {
+    		message = ("Folded!");
+    	    }
+
+    	    if (winnerIdx == 0) {
+                System.out.println("player");
+                message = message + ("\n\nYou win!\n\nNext round?");
+    	    } else if (winnerIdx != 0) {
+    		System.out.println("opponent");
+    		message = message + ("\n\nOpponent wins.\n\nNext round?");
+      } else if (winnerIdx < 0){
+                System.out.println("tie");
+                message = message + ("\n\nTie \n\nNext round?");
+    	    }
+
+    	    int option = JOptionPane.showConfirmDialog(null, message, "Winner",
+    						       JOptionPane.YES_NO_OPTION);
+
+	    if (option == JOptionPane.YES_OPTION) {
+    		// Restart
+		mainFrame.dispose();
+		PokerSinglePlayer singlePlayerReplay;
+    PokerSinglePlayer multiPlayerReplay;
+
+		// Check if players have enough chips.
+		// Create new game.
+
+		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5){
+		    JOptionPane.showMessageDialog(null, "Resetting chips...");
+          multiPlayerReplay = new PokerSinglePlayer();
+          singlePlayerReplay = new PokerSinglePlayer(500,500);
+
+		    if (multiPlayer == true)
+        {
+          multiPlayerReplay.go();
+        }
+		    singlePlayerReplay.go();
+		}
+		else {
+		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips());
+		    singlePlayerReplay.go();
+		}
+
+	    } else if (option == JOptionPane.NO_OPTION) {
+		if(players.get(0).getChips() < 5 || players.get(0).getChips() < 5) {
+		    gameOver("GAME OVER! No chips left!");
+		}
+		gameOver("GAME OVER! Thanks for playing.\n\n");
+	    }
+
+	    else {
+    		// Quit
+    		System.exit(1);
+    	    }
+    	}
     }
 
     /**
