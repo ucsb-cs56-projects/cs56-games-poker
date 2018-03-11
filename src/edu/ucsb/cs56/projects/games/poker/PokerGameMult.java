@@ -38,14 +38,6 @@ public class PokerGameMult {
 
     static int MAXPLAYERS = 4;
 
-    /**
-     * enum representing which player's turn it is
-     */
-//    public enum Turn {
-  //      PLAYER1, PLAYER2, PLAYER3, PLAYER4
-    //        };
-
-
     // PokerGame GUI
 
 
@@ -58,15 +50,6 @@ public class PokerGameMult {
     protected Player winner;
     protected int winnerIdx;
 
-    /**
-     * The user playing the game
-     */
-    //protected Player player1, player2, player3, player4;
-
-    /**
-     * The opponent (currently an AI)
-     */
-   // protected Player opponent;
 
     /**
      * The deck used for the game
@@ -129,7 +112,7 @@ public class PokerGameMult {
      */
      protected int activePlayers;
     //int turn;
-    //protected int activePlayers;
+
     /**
      * The back of a card
      */
@@ -179,14 +162,13 @@ public class PokerGameMult {
 
     }
     // Multiplayer
-
+    // Current Functionality Supports One User and (MAXPLAYER - 1) AIs
    public PokerGameMult(int player) {
 	    this.deck = new Deck();
-	    //int AIs = 4 - player; //Assuming multiplayer only supports 4 people
       players = new ArrayList<Player>();
 	    players.add(new User(500, deck));
-	     for (int i = 0; i < MAXPLAYERS-1; i++) {
-	    players.add(new OpponentAI(500, deck));
+	    for (int i = 0; i < MAXPLAYERS-1; i++) {
+         players.add(new OpponentAI(500, deck));
       }
 	     this.table = new TableCards(deck);
 	      pot = 0;
@@ -271,18 +253,18 @@ public class PokerGameMult {
      * Sets up the player's and opponent's hand.
      */
     public void setUp() {
-        for(Player player:players) {
-	    player.setDelegate(this);
-	    if (player.getChips() >= 5) {
+      for(Player player:players) {
+          player.setDelegate(this);
+	      if (player.getChips() >= 5) {
           	player.bet(5);
            	pot += 5;
         }
-            else {
+        else {
                   gameOver = true;
                   showWinnerAlert();
-	    }
-	}
-	message = "Ante of 5 chips set.";
+	     }
+	   }
+	      message = "Ante of 5 chips set.";
         backCard = new Card(100, "B");
         String dir = "Cards/";
         String cardFile = "B.png";
@@ -385,7 +367,7 @@ public class PokerGameMult {
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);
         int win = comparison.compareHands();
-//assume compareHands() returns player index of winning player
+        //compareHands() returns player index of winning player
 	if(win < 0)
 	     return;
 	else {

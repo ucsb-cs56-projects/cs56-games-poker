@@ -8,17 +8,6 @@ import java.util.ArrayList;
  * Class that Compares Hands between Players
  */
 public class CompareHands implements Serializable{
-
-    /**
-     * ArrayList holding player1's cards and the table cards
-     */
-    private ArrayList<Card> cardHand1;
-
-    /**
-     * ArrayList holding player2's cards and the table cards
-     */
-    private ArrayList<Card> cardHand2;
-
     /**
      * ArrayList to hold each Player's hand, index = player number
     */
@@ -46,12 +35,16 @@ public class CompareHands implements Serializable{
           ArrayList<Card> cards = new ArrayList<Card>();
     	    // get player at current index
     	    Player current = Players.get(i);
+          players.add(current);
           // get current player's hand and add to cards
           cards.addAll(current.getHand());
     	    cards.addAll(table.getFlopCards());
           cards.add(table.getTurnCard());
           cards.add(table.getRiverCard());
+<<<<<<< HEAD
 
+=======
+>>>>>>> f5ff562a0552f24e74d294737cc94ed1440f69da
           // add player's cards into their hand
           hands.add(cards);
     	}
@@ -188,7 +181,6 @@ public class CompareHands implements Serializable{
 
     /**
      * compareMessage for multiplayer
-     * relies on compareHands of multiplayer
      **/
     public String compareMessage(){
 	// get winner's index in hands ArrayList
