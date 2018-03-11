@@ -104,7 +104,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 
     /**
      * Method to activate the opponent AI on turn change.
-     * Changes between you and the AI
+     * Changes between you and the AIs
      */
 
     public void changeTurn() {
@@ -136,38 +136,51 @@ final class PokerSinglePlayer extends PokerGameGui {
                 turn = lowestTurn;
                 controlButtons();
                 responding = false;
+                // if player is still in game
                 if (lowestTurn == 0)
                 {
+                  System.out.println("Player's turn.");
                   prompt = "Player's turn. What will you do?";
                 }
+                // if player is not in game
                 else
                 {
+                    System.out.println("Opponent " + turn + "'s turn.");
                     prompt = "opponent " + (turn) + "'s Turn.";
+                    timer.restart();
 
                 }
                 updateFrame();
-            } else {
-              updateFrame();
-              nextStep();
+            }
+            else {
                 turn = lowestTurn;
-                if (lowestTurn == 0)
-                {
-                  prompt = "Player's turn. What will you do?";
-                }
-                else if (lowestTurn != 0)
-                {
+                updateFrame();
+                nextStep();
+                if (step != Step.SHOWDOWN) {
+                  // if player is still in game
+                  if (lowestTurn == 0)
+                  {
+                    System.out.println("Player's Turn.");
+                    prompt = "Player's turn. What will you do?";
+                  }
+                  // if player is not in game, skip their turn and calls
+                  // turnDecider w/ timer to make AI take its turn
+                  else if (lowestTurn != 0)
+                  {
+                    System.out.println("Opponent " + turn + "'s turn.");
                     prompt = "opponent " + (turn) + "'s Turn.";
+                    timer.restart();
+                  }
                 }
-
                 controlButtons();
                 updateFrame();
-                //timer.restart();
 
             }
         }
     }
 
     public void nextStep() {
+      System.out.println("Next Step");
         if (step == Step.BLIND) { // Most like able to skip/remove this step
             step = Step.FLOP;
         } else if (step == Step.FLOP) {

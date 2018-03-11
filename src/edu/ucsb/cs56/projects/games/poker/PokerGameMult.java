@@ -328,9 +328,12 @@ public class PokerGameMult {
       		for (Player player:players) {
       			player.winStatus = false;
           }
-          turn++;
+          // after a player folds, prompt the next active player to take their turn
+          while (players.get(turn).status == 0)
+          {
+            turn++;
+          }
           players.get(turn).takeTurn();
-
       	}
 
 
