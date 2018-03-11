@@ -58,8 +58,8 @@ public abstract class Player implements Serializable {
         this.pokerHand = new Hand(deck);
         this.chips = chips;
         this.wins = 0;
-	status = 1;
-	winStatus = false;
+      	status = 1;
+      	winStatus = false;
     }
 
     /**

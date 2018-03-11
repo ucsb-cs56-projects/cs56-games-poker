@@ -78,7 +78,7 @@ public class OpponentAI extends Player implements Serializable {
                 delegate.setBet(0);
                 delegate.setResponding(false);
                 delegate.updateFrame();
-		delegate.changeTurn();
+
                 delegate.restartTimer();
             } else {
                 delegate.setMessage("opponent folds.");
@@ -102,6 +102,7 @@ public class OpponentAI extends Player implements Serializable {
         } else if (delegate.getStep() != PokerGameMult.Step.SHOWDOWN) {
             delegate.setMessage("opponent checks.");
             delegate.updateFrame();
+            System.out.println("OPP 3");
             delegate.changeTurn();
         }
     }

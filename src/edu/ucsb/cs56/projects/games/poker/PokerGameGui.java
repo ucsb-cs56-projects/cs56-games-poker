@@ -553,8 +553,9 @@ public class PokerGameGui extends PokerGameMult{
         if (allIn) {
             message = "All in, no more bets allowed";
         }
-        gameMessage.setText(message);
         playerPrompt.setText(prompt);
+        gameMessage.setText(message);
+
         potLabel.setText(String.format("Pot: %d", pot));
         opponent1ChipsLabel.setText(String.format("Chips: %d", players.get(1).getChips()));
         if (multiPlayer == true)

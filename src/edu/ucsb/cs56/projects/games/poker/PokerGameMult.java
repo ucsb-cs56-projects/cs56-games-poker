@@ -289,7 +289,9 @@ public class PokerGameMult {
      * PlayerDelegate method handles folding
      */
     // COULD IMPROVE IMPLEMENTATION
+    protected int lowestTurn = 0;
     public void fold() {
+      lowestTurn++;
         activePlayers = 0;
         // after a player folds, check for all activePlayers in game
       	for (Player player:players) {
@@ -326,6 +328,7 @@ public class PokerGameMult {
           System.out.println("Opponent " + (turn) + " folds.");
         }
         System.out.println(activePlayers + " active players remaining.");
+        players.get(turn+1).takeTurn();
     }
 
     /** TODO: Change for multiplayer
