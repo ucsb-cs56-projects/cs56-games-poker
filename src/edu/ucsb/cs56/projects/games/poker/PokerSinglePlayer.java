@@ -44,7 +44,7 @@ final class PokerSinglePlayer extends PokerGameGui {
      */
      // Change to players and equal chips?
      public PokerSinglePlayer(int pChips, int oChips){
-	super(4);
+	super();
 	for(Player player:players) {
         player.setChips(pChips);
         player.setDelegate(this);

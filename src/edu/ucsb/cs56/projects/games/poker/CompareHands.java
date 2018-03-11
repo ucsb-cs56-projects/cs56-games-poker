@@ -189,8 +189,11 @@ public class CompareHands implements Serializable{
     	if (winner >= 0) {
     	    // get winner's cards
     	    // ArrayList<Card> winning_hand = hands.get(winner);
-
-    	    message = calculateValueToString(winning_hand) + " beats all!";
+	    if (players.size() == 2) {
+		    message = calculateValueToString(winning_hand) + " beats " + calculateValueToString(hands.get(1-winner)) + "!";
+	    }
+	    else
+    	         message = calculateValueToString(winning_hand) + " beats all!";
     	}
     	else {
     	    message = "It's a tie with " + calculateValueToString(winning_hand);

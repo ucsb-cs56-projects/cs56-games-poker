@@ -111,7 +111,8 @@ public class PokerGameMult {
      * etc
      */
      protected int activePlayers;
-    //int turn;
+    
+     protected int totalPlayers;
 
     /**
      * The back of a card
@@ -151,6 +152,7 @@ public class PokerGameMult {
 
 	     this.table = new TableCards(deck);
 	      pot = 0;
+	      totalPlayers = players.size();
 
 
     }
@@ -169,6 +171,7 @@ public class PokerGameMult {
         for (int i = 0; i < players.size(); i++) {
           players.get(i).setIndex(i);
         }
+	totalPlayers = players.size();
 
     }
 
@@ -363,11 +366,13 @@ public class PokerGameMult {
 	}
         System.out.println("Tie");
         System.out.println(String.format("%d", pot));
-	int chipsGained = pot/MAXPLAYERS;
+	int chipsGained = pot/activePlayers;
         for (Player player:players) {
+	    if (player.status ==1) {
 	    int playerChips = player.getChips();
             playerChips += chipsGained;
             player.setChips(playerChips);
+	    }
         }
     }
 
