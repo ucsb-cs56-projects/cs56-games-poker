@@ -730,8 +730,8 @@ public class PokerGameGui extends PokerGameMult{
         public void actionPerformed(ActionEvent e) {
             message = "Opponents waiting for turn.";
             prompt = "You fold.";
-            players.get(0).foldHand();
             System.out.println("You Folded. ");
+            players.get(0).foldHand();
             int active = 0;
             for (Player player: players)
             {
@@ -740,7 +740,6 @@ public class PokerGameGui extends PokerGameMult{
                 active ++;
               }
             }
-            System.out.println(active + " active players remaining.");
         }
     }
 

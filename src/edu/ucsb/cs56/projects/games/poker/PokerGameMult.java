@@ -127,6 +127,7 @@ public class PokerGameMult {
      * turn = 1 : players[1] turn
      * etc
      */
+     protected int activePlayers;
     //int turn;
     //protected int activePlayers;
     /**
@@ -307,7 +308,7 @@ public class PokerGameMult {
      */
     // COULD IMPROVE IMPLEMENTATION
     public void fold() {
-        int activePlayers = 0;
+        activePlayers = 0;
         // after a player folds, check for all activePlayers in game
       	for (Player player:players) {
       	    if (player.status == 1) {
@@ -316,7 +317,7 @@ public class PokerGameMult {
       	    }
       	}
         // if activePlayers = 1, they win.
-      	if (activePlayers <= 1) {
+      	if (activePlayers == 1) {
           for (Player player: players)
           {
               if (player.status == 1)
@@ -333,11 +334,16 @@ public class PokerGameMult {
               // deck.reShuffle();
           	    resultType = Result.NEW_GAME;
       	}
-        System.out.println(activePlayers + " active players remaining.");
+
       	else {
       		for (Player player:players)
       			player.winStatus = false;
       	}
+        if (turn != 0)
+        {
+          System.out.println("Opponent " + (turn) + " folds.");
+        }
+        System.out.println(activePlayers + " active players remaining.");
     }
 
     /** TODO: Change for multiplayer

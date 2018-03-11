@@ -25,6 +25,8 @@ public class CompareHands implements Serializable{
     private ArrayList<ArrayList<Card>> hands;
 
     private ArrayList<Player> players;
+
+    private int ties;
     /**
      * Multiplayer Compare Hands Constructor
      * supports dynamic arraylist for any number of players
@@ -37,7 +39,7 @@ public class CompareHands implements Serializable{
     	// nested ArrayList; hands[0] = cards of player 0
     	// EX: hands = [ [card1, card2...], [card1, card2...] ]
     	hands = new ArrayList<ArrayList<Card>>(Players.size());
-
+      players = Players;
       // for each player, get their hand and put it into ArrayList hands
     	for (int i = 0; i < Players.size(); i ++) {
           // collection to store cards
@@ -49,11 +51,11 @@ public class CompareHands implements Serializable{
     	    cards.addAll(table.getFlopCards());
           cards.add(table.getTurnCard());
           cards.add(table.getRiverCard());
-          players.add(Players.get(i));
 
           // add player's cards into their hand
           hands.add(cards);
     	}
+
 
     }
 
@@ -64,34 +66,39 @@ public class CompareHands implements Serializable{
     **/
     public int compareHands() {
     	int max_value = -1;
-    	int winner = -1;
+    	int winner = 0;
+      ties = 0;
 
     	for (ArrayList<Card> hand : hands) {
     	    int value = calculateValue(hand);
-          // only calculate hands of activePlayers
-          Player current = players.get(hands.indexOf(hands));
-          if (current.status == 1) {
+          int idx = hands.indexOf(hand);
               if (value > max_value) {
         		// reset max value
             		max_value = value;
         		// replace previous winner
-            		winner = hands.indexOf(hand);
+                if (players.get(idx).status == 1) {
+                  winner = hands.indexOf(hand);
+
+                }
+                // if exceeded highest hand, tie = 0
+                ties = 0;
+
         	    }
-              else if (value < max_value)
-              {
-                int idx = hands.indexOf(hand);
-                // set their status as inactive
-                players.get(idx).foldHand();
-              }
-        	    // if equal hands, TIE. return -1
+        	    // if equal highest hand, add to ties
+
         	    else if (value == max_value) {
-        		      winner = -1;
+        		      winner = 0 ;
+                  ties++;
         	    }
-          }
 
     	}
     	return winner;
 
+    }
+    // returns number of players tie
+    public int numberOfTies()
+    {
+      return ties;
     }
 
     /**

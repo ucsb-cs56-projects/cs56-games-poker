@@ -208,66 +208,45 @@ final class PokerSinglePlayer extends PokerGameGui {
      */
      // BUG: must refactor accordingly to fit GUI
     public void showWinnerAlert() {
-    	if(!gameOver){
-        String message = "";
-        oSubPane1.remove(backCardLabel1);
-        oSubPane1.remove(backCardLabel2);
-        oSubPane2.remove(backCardLabel3);
-        oSubPane2.remove(backCardLabel4);
-        oSubPane3.remove(backCardLabel5);
-        oSubPane3.remove(backCardLabel6);
-        // BUG: chips not added or decreased properly
-        oSubPane2.remove(opponent2ChipsLabel);
+      if(!gameOver){
+    	    String message = "";
+          oSubPane1.remove(backCardLabel1);
+          oSubPane1.remove(backCardLabel2);
+    	    oSubPane2.remove(backCardLabel3);
+    	    oSubPane2.remove(backCardLabel4);
+          oSubPane3.remove(backCardLabel5);
+          oSubPane3.remove(backCardLabel6);
 
-        // change opponent.getHand
-        // CAN REIMPLEMENT INTO FOR (Players player: players) for flexibility
-        for(int i=0;i<2;i++){
-            oSubPane1.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
-            oSubPane2.add(new JLabel(getCardImage((players.get(2).getHand()).get(i))));
-            oSubPane3.add(new JLabel(getCardImage((players.get(3).getHand()).get(i))));
-        }
-        oSubPane2.add(opponent2ChipsLabel);
-        updateFrame();
 
-	      message = winningHandMessage();
-
-	      int winner = 0;
-        // if everyone folds except for one
-        if (Fold == true)
-        {
-          if (winnerIdx != 0)
-          {
-            message = message + ("\n\nPlayer " + (winnerIdx) + " wins!\n\nNext round?");
-          }
-          else
-          {
-            message =  message + ("\n\nOpponent " + (winnerIdx) + " wins.\n\nNext round?");
-          }
-
-        }
-        else
-        {
-
-        }
-
-	     for (Player player:players) {
-         if (player.winStatus == true) {
-     		    int index = players.indexOf(player);
-     		    index += 1;
-            if (player.type == 1) {
-         			System.out.println("player");
-         			message = message + ("\n\nPlayer " + (index) + " wins!\n\nNext round?");
-     		    }
+    	    for(int i=0;i<2;i++){
+            if (multiPlayer == true)
+            {
+              oSubPane1.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
+              oSubPane2.add(new JLabel(getCardImage((players.get(2).getHand()).get(i))));
+    	        oSubPane3.add(new JLabel(getCardImage((players.get(3).getHand()).get(i))));
+            }
             else {
-         			System.out.println("opponent");
-         			message = message + ("\n\nOpponent " + (index-1) + " wins.\n\nNext round?");
-     		    }
-     		    winner++;
-     		}
-       }
-       // use activePlayers to determine number of tied players
-	    if (winner == 0){
-	/*
+              oSubPane2.add(new JLabel(getCardImage((players.get(1).getHand()).get(i))));
+            }
+
+    	    }
+          if (multiPlayer == true)
+          {
+            oSubPane1.remove(opponent1ChipsLabel);
+            oSubPane1.add(opponent1ChipsLabel);
+            oSubPane2.remove(opponent2ChipsLabel);
+            oSubPane2.add(opponent2ChipsLabel);
+            oSubPane3.remove(opponent3ChipsLabel);
+            oSubPane3.add(opponent3ChipsLabel);
+
+          }
+          else {
+            oSubPane2.remove(opponent1ChipsLabel);
+            oSubPane2.add(opponent1ChipsLabel);
+
+          }
+
+    	    updateFrame();
     	    if (!Fold) {
     		message = winningHandMessage();
     	    }
@@ -282,7 +261,6 @@ final class PokerSinglePlayer extends PokerGameGui {
     		System.out.println("opponent");
     		message = message + ("\n\nOpponent wins.\n\nNext round?");
       } else if (winnerIdx < 0){
-*/
                 System.out.println("tie");
                 message = message + ("\n\nTie \n\nNext round?");
     	    }
@@ -294,29 +272,10 @@ final class PokerSinglePlayer extends PokerGameGui {
     		// Restart
 		mainFrame.dispose();
 		PokerSinglePlayer singlePlayerReplay;
-		int Continue = 0;
 
 		// Check if players have enough chips.
 		// Create new game.
-		for (Player player:players) {
-		    if (player.getChips() < 5){
-		    	JOptionPane.showMessageDialog(null, "Resetting chips...");
-		    	singlePlayerReplay = new PokerSinglePlayer();
-		    	singlePlayerReplay.go();
-			Continue++;
-		    }
-		}
-		if (Continue == 0) {
-		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(),players.get(2).getChips(),players.get(3).getChips());
-		    singlePlayerReplay.go();
-		}
-	    }
-	    else if (option == JOptionPane.NO_OPTION) {
-		for (Player player:players) {
-		    if(player.getChips() < 5) {
-		         gameOver("GAME OVER! No chips left!");
-		   }
-/*
+
 		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5){
 		    JOptionPane.showMessageDialog(null, "Resetting chips...");
 		    singlePlayerReplay = new PokerSinglePlayer();
@@ -330,7 +289,6 @@ final class PokerSinglePlayer extends PokerGameGui {
 	    } else if (option == JOptionPane.NO_OPTION) {
 		if(players.get(0).getChips() < 5 || players.get(0).getChips() < 5) {
 		    gameOver("GAME OVER! No chips left!");
-*/
 		}
 		gameOver("GAME OVER! Thanks for playing.\n\n");
 	    }
