@@ -73,23 +73,11 @@ final class PokerSinglePlayer extends PokerGameGui {
 
         if(!gameOver){
             step = Step.BLIND; //This is the first step in the game.
-	   /* int currentPlayers = players.size();
-            int rng = (int) (Math.random()*currentPlayers); //generate random num 0-4
-	    Player first = players.get(rng);
-	    first.turn = true;
-	    turn = rng;
-	    rng++;
-            if (turn == 0) { //1 = player 1 goes first.
-		message = "player 1 goes first!";
-                prompt = "what will you do?";
-            }
-	    else
-		prompt = "player " + rng + " goes first!";
-		*/
-	    players.get(0).turn = true;
-	    turn = 0;
-	    message = "player 1 goes first!";
-	    prompt = "what will you do?";
+
+      	    players.get(0).turn = true;
+      	    turn = 0;
+      	    message = "player 1 goes first!";
+      	    prompt = "what will you do?";
             //Here, we are using a timer to control how the turns work
             //The timer comes from the swing class if you want to read up on it
             //Another thing to note is we used a lambda function deal with the thread in timer.

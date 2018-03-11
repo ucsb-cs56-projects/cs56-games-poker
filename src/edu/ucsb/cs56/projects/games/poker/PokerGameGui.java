@@ -283,14 +283,14 @@ public class PokerGameGui extends PokerGameMult{
             showdownButton = new JButton("SHOWDOWN");
             showdownButton.addActionListener(new showdownButtonHandler());
 
-            /*putting the rules pictures into the game without adding a new window */
-            // maybe better as a popup scroll window
 
             rulesButton = new JButton("RULES");
             rulesButton.setEnabled(true);
             rulesButton.addActionListener(new rulesButtonHandler());
             /**
             * SWAPPED OUT FOR POPUP WINDOW OPTION
+            * maybe better as a popup scroll window
+
             rulesPanel = new JPanel();
             rulesPanel.setLayout(new BorderLayout());
             rulesOverviewLabel = new JLabel();
@@ -450,9 +450,6 @@ public class PokerGameGui extends PokerGameMult{
               oSubPane2.add(opponent1ChipsLabel);
 
             }
-
-
-
 
 
             for (int i = 0; i < 2; i++) {
@@ -633,7 +630,6 @@ public class PokerGameGui extends PokerGameMult{
 		if (bet<=0) {
                     prompt = "Enter a valid bet!";
                 }
-                //else if (placeHolder== players.size()) {
                 else if ((players.get(0).getChips() - bet >= 0) && (players.get(1).getChips() - bet >= 0)) {
                     pot += bet;
                     players.get(0).bet(bet);
@@ -641,8 +637,7 @@ public class PokerGameGui extends PokerGameMult{
                     updateBetGUIElements();
                     checkPassTurnUpdate();
                 }
-                //else if (((turn == 0) && ((players.get(0)).getChips() < bet)) || ((turn >= 1) && ((players.get(turn)).getChips() < bet))) {
-                else if (((turn == 0) && (players.get(0).getChips() < bet)) || ((turn != 0) && (players.get(1).getChips() < bet))) {
+                else if (((turn == 0) && (players.get(0).getChips() < bet)) || ((turn != 0) && (players.get(turn).getChips() < bet))) {
                     prompt = "Not enough chips!";
                 }
                 else {
@@ -772,10 +767,6 @@ public class PokerGameGui extends PokerGameMult{
          * @param e action event
          */
         public void actionPerformed(ActionEvent e) {
-          // BUG: REFACTORING AFFECTED THESE FUNCTIONS
-          // PokerGame::determineWinner
-          // PokerGame::collectPot
-          //PokerSinglePlayer::showWinnerAlert
             determineWinner();
             collectPot();
             showWinnerAlert();
