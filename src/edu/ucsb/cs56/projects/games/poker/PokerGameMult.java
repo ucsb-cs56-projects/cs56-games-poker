@@ -135,10 +135,10 @@ public class PokerGameMult {
      */
     protected boolean allIn = false;
 
-    /** TODO: Change for multiplayer
+     /*
      * No arg constructor that initializes a new deck.
      */
-    // FIX THIS OR FIX setUp() METHOD
+
     // Single Player
     public PokerGameMult() {
       this.deck = new Deck();

@@ -163,8 +163,8 @@ final class PokerSinglePlayer extends PokerGameGui {
                     System.out.println("Player's Turn.");
                     prompt = "Player's turn. What will you do?";
                   }
-                  // if player is not in game, skip their turn and calls
-                  // turnDecider w/ timer to make AI take its turn
+                  // if player is not in game, skips their turn and calls
+                  // turnDecider w/ timer.restart to make AI take its turn
                   else if (lowestTurn != 0)
                   {
                     System.out.println("Opponent " + turn + "'s turn.");
@@ -263,7 +263,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 		// Check if players have enough chips.
 		// Create new game.
 
-		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5){
+		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5) {
 		    JOptionPane.showMessageDialog(null, "Resetting chips...");
 
           singlePlayerReplay = new PokerSinglePlayer();

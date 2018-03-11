@@ -63,7 +63,7 @@ public class PokerGameGui extends PokerGameMult{
     /**
      * Button to view general overview of Texas Holdem
      */
-	protected JButton overviewRulesButton;
+	  protected JButton overviewRulesButton;
 
     /**
      * Button to view information about basic gameplay in each round
@@ -86,7 +86,7 @@ public class PokerGameGui extends PokerGameMult{
     /**
      * Button to return to main menu when game is over
      */
-	protected JButton gameOverButton; // gameOverFrame
+	  protected JButton gameOverButton; // gameOverFrame
 
     /**
      * Image of example poker hands
@@ -203,7 +203,7 @@ public class PokerGameGui extends PokerGameMult{
     /**
      * Panel displaying player's chips
      */
-	protected JPanel pSubPane1;
+	  protected JPanel pSubPane1;
 
     /**
      * Panel where the player's cards are displayed
@@ -346,6 +346,7 @@ public class PokerGameGui extends PokerGameMult{
             opponent1ChipsLabel = new JLabel(String.format("Chips: %d", players.get(1).getChips()));
             opponent1WinsLabel = new JLabel();
             opponent1WinsLabel.setText(String.format("Opponent 1 wins: %d", players.get(1).getWins()));
+
             if (multiPlayer == true)
             {
               opponent2ChipsLabel = new JLabel(String.format("Chips: %d", players.get(2).getChips()));
@@ -374,6 +375,7 @@ public class PokerGameGui extends PokerGameMult{
             wSubPanel.add(newline1);
             wSubPanel.add(opponent1WinsLabel);
             wSubPanel.add(newline2);
+
             if (multiPlayer == true)
             {
               wSubPanel.add(opponent2WinsLabel);

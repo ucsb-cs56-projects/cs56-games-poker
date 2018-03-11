@@ -52,7 +52,7 @@ public class CompareHands implements Serializable{
     /**
      * compareHands multiplayer function
      * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing)
-     * Returns -1 if there is a tie for the highest hand value
+     * Returns 0 if there is a tie for the highest hand value
     **/
     public int compareHands() {
     	int max_value = -1;
