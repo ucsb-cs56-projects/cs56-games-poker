@@ -133,6 +133,10 @@ final class PokerSinglePlayer extends PokerGameGui {
                 turn++;
                 controlButtons();
                 message = "opponent " + (turn) + " is thinking...";
+                if (!Fold)
+                {
+                  timer.restart();
+                }
                 updateFrame();
                 }
             else {
