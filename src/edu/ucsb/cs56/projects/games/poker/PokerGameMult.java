@@ -371,6 +371,7 @@ public class PokerGameMult {
     /** TODO: Change for multiplayer
      * Function that transfers winnings to a player
      */
+     protected int ties;
     protected void collectPot() {
         for (Player player:players) {
     	    if (player.winStatus == true) {
@@ -392,7 +393,7 @@ public class PokerGameMult {
       }
       System.out.println("Tie");
     System.out.println(String.format("%d", pot));
-     int chipsGained = pot/activePlayers;
+     int chipsGained = pot/ties;
       for (Player player:players) {
     if (player.status ==1) {
     int playerChips = player.getChips();
@@ -411,12 +412,16 @@ public class PokerGameMult {
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);
         int win = comparison.compareHands();
+
         System.out.println(win);
         winnerIdx = win;
         //compareHands() returns player index of winning player
-	if(win < 0)
+	if(win < 0) {
+       ties = comparison.numberOfTies();
 	     return;
+     }
 	else {
+       ties = 1;
 	     Player winner = players.get(win);
       	     players.get(win).win();
       	     players.get(win).winStatus = true;
