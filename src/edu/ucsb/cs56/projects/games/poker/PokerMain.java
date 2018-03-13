@@ -121,7 +121,7 @@ public class PokerMain {
                 singlePlayer.go();
             }
             if (src == multiPlayerButton) {
-              PokerSinglePlayer multiPlayer = new PokerSinglePlayer(500,500);
+              PokerSinglePlayer multiPlayer = new PokerSinglePlayer(4);
               multiPlayer.go();
             }
             /*
