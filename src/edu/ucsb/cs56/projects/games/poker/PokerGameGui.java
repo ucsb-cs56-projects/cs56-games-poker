@@ -247,16 +247,16 @@ public class PokerGameGui extends PokerGameMult{
     /**
      * No arg constructor for PokerGameGui that simply calls the superclass constructor
      */
-     // Single Player
+     // Default: Single Player
     public PokerGameGui(){
         super();
     }
     // MultiPlayer
-    public PokerGameGui(int player) {
-      super(player);
-      multiPlayer = true;
-
-
+    // if mode == true, singlePlayer
+    // if mode == false, multiPlayer
+    public PokerGameGui(boolean mode) {
+      super(mode);
+      multiPlayer = !mode;
     }
 
     /**

@@ -26,23 +26,35 @@ final class PokerSinglePlayer extends PokerGameGui {
 
 
     /**
-     * No arg constructor to create instance of PokerSinglePlayer to begin game
+     * Default No arg constructor to create instance of PokerSinglePlayer to begin game
+     * If no arguments, assume SinglePlayer mode
      */
-    public PokerSinglePlayer(){
-	    super();
-    	for(Player player:players) {
+     public PokerSinglePlayer() {
+       super();
+     }
+
+     /**
+      *  Constructor that determines singlePlayer or multiPlayer mode
+      *  Mode = true, singlePlayer Mode
+      *  Mode = false, multiPlayer Mode
+     **/
+    public PokerSinglePlayer(boolean mode){
+        super(mode);
+
+    	 for(Player player:players) {
     	    player.setDelegate(this);
         }
 
     }
 
     /**
+     * SinglePlayer Constructor
      * Constructor to set the player and opponent's initial chips.
      * This is used when we continue playing the game
      * @param pChips the player's chips
      * @param oChips the opponent's chips
      */
-     // Change to players and equal chips?
+     //
      public PokerSinglePlayer(int pChips, int oChips){
 	super();
 	for(Player player:players) {
@@ -53,12 +65,19 @@ final class PokerSinglePlayer extends PokerGameGui {
        opponent.setChips(oChips);
      }
 
+     /**
+      * MultiPlayer Constructor
+      * Constructor to set the player and opponent's initial chips.
+      * This is used when we continue playing the game
+      * @param pChips the player's chips
+      * @param oChips the opponent's chips
+      */
     public PokerSinglePlayer(int pChips, int o1Chips, int o2Chips, int o3Chips){
-        super();
-	players.get(0).setChips(pChips);
+        super(false);
+	       players.get(0).setChips(pChips);
         players.get(1).setChips(o1Chips);
-	players.get(2).setChips(o2Chips);
-	players.get(3).setChips(o3Chips);
+	       players.get(2).setChips(o2Chips);
+	        players.get(3).setChips(o3Chips);
         for(Player player:players)
 	    player.setDelegate(this);
     }
@@ -115,19 +134,21 @@ final class PokerSinglePlayer extends PokerGameGui {
                 controlButtons();
                 message = "opponent " + (turn) + " is thinking...";
                 updateFrame();
-                timer.restart();
                 }
             else {
-                  updateFrame();
+                  //updateFrame();
                   //nextStep();
                   if (step != Step.SHOWDOWN) {
                       turn++;
                       controlButtons();
                       System.out.println("Opponent " + turn + "'s turn.");
                       prompt = "opponent " + (turn) + "'s Turn.";
-                      //message = "opponent " + (turn) + " is thinking...";
                       updateFrame();
-                      timer.restart();
+                  }
+                  // if activePlayers > 1, turns keep going
+                  if (!Fold)
+                  {
+                    timer.restart();
                   }
                 }
         }
@@ -162,6 +183,7 @@ final class PokerSinglePlayer extends PokerGameGui {
                   {
                     System.out.println("Player's Turn.");
                     prompt = "Player's turn. What will you do?";
+
                   }
                   // if player is not in game, skips their turn and calls
                   // turnDecider w/ timer.restart to make AI take its turn
@@ -169,7 +191,12 @@ final class PokerSinglePlayer extends PokerGameGui {
                   {
                     System.out.println("Opponent " + turn + "'s turn.");
                     prompt = "opponent " + (turn) + "'s Turn.";
-                    timer.restart();
+
+                    // if activePlayers > 1, turns keep going
+                    if (!Fold)
+                    {
+                      timer.restart();
+                    }
                   }
                 }
                 controlButtons();
@@ -258,7 +285,7 @@ final class PokerSinglePlayer extends PokerGameGui {
     		// Restart
 		mainFrame.dispose();
 		PokerSinglePlayer singlePlayerReplay;
-
+    PokerSinglePlayer multiPlayerReplay;
 
 		// Check if players have enough chips.
 		// Create new game.
@@ -266,13 +293,30 @@ final class PokerSinglePlayer extends PokerGameGui {
 		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5) {
 		    JOptionPane.showMessageDialog(null, "Resetting chips...");
 
-          singlePlayerReplay = new PokerSinglePlayer();
+          singlePlayerReplay = new PokerSinglePlayer(true);
+          multiPlayerReplay = new PokerSinglePlayer(false);
+          if (multiPlayer == true)
+          {
+            multiPlayerReplay.go();
+          }
+          else
+          {
+            singlePlayerReplay.go();
+          }
 
-		    singlePlayerReplay.go();
 		}
 		else {
 		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips());
-		    singlePlayerReplay.go();
+
+        if (multiPlayer == true)
+        {
+          multiPlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(), players.get(2).getChips(), players.get(3).getChips());
+          multiPlayerReplay.go();
+        }
+        else
+        {
+          singlePlayerReplay.go();
+        }
 		}
 
 	    } else if (option == JOptionPane.NO_OPTION) {
