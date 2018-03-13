@@ -388,17 +388,19 @@ public class PokerGameMult {
         		player.win();
         		return;
         }
+
+      }
+      System.out.println("Tie");
+    System.out.println(String.format("%d", pot));
+     int chipsGained = pot/activePlayers;
+      for (Player player:players) {
+    if (player.status ==1) {
+    int playerChips = player.getChips();
+          playerChips += chipsGained;
+          player.setChips(playerChips);
+    }
 	}
-        System.out.println("Tie");
-        System.out.println(String.format("%d", pot));
-	int chipsGained = pot/activePlayers;
-        for (Player player:players) {
-	    if (player.status ==1) {
-	    int playerChips = player.getChips();
-            playerChips += chipsGained;
-            player.setChips(playerChips);
-	    }
-        }
+
     }
 
     /** TODO: Change for multiplayer
@@ -409,6 +411,8 @@ public class PokerGameMult {
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);
         int win = comparison.compareHands();
+        System.out.println(win);
+        winnerIdx = win;
         //compareHands() returns player index of winning player
 	if(win < 0)
 	     return;
