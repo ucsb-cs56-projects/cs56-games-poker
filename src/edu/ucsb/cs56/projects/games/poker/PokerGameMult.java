@@ -20,7 +20,7 @@ public class PokerGameMult {
      */
      // if OPPONENT, loop through
     public enum Result {
-        PLAYER, OPPONENT, TIE, NEW_GAME
+        PLAYER, OPPONENT, TIE, NEW_GAME, END_GAME
             };
 
     public boolean Fold = false;
@@ -111,7 +111,7 @@ public class PokerGameMult {
      * etc
      */
      protected int activePlayers;
-    
+
      protected int totalPlayers;
 
     /**
@@ -153,27 +153,52 @@ public class PokerGameMult {
 	     this.table = new TableCards(deck);
 	      pot = 0;
 	      totalPlayers = players.size();
-
-
     }
+
     // Multiplayer
     // Current Functionality Supports One User and (MAXPLAYER - 1) AIs
-   public PokerGameMult(int player) {
+    // if mode == true, singlePlayer
+    // if mode == false, multiPlayer
+   public PokerGameMult(boolean mode) {
 	    this.deck = new Deck();
+      this.table = new TableCards(deck);
+      pot = 0;
       players = new ArrayList<Player>();
-	    players.add(new User(500, deck));
-	    for (int i = 0; i < MAXPLAYERS-1; i++) {
-         players.add(new OpponentAI(500, deck));
-      }
-	     this.table = new TableCards(deck);
-	      pot = 0;
 
+	    players.add(new User(500, deck));
+
+      if (mode == true)
+      {
+        players.add(new OpponentAI(500, deck));
+      }
+      else
+      {
+        for (int i = 0; i < MAXPLAYERS-1; i++) {
+           players.add(new OpponentAI(500, deck));
+        }
+
+      }
         for (int i = 0; i < players.size(); i++) {
           players.get(i).setIndex(i);
         }
-	totalPlayers = players.size();
+	       totalPlayers = players.size();
 
     }
+
+   public PokerGameMult(int totalplayers) {
+      this.deck = new Deck();
+      this.table = new TableCards(deck);
+      pot = 0;
+      players = new ArrayList<Player>();
+      players.add(new User(500, deck));
+      for (int i = 0; i < totalplayers-1; i++) {
+           players.add(new OpponentAI(500, deck));
+        }
+        for (int i = 0; i < players.size(); i++) {
+          players.get(i).setIndex(i);
+        }
+               totalPlayers = players.size();
+   }
 
     // Getters and setters for various members
 
@@ -324,7 +349,7 @@ public class PokerGameMult {
       	// Reset player win flag
 
               // deck.reShuffle();
-          	    resultType = Result.NEW_GAME;
+          	    resultType = Result.END_GAME;
       	}
 
       	if (activePlayers > 1) {
