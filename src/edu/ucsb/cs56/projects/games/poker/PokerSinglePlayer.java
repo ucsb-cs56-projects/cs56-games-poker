@@ -47,6 +47,14 @@ final class PokerSinglePlayer extends PokerGameGui {
 
     }
 
+    public PokerSinglePlayer(int totalplayers){
+            super(totalplayers);
+        for(Player player:players) {
+            player.setDelegate(this);
+        }
+
+    }
+
     /**
      * SinglePlayer Constructor
      * Constructor to set the player and opponent's initial chips.
@@ -65,6 +73,13 @@ final class PokerSinglePlayer extends PokerGameGui {
        opponent.setChips(oChips);
      }
 
+    public PokerSinglePlayer(int [] Chips, int totalplayers){
+        super(totalplayers);
+	for (Player player:players) {
+	   int index = players.indexOf(player);
+	   player.setChips(Chips[index]);
+	}
+    }
      /**
       * MultiPlayer Constructor
       * Constructor to set the player and opponent's initial chips.
@@ -72,6 +87,7 @@ final class PokerSinglePlayer extends PokerGameGui {
       * @param pChips the player's chips
       * @param oChips the opponent's chips
       */
+	   /*
     public PokerSinglePlayer(int pChips, int o1Chips, int o2Chips, int o3Chips){
         super(false);
 	       players.get(0).setChips(pChips);
@@ -79,8 +95,11 @@ final class PokerSinglePlayer extends PokerGameGui {
 	       players.get(2).setChips(o2Chips);
 	        players.get(3).setChips(o3Chips);
         for(Player player:players)
+>>>>>>> cc65c7c722fcc0774ebd8519c4dce98b8250d7e5
 	    player.setDelegate(this);
+	}
     }
+    */
 
     /**
      * Starts game between you and AI
@@ -296,7 +315,8 @@ final class PokerSinglePlayer extends PokerGameGui {
 
 		if(players.get(0).getChips() < 5 || players.get(1).getChips() < 5) {
 		    JOptionPane.showMessageDialog(null, "Resetting chips...");
-
+          singlePlayerReplay = new PokerSinglePlayer(totalPlayers);
+/*
           singlePlayerReplay = new PokerSinglePlayer(true);
           multiPlayerReplay = new PokerSinglePlayer(false);
           if (multiPlayer == true)
@@ -307,11 +327,23 @@ final class PokerSinglePlayer extends PokerGameGui {
           {
             singlePlayerReplay.go();
           }
+*/
 
 		}
 		else {
+		     if (totalPlayers == 2) {
 		    singlePlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips());
-
+		    singlePlayerReplay.go();
+			}
+		      else {
+			int [] chips = new int [totalPlayers];
+			for (Player player:players) {
+			  int index = players.indexOf(player);
+			  chips [index] = player.getChips();
+			}
+			singlePlayerReplay = new PokerSinglePlayer(chips,totalPlayers);
+		}
+/*
         if (multiPlayer == true)
         {
           multiPlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(), players.get(2).getChips(), players.get(3).getChips());
@@ -321,6 +353,7 @@ final class PokerSinglePlayer extends PokerGameGui {
         {
           singlePlayerReplay.go();
         }
+*/
 		}
 
 	    } else if (option == JOptionPane.NO_OPTION) {

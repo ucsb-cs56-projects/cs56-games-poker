@@ -185,6 +185,21 @@ public class PokerGameMult {
 
     }
 
+   public PokerGameMult(int totalplayers) {
+      this.deck = new Deck();
+      this.table = new TableCards(deck);
+      pot = 0;
+      players = new ArrayList<Player>();
+      players.add(new User(500, deck));
+      for (int i = 0; i < totalplayers-1; i++) {
+           players.add(new OpponentAI(500, deck));
+        }
+        for (int i = 0; i < players.size(); i++) {
+          players.get(i).setIndex(i);
+        }
+               totalPlayers = players.size();
+   }
+
     // Getters and setters for various members
 
     /**

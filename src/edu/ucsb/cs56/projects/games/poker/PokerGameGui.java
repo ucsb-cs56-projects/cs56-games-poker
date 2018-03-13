@@ -259,6 +259,10 @@ public class PokerGameGui extends PokerGameMult{
       multiPlayer = !mode;
     }
 
+    public PokerGameGui(int totalplayers) {
+	    super(totalplayers);
+    }
+
     /**
      * Initial GUI setup
      * Instantiates the relevant JComponent objects (which is most of them) to their initial states
