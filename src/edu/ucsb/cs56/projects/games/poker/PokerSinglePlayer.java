@@ -147,7 +147,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 
     public void changeTurn() {
       Player current = players.get(turn);
-      if (turn < players.size() - 1) {
+      if (turn < (players.size() - 1)) {
             if (responding == true) {
                 turn++;
                 controlButtons();
