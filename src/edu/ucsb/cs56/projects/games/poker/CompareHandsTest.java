@@ -469,7 +469,7 @@ import org.junit.Test;
             players.add(player2);
             comparingHands = new CompareHands(players, table);
  	    //For now, counts as a tie
-            assertEquals(0, comparingHands.compareHands());
+            assertEquals(-1, comparingHands.compareHands());
         }
 
         /** Test two pair wins against lower two pair */
