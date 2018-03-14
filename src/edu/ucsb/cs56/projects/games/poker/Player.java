@@ -103,6 +103,10 @@ public abstract class Player implements Serializable {
     public void win() {
         wins += 1;
     }
+
+    public void setWins(int Wins) {
+	wins = Wins;
+    }
     public void setIndex(int idx)
     {
       index = idx;

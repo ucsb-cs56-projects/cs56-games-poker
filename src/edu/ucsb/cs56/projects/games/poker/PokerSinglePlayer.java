@@ -75,11 +75,12 @@ final class PokerSinglePlayer extends PokerGameGui {
      }
 
      // MultiPlayer Continue Constructor
-    public PokerSinglePlayer(int [] Chips, int totalPlayers, boolean mode){
+    public PokerSinglePlayer(int [] Chips, int [] Wins, int totalPlayers, boolean mode){
         super(mode);
 	for (Player player:players) {
 	   int index = players.indexOf(player);
 	   player.setChips(Chips[index]);
+	   player.setWins(Wins[index]);
 	}
     }
      /**
@@ -339,21 +340,25 @@ final class PokerSinglePlayer extends PokerGameGui {
 			}
 		      else {
 			int [] chips = new int [totalPlayers];
+			int [] totalWins = new int [totalPlayers];
 			for (Player player:players) {
 			  int index = players.indexOf(player);
 			  chips [index] = player.getChips();
+			  totalWins [index] = player.getWins();
 			}
-			singlePlayerReplay = new PokerSinglePlayer(chips,totalPlayers, true);
+			singlePlayerReplay = new PokerSinglePlayer(chips,totalWins, totalPlayers, true);
 		}
 
         if (multiPlayer == true)
         {
           int [] chips = new int [MAXPLAYERS];
+	  int [] totalWins = new int [MAXPLAYERS];
     			for (Player player:players) {
     			  int index = players.indexOf(player);
     			  chips [index] = player.getChips();
+			  totalWins [index] = player.getWins();
     			}
-          multiPlayerReplay = new PokerSinglePlayer(chips, totalPlayers, false);
+          multiPlayerReplay = new PokerSinglePlayer(chips, totalWins, totalPlayers, false);
           multiPlayerReplay.go();
         }
         else
