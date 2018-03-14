@@ -315,8 +315,8 @@ import org.junit.Test;
 		players.add(player1);
     players.add(player2);
     comparingHands = new CompareHands(players, table);
-		  //For now, counts as a tie
-		assertEquals(-1, comparingHands.compareHands());
+
+		assertEquals(0, comparingHands.compareHands());
 	 }
 
 	 /** test case where players have the same hand */
@@ -393,8 +393,8 @@ import org.junit.Test;
         players.add(player1);
         players.add(player2);
         comparingHands = new CompareHands(players, table);
-	//for now counts as a tie
-        assertEquals(-1, comparingHands.compareHands());
+
+        assertEquals(0, comparingHands.compareHands());
     }
 
     /** test four of a kind wins against lower four of a kind */
@@ -408,24 +408,24 @@ import org.junit.Test;
         players.add(player1);
         players.add(player2);
         comparingHands = new CompareHands(players, table);
-	//for now counts as a tie
-        assertEquals(-1, comparingHands.compareHands());
+
+        assertEquals(0, comparingHands.compareHands());
     }
 
     /** test full house wins against lower full house */
     @Test
     public void testFullHouseBeatsFullHouse() {
-	table = new TableCards(twoSpade, twoHeart, eightHeart, eightDiamond, jackHeart);
-	hand1 = new Hand(twoDiamond, jackClub);
-	player1 = new User(hand1);
-	hand2 = new Hand(eightClub, jackSpade);
-	player2 = new User(hand2);
-	players.add(player1);
-   	players.add(player2);
-    	comparingHands = new CompareHands(players, table);
-	//for now counts as a tie
-    	assertEquals(-1, comparingHands.compareHands());
-    }
+		table = new TableCards(twoSpade, twoHeart, eightHeart, eightDiamond, jackHeart);
+		hand1 = new Hand(twoDiamond, jackClub);
+		player1 = new User(hand1);
+		hand2 = new Hand(eightClub, jackSpade);
+		player2 = new User(hand2);
+		players.add(player1);
+    players.add(player2);
+    comparingHands = new CompareHands(players, table);
+
+    		assertEquals(0, comparingHands.compareHands());
+        }
 
     	/** test flush wins against lower flush */
     	@Test
@@ -437,9 +437,9 @@ import org.junit.Test;
             player2 = new User(hand2);
             players.add(player1);
             players.add(player2);
-	    comparingHands = new CompareHands(players, table);
-	    //for now counts as a tie
-            assertEquals(-1, comparingHands.compareHands());
+    comparingHands = new CompareHands(players, table);
+
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** test straight wins against lower straight */
@@ -453,8 +453,8 @@ import org.junit.Test;
             players.add(player1);
             players.add(player2);
             comparingHands = new CompareHands(players, table);
-     	    //For now, counts as a tie
-            assertEquals(-1, comparingHands.compareHands());
+
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** test three of a kind wins against lower three of a kind */
@@ -468,8 +468,8 @@ import org.junit.Test;
             players.add(player1);
             players.add(player2);
             comparingHands = new CompareHands(players, table);
- 	    //For now, counts as a tie
-            assertEquals(-1, comparingHands.compareHands());
+
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** Test two pair wins against lower two pair */
@@ -483,8 +483,8 @@ import org.junit.Test;
             players.add(player1);
             players.add(player2);
             comparingHands = new CompareHands(players, table);
-	    //For now, counts as a tie
-            assertEquals(-1, comparingHands.compareHands());
+
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** Test pair wins against lower pair */
@@ -498,8 +498,8 @@ import org.junit.Test;
             players.add(player1);
             players.add(player2);
             comparingHands = new CompareHands(players, table);
-	    //For now, counts as a tie
-            assertEquals(-1, comparingHands.compareHands());
+
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** Test player with higher card wins when no actual hands are able to be made */
@@ -513,7 +513,7 @@ import org.junit.Test;
             players.add(player1);
             players.add(player2);
             comparingHands = new CompareHands(players, table);
-	    //For now, counts as a tie
-            assertEquals(-1, comparingHands.compareHands());
+
+            assertEquals(0, comparingHands.compareHands());
         }
     }
