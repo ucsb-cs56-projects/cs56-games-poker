@@ -54,7 +54,7 @@ public class CompareHands implements Serializable{
      * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing)
      * Returns 0 if there is a tie for the highest hand value
     **/
-    protected int tieIdx;
+    protected int [] tieIdx;
     public int compareHands() {
     	int max_value = -1;
     	int winner = -1;
@@ -71,13 +71,13 @@ public class CompareHands implements Serializable{
 
                     winner = hands.indexOf(hand);
                   // if exceeded highest hand, ties reset
-                  ties = 1;
+                  ties = 0;
           	    }
           	    // if equal highest hand, add to ties
 
           	    else if (value == max_value) {
-          		      winner = -1;
-                    tieIdx = idx;
+          	    winner = -1;
+		    tieIdx[ties] = idx;
                     ties++;
           	    }
           }
