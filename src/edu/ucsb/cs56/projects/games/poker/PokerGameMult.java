@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Class that represents a Texas Holdem' Style Poker Game.
  */
-public class PokerGame {
+public class PokerGameMult extends PokerGame {
     // PokerGame States
 
     /**
@@ -21,7 +21,7 @@ public class PokerGame {
     public enum Winner {
         PLAYER, OPPONENT, TIE, NEW_GAME
             };
-    public boolean Fold = false;
+
 
     /**
      * enum representing the game step
@@ -30,12 +30,16 @@ public class PokerGame {
         BLIND, FLOP, TURN, RIVER, SHOWDOWN
             };
 
+    public enum Type {
+	PLAYER, COMPUTER
+    };
+
     /**
      * enum representing which player's turn it is
      */
-    public enum Turn {
-        PLAYER, OPPONENT
-            };
+//    public enum Turn {
+  //      PLAYER1, PLAYER2, PLAYER3, PLAYER4
+    //        };
 
 
     // PokerGame GUI
@@ -46,17 +50,17 @@ public class PokerGame {
     /**
      * ArrayList holding the game's current players
      */
-    //protected ArrayList<Player> players;
+    protected ArrayList<Player> players;
 
     /**
      * The user playing the game
      */
-    protected Player player;
+    //protected Player player1, player2, player3, player4;
 
     /**
      * The opponent (currently an AI)
      */
-    protected Player opponent;
+   // protected Player opponent;
 
     /**
      * The deck used for the game
@@ -110,7 +114,7 @@ public class PokerGame {
     /**
      * Which player's turn it is
      */
-    protected Turn turn;
+    protected int turn;
     /**
      * Variable representing which player's turn it is
      * turn = 0 : players[0] turn
@@ -145,12 +149,23 @@ public class PokerGame {
      * No arg constructor that initializes a new deck.
      */
     // FIX THIS OR FIX setUp() METHOD
-    public PokerGame() {
+    public PokerGameMult() {
         this.deck = new Deck();
-        this.player = new User(500, deck);
-        this.opponent = new OpponentAI(500, deck);
+        this.players.add(new User(500, deck));
+        this.players.add(new OpponentAI(500, deck));
         this.table = new TableCards(deck);
         pot = 0;
+    }
+
+   public PokerGameMult(int player) {
+	this.deck = new Deck();
+	int AIs = 4 - player; //Assuming multiplayer only supports 4 people
+	for (int i = 0; i < player; i++)
+	    this.players.add(new User(500, deck));
+	for (int i = 0; i < AIs; i++)
+	    this.players.add(new OpponentAI(500, deck));
+	this.table = new TableCards(deck);
+	pot = 0;
     }
     
     // Getters and setters for various members
@@ -191,7 +206,7 @@ public class PokerGame {
      * Returns the game's current step
      * @return the current step
      */
-    public Step getStep() {
+   /* public Step getStep() {
         return step;
     }
 
@@ -231,19 +246,18 @@ public class PokerGame {
      * Sets up the player's and opponent's hand.
      */
     public void setUp() {
-        player.setDelegate(this);
-        opponent.setDelegate(this);
-        if (player.getChips() >= 5 && opponent.getChips() >= 5) {
-            player.bet(5);
-            opponent.bet(5);
-            pot += 10;
-            message = "Ante of 5 chips set.";
+        for(Player player:players) {
+	    player.setDelegate(this);
+	    if (player.getChips() >= 5) {
+          	player.bet(5);
+           	pot += 5;
         }
-        else {
-            gameOver = true;
-            showWinnerAlert();
-        }
-
+            else {
+                  gameOver = true;
+                  showWinnerAlert();
+	    }
+	}
+	message = "Ante of 5 chips set.";
         backCard = new Card(100, "B");
         String dir = "Cards/";
         String cardFile = "B.png";
@@ -269,56 +283,55 @@ public class PokerGame {
      */
     // COULD IMPROVE IMPLEMENTATION
     public void fold() {
-        if (turn == Turn.PLAYER) {
-            winnerType = Winner.OPPONENT;
-            opponent.win();
-        } else {
-            winnerType = Winner.PLAYER;
-            player.win();
-        }
-        collectPot();
-	Fold = true;
-        showWinnerAlert();
+        int activePlayers = 0;
+	for (Player player:players) {
+	    if (player.status == 1) { 
+		activePlayers +=1;
+		player.winStatus = true;
+	    }
+	}
+	if (activePlayers <= 1) {
+        	collectPot();
+        	showWinnerAlert();
 	// Reset player win flag
 
         // deck.reShuffle();
-        winnerType = Winner.NEW_GAME;
+    	    winnerType = Winner.NEW_GAME;
+	}
+	else {
+		for (Player player:players)
+			player.winStatus = false;
+	}
     }
 
     /** TODO: Change for multiplayer
      * Function that transfers winnings to a player
      */
     protected void collectPot() {
-        if (winnerType == Winner.PLAYER) {
-	    // Player won
-            System.out.println("Player");
-            System.out.println(String.format("%d", pot));
-            int playerChips = player.getChips();
-            playerChips += pot;
+        for (Player player:players) {
+    	    if (player.winStatus == true) {	
+		if (player.getType() == 1) {
+	    	    System.out.println("Player " + players.indexOf(player));
+		    System.out.println(String.format("%d", pot));
+		}
+		else if (player.getType() == 0) {
+		     System.out.println("Opponent");
+                     System.out.println(String.format("%d", pot));
+		}
+		int playerChips = player.getChips();
+		playerChips += pot;
+		player.setChips(playerChips);
+		player.win();
+		return;
+	    }
+	}
+        System.out.println("Tie");
+        System.out.println(String.format("%d", pot));
+	int chipsGained = pot/4;
+        for (Player player:players) {
+	    int playerChips = player.getChips();
+            playerChips += chipsGained;
             player.setChips(playerChips);
-            player.win();
-        } else if (winnerType == Winner.OPPONENT) {
-            // Player lost
-            System.out.println("OPPONENT");
-            System.out.println(String.format("%d", pot));
-            int opponentChips = opponent.getChips();
-            opponentChips += pot;
-            opponent.setChips(opponentChips);
-            opponent.win();
-        } else if (winnerType == Winner.TIE) {
-            // Tie, split pot, should be extremely rare
-            System.out.println("Tie");
-            System.out.println(String.format("%d", pot));
-            int opponentChips = opponent.getChips();
-            opponentChips += (pot / 2);
-            opponent.setChips(opponentChips);
-            pot -= (pot / 2);
-            int playerChips = player.getChips();
-            playerChips += pot;
-            player.setChips(playerChips);
-        } else {
-            // New game, should never be called
-            pot = 0;
         }
     }
 	
@@ -329,20 +342,11 @@ public class PokerGame {
  
     public void determineWinner() {
         CompareHands comparison = new CompareHands(player, opponent, table);
-        int winner = comparison.compareHands();
-
-        if (winner == 1) {
-            winnerType = Winner.PLAYER;
-	    player.win();
-	}
-
-	else if (winner == 0) {
-	    winnerType = Winner.OPPONENT;
-            opponent.win();   
-        }
-	else {
-	    winnerType = Winner.TIE;
-	}
+        int win = comparison.compareHands();
+//assume compareHands() returns player index of winning player
+        Player winner = players.get(win);
+	winner.win();
+	winner.winStatus = true;
     }
 
     public String winningHandMessage(){
