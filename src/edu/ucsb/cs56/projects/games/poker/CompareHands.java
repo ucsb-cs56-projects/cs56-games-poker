@@ -57,22 +57,21 @@ public class CompareHands implements Serializable{
     protected int tieIdx;
     public int compareHands() {
     	int max_value = -1;
-    	int winner = 0;
-      int tieIdx;
-      ties = 0;
+    	int winner = -1;
+      ties = 1;
 
     	for (ArrayList<Card> hand : hands) {
            int idx = hands.indexOf(hand);
            int value = calculateValue(hand);
-          if (players.get(idx).status == 1) {
+          if (players.get(idx).status != 0) {
                 if (value > max_value) {
           		// reset max value
-              		max_value = value;
+              	max_value = value;
           		// replace previous winner
 
                     winner = hands.indexOf(hand);
-                  // if exceeded highest hand, tie = 0
-                  ties = 0;
+                  // if exceeded highest hand, ties reset
+                  ties = 1;
           	    }
           	    // if equal highest hand, add to ties
 
