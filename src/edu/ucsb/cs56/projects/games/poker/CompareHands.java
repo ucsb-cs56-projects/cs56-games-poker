@@ -69,9 +69,11 @@ public class CompareHands implements Serializable{
               	max_value = value;
           		// replace previous winner
 
-                    winner = hands.indexOf(hand);
+                winner = hands.indexOf(hand);
                   // if exceeded highest hand, ties reset
-                  ties = 0;
+                ties = 0;
+		for (int i:tieIdx)
+		    tieIdx[i] = 0;	
           	    }
           	    // if equal highest hand, add to ties
 
@@ -81,8 +83,42 @@ public class CompareHands implements Serializable{
                     ties++;
           	    }
           }
-
     	}
+	if (ties > 0) {
+	      value = calculateValue(hands.get(tieIdx[0]));
+	      switch (player1Value) {
+                case 8:
+                    // straight flush
+                    return straightFlushTie();
+                case 7:
+                    // four of a kind
+                    return fourOfAKindTie();
+                case 6:
+                    // full house
+                    return fullHouseTie();
+                case 5:
+                    // flush
+                    return flushTie();
+                case 4:
+                    // straight
+                    return straightTie();
+                case 3:
+                    // three of a kind
+                    return threeOfAKindTie();
+                case 2:
+                    // two pair
+                    return twoPairTie();
+                case 1:
+                    // pair
+                    return pairTie();
+                case 0:
+                    // high card
+                    return highCardTie();
+                default:
+                    // should never happen
+                    return 2;
+	      }
+	}
 
     	return winner;
 
@@ -91,11 +127,6 @@ public class CompareHands implements Serializable{
     public int numberOfTies()
     {
       return ties;
-    }
-
-    public int getTieIdx()
-    {
-      return tieIdx;
     }
 
     /**
