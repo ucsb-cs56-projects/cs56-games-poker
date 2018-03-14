@@ -23,8 +23,6 @@ final class PokerSinglePlayer extends PokerGameGui {
     boolean yourTurnToBet = true;
 
 
-
-
     /**
      * Default No arg constructor to create instance of PokerSinglePlayer to begin game
      * If no arguments, assume SinglePlayer mode
