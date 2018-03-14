@@ -90,7 +90,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 	 /** test hand with one pair loses to hand with straight */
 	 @Test
@@ -104,7 +104,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 
 	 /** test two pair wins against one pair */
@@ -119,8 +119,8 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
-		assertEquals("Two Pair beats Pair", comparingHands.compareMessage());
+		assertEquals(0, comparingHands.compareHands());
+		assertEquals("Two Pair beats Pair!", comparingHands.compareMessage());
 	 }
 	 /** test two pair loses against straight */
 	 @Test
@@ -134,8 +134,8 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
-		assertEquals("Straight beats Two Pair", comparingHands.compareMessage());
+		assertEquals(1, comparingHands.compareHands());
+		assertEquals("Straight beats Two Pair!", comparingHands.compareMessage());
 	 }
 
 	 /** test three of a kind wins against one pair */
@@ -150,8 +150,8 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
-		assertEquals("Three of a Kind beats Pair", comparingHands.compareMessage());
+		assertEquals(0, comparingHands.compareHands());
+		assertEquals("Three of a Kind beats Pair!", comparingHands.compareMessage());
 	 }
 
 	 /** test three of a kind loses against flush */
@@ -166,7 +166,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 
 	 /** test straight wins against three of a kind */
@@ -181,7 +181,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 
 	 /** test straight loses against flush */
@@ -196,7 +196,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 
 	 /** test flush wins against straight */
@@ -211,7 +211,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 
 	 /** test flush loses to straight flush */
@@ -226,7 +226,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 
 	 /** test full house wins against flush */
@@ -241,7 +241,7 @@ import org.junit.Test;
     players.add(player2);
 		comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 
 	 /** test full house loses against four of a kind */
@@ -256,7 +256,7 @@ import org.junit.Test;
     players.add(player2);
     comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 
 	 /** test four of a kind wins against three of a kind */
@@ -271,7 +271,7 @@ import org.junit.Test;
     players.add(player2);
     comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 
 	 /** test four of a kind loses to straight flush */
@@ -286,7 +286,7 @@ import org.junit.Test;
     players.add(player2);
     comparingHands = new CompareHands(players, table);
 
-		assertEquals(0, comparingHands.compareHands());
+		assertEquals(1, comparingHands.compareHands());
 	 }
 
 	 /** test straight flush wins against full house */
@@ -316,7 +316,7 @@ import org.junit.Test;
     players.add(player2);
     comparingHands = new CompareHands(players, table);
 
-		assertEquals(1, comparingHands.compareHands());
+		assertEquals(0, comparingHands.compareHands());
 	 }
 
 	 /** test case where players have the same hand */
@@ -331,7 +331,7 @@ import org.junit.Test;
     players.add(player2);
     comparingHands = new CompareHands(players, table);
 
-		assertEquals(2, comparingHands.compareHands());
+		assertEquals(-1, comparingHands.compareHands());
 	 }
 
 
@@ -347,7 +347,7 @@ import org.junit.Test;
         players.add(player2);
         comparingHands = new CompareHands(players, table);
 
-        assertEquals(1, comparingHands.compareHands());
+        assertEquals(0, comparingHands.compareHands());
     }
 
 
@@ -363,7 +363,7 @@ import org.junit.Test;
         players.add(player2);
         comparingHands = new CompareHands(players, table);
 
-        assertEquals(1, comparingHands.compareHands());
+        assertEquals(0, comparingHands.compareHands());
     }
 
      /** test straight wins against pair when table has duplicate values */
@@ -378,7 +378,7 @@ import org.junit.Test;
         players.add(player2);
         comparingHands = new CompareHands(players, table);
 
-        assertEquals(1, comparingHands.compareHands());
+        assertEquals(0, comparingHands.compareHands());
 
     }
 
@@ -394,7 +394,7 @@ import org.junit.Test;
         players.add(player2);
         comparingHands = new CompareHands(players, table);
 
-        assertEquals(1, comparingHands.compareHands());
+        assertEquals(0, comparingHands.compareHands());
     }
 
     /** test four of a kind wins against lower four of a kind */
@@ -454,7 +454,7 @@ import org.junit.Test;
             players.add(player2);
             comparingHands = new CompareHands(players, table);
 
-            assertEquals(1, comparingHands.compareHands());
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** test three of a kind wins against lower three of a kind */
@@ -469,7 +469,7 @@ import org.junit.Test;
             players.add(player2);
             comparingHands = new CompareHands(players, table);
 
-            assertEquals(1, comparingHands.compareHands());
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** Test two pair wins against lower two pair */
@@ -484,7 +484,7 @@ import org.junit.Test;
             players.add(player2);
             comparingHands = new CompareHands(players, table);
 
-            assertEquals(1, comparingHands.compareHands());
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** Test pair wins against lower pair */
@@ -499,7 +499,7 @@ import org.junit.Test;
             players.add(player2);
             comparingHands = new CompareHands(players, table);
 
-            assertEquals(1, comparingHands.compareHands());
+            assertEquals(0, comparingHands.compareHands());
         }
 
         /** Test player with higher card wins when no actual hands are able to be made */
@@ -514,6 +514,6 @@ import org.junit.Test;
             players.add(player2);
             comparingHands = new CompareHands(players, table);
 
-            assertEquals(1, comparingHands.compareHands());
+            assertEquals(0, comparingHands.compareHands());
         }
     }
