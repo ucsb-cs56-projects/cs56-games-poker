@@ -185,6 +185,9 @@ public class PokerGameMult {
 
     }
 
+    /**
+      * not currently in use
+    **/
    public PokerGameMult(int totalplayers) {
       this.deck = new Deck();
       this.table = new TableCards(deck);
@@ -406,7 +409,6 @@ public class PokerGameMult {
     /** TODO: Change for multiplayer
      * Method to determine the winner of the game
      */
-    // Possibly fix this
 
     public void determineWinner() {
         CompareHands comparison = new CompareHands(players, table);

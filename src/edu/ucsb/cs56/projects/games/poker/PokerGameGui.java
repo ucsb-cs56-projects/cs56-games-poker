@@ -251,7 +251,7 @@ public class PokerGameGui extends PokerGameMult{
     public PokerGameGui(){
         super();
     }
-    // MultiPlayer
+    // MultiPlayer & SinglePLayer
     // if mode == true, singlePlayer
     // if mode == false, multiPlayer
     public PokerGameGui(boolean mode) {
@@ -259,6 +259,9 @@ public class PokerGameGui extends PokerGameMult{
       multiPlayer = !mode;
     }
 
+    /**
+      * not currently in use
+    **/
     public PokerGameGui(int totalplayers) {
 	    super(totalplayers);
     }
