@@ -297,7 +297,7 @@ final class PokerSinglePlayer extends PokerGameGui {
                 message = message + ("\n\nYou win!\n\nNext round?");
     	    } else if (winnerIdx != 0) {
     		System.out.println("opponent");
-    		message = message + ("\n\nOpponent " + winnerIdx + " wins.\n\nNext round?");
+    		message = message + ("\n\nOpponent" + winnerIdx + "wins.\n\nNext round?");
       } else if (winnerIdx < 0){
                 System.out.println("tie");
                 message = message + ("\n\nTie \n\nNext round?");
