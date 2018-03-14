@@ -47,6 +47,7 @@ final class PokerSinglePlayer extends PokerGameGui {
 
     }
 
+    // In the future, more flexibility with user input on player numbers
     public PokerSinglePlayer(int totalplayers){
             super(totalplayers);
         for(Player player:players) {
@@ -73,8 +74,9 @@ final class PokerSinglePlayer extends PokerGameGui {
        opponent.setChips(oChips);
      }
 
-    public PokerSinglePlayer(int [] Chips, int totalplayers){
-        super(totalplayers);
+     // MultiPlayer Continue Constructor
+    public PokerSinglePlayer(int [] Chips, int totalPlayers, boolean mode){
+        super(mode);
 	for (Player player:players) {
 	   int index = players.indexOf(player);
 	   player.setChips(Chips[index]);
@@ -152,6 +154,10 @@ final class PokerSinglePlayer extends PokerGameGui {
                 turn++;
                 controlButtons();
                 message = "opponent " + (turn) + " is thinking...";
+                if (!Fold)
+                {
+                  timer.restart();
+                }
                 updateFrame();
                 }
             else {
@@ -291,7 +297,7 @@ final class PokerSinglePlayer extends PokerGameGui {
                 message = message + ("\n\nYou win!\n\nNext round?");
     	    } else if (winnerIdx != 0) {
     		System.out.println("opponent");
-    		message = message + ("\n\nOpponent wins.\n\nNext round?");
+    		message = message + ("\n\nOpponent " + winnerIdx + " wins.\n\nNext round?");
       } else if (winnerIdx < 0){
                 System.out.println("tie");
                 message = message + ("\n\nTie \n\nNext round?");
@@ -337,19 +343,23 @@ final class PokerSinglePlayer extends PokerGameGui {
 			  int index = players.indexOf(player);
 			  chips [index] = player.getChips();
 			}
-			singlePlayerReplay = new PokerSinglePlayer(chips,totalPlayers);
+			singlePlayerReplay = new PokerSinglePlayer(chips,totalPlayers, true);
 		}
-/*
+
         if (multiPlayer == true)
         {
-          multiPlayerReplay = new PokerSinglePlayer(players.get(0).getChips(),players.get(1).getChips(), players.get(2).getChips(), players.get(3).getChips());
+          int [] chips = new int [MAXPLAYERS];
+    			for (Player player:players) {
+    			  int index = players.indexOf(player);
+    			  chips [index] = player.getChips();
+    			}
+          multiPlayerReplay = new PokerSinglePlayer(chips, totalPlayers, false);
           multiPlayerReplay.go();
         }
         else
         {
           singlePlayerReplay.go();
         }
-*/
 		}
 
 	    } else if (option == JOptionPane.NO_OPTION) {

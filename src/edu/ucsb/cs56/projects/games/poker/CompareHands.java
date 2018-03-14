@@ -54,34 +54,37 @@ public class CompareHands implements Serializable{
      * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing)
      * Returns 0 if there is a tie for the highest hand value
     **/
+    protected int tieIdx;
     public int compareHands() {
     	int max_value = -1;
     	int winner = 0;
+      int tieIdx;
       ties = 0;
 
     	for (ArrayList<Card> hand : hands) {
-    	    int value = calculateValue(hand);
-          int idx = hands.indexOf(hand);
-              if (value > max_value) {
-        		// reset max value
-            		max_value = value;
-        		// replace previous winner
-                if (players.get(idx).status == 1) {
-                  winner = hands.indexOf(hand);
+           int idx = hands.indexOf(hand);
+           int value = calculateValue(hand);
+          if (players.get(idx).status == 1) {
+                if (value > max_value) {
+          		// reset max value
+              		max_value = value;
+          		// replace previous winner
 
-                }
-                // if exceeded highest hand, tie = 0
-                ties = 0;
+                    winner = hands.indexOf(hand);
+                  // if exceeded highest hand, tie = 0
+                  ties = 0;
+          	    }
+          	    // if equal highest hand, add to ties
 
-        	    }
-        	    // if equal highest hand, add to ties
-
-        	    else if (value == max_value) {
-        		      winner = 0 ;
-                  ties++;
-        	    }
+          	    else if (value == max_value) {
+          		      winner = -1;
+                    tieIdx = idx;
+                    ties++;
+          	    }
+          }
 
     	}
+
     	return winner;
 
     }
@@ -89,6 +92,11 @@ public class CompareHands implements Serializable{
     public int numberOfTies()
     {
       return ties;
+    }
+
+    public int getTieIdx()
+    {
+      return tieIdx;
     }
 
     /**
@@ -181,8 +189,19 @@ public class CompareHands implements Serializable{
      **/
     public String compareMessage(){
 	// get winner's index in hands ArrayList
+      ArrayList<Card> winning_hand = new ArrayList<Card>();
     	int winner = this.compareHands();
-    	ArrayList<Card> winning_hand = hands.get(winner);
+      if (winner != -1)
+      {
+        winning_hand = hands.get(winner);
+
+      }
+      else
+      {
+        winning_hand = hands.get(tieIdx);
+
+      }
+
     	String message;
 
 	/** if it is not a TIE **/
