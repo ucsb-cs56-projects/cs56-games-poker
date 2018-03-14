@@ -36,6 +36,7 @@ public class PokerGameMult {
 	PLAYER, COMPUTER
     };
 
+    // GUI only supports one user and three AIs currently
     static int MAXPLAYERS = 4;
 
     // PokerGame GUI
@@ -47,9 +48,12 @@ public class PokerGameMult {
      * ArrayList holding the game's current players
      */
     protected ArrayList<Player> players;
-    protected Player winner;
-    protected int winnerIdx;
 
+    // winning Player
+    protected Player winner;
+
+    // winning Player's index
+    protected int winnerIdx;
 
     /**
      * The deck used for the game
@@ -110,8 +114,11 @@ public class PokerGameMult {
      * turn = 1 : players[1] turn
      * etc
      */
+
+     // number of Players not folded
      protected int activePlayers;
 
+     // total number of Players in game
      protected int totalPlayers;
 
     /**
@@ -140,7 +147,7 @@ public class PokerGameMult {
      * No arg constructor that initializes a new deck.
      */
 
-    // Single Player
+    // Default: Single Player
     public PokerGameMult() {
       this.deck = new Deck();
       players = new ArrayList<Player>();
@@ -155,7 +162,7 @@ public class PokerGameMult {
 	      totalPlayers = players.size();
     }
 
-    // Multiplayer
+    // Multiplayer or SinglePlayer 
     // Current Functionality Supports One User and (MAXPLAYER - 1) AIs
     // if mode == true, singlePlayer
     // if mode == false, multiPlayer
