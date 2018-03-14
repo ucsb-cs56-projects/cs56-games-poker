@@ -395,7 +395,6 @@ public class PokerGameMult {
         		int playerChips = player.getChips();
         		playerChips += pot;
         		player.setChips(playerChips);
-        		player.win();
         		return;
         }
 
@@ -427,7 +426,7 @@ public class PokerGameMult {
 	     return;
 	else {
 	     Player winner = players.get(win);
-      	     //players.get(win).win();
+      	     players.get(win).win();
       	     players.get(win).winStatus = true;
 
 	}
