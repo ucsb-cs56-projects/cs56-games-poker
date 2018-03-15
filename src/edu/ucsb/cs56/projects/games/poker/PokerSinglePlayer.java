@@ -129,8 +129,6 @@ final class PokerSinglePlayer extends PokerGameGui {
                 updateFrame();
                 }
             else {
-                  //updateFrame();
-                  //nextStep();
                   if (step != Step.SHOWDOWN) {
                       turn++;
                       controlButtons();

@@ -357,8 +357,6 @@ public class PokerGameMult {
               	showWinnerAlert();
 
       	// Reset player win flag
-
-              // deck.reShuffle();
           	    resultType = Result.END_GAME;
       	}
 

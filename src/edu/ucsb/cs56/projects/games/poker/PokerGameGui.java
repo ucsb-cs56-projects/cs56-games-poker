@@ -667,19 +667,6 @@ public class PokerGameGui extends PokerGameMult{
          * Handles the betting functionality for an all-in scenario
          */
         private void allInBet() {
-/*
-  	    int min = (players.get(0)).getChips();
-	    int temp;
-	    for (Player player:players) {
-		temp = player.getChips();
-		if(temp < min)
-		   min = temp;
-	    }
-            prompt = "Opponent only has " + min + " chips. Your bet is limited to ";
-            prompt += min + " chips.If this bet is called, it will be an all in.";
-            pot += min;
-            player.bet(min);
-*/
           // bet limit needs readjusting
             prompt = "Opponent only has " + players.get(1).getChips() + " chips. Your bet is limited to ";
             prompt += players.get(1).getChips() + " chips.If this bet is called, it will be an all in.";
