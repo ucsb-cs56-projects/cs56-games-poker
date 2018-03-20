@@ -93,7 +93,7 @@ To learn about the code, please refer to the code assessment section above. Over
 
 F17 Final Remarks
 =================
-For an assessment of the basic program structure, please refer to the code assement section above. In addition to fixing some relatively minor issues, such as Javadoc generation and comments, we tried to improve CompareHands and make it easier for the (currently single player only) game to be extended to include multiplayer functionality.
+For an assessment of the basic program structure, please refer to the code assessment section above. In addition to fixing some relatively minor issues, such as Javadoc generation and comments, we tried to improve CompareHands and make it easier for the (currently single player only) game to be extended to include multiplayer functionality.
 
 **Minor Issues Fixed:**
 * **Added Javadoc comments** - added comments to much of the code base
@@ -109,3 +109,19 @@ Since Users and AIs can both be thought of as Players, extending the code to mul
 **Recommendations:**
 
 Because of the current state of the code base, we recommend refactoring the code for multiplayer before adding new features. Currently, the assumption that the game has only 2 players is reflected in much of the logic and much of the existing code requires significant refactoring to support multiplayer. Some of the issues, such as incorporating the chat server into the game GUI window, are only truly relevant if multiplayer has already been implemented. Additionally, the implementation for new features will likely differ depending on whether or not the game supports multiplayer. Adding too many features without adding multiplayer might make the code too dependent on the assumption that there are only two players for it to be feasible to be extended to multiplayer. One piece of general advice about refactoring the code to allow multiplayer is don't be surprised if you find yourself changing much (or most) of the code. As has been previously stated, the most of the existing code assumes only two players. Adding multiplayer requires significant change to existing code, showing how programming to implementations instead of interfaces can result in a program both difficult to maintain and extend.
+
+W18 Final Remarks
+=================
+For an assessment of the basic program structure, please refer to the code assement section above. The original state of the code was hardcoded throughout the program to assume there were only two players, a user and an opponent, and we refactored that code to create a program that can handle an arbitrary amount of players as long as the GUI is refactored. As of now, we assume there are only four players, one user and three computers, but in the future that can be changed to support a larger amount of players.
+
+**Minor Issues Fixed**
+* **Fixed Text Gathering** We edited the text to make sure it didn't stick to the edge of the screen to make it look more appealing.
+* **Fixed Fold Output** The message displayed when you fold now addresses that you folded instead of comparing hands.
+
+**Major Issues Fixed**
+* **Major code refactoring** We refactored the PokerGame.java, PokerSinglePlayer.java, and PokerGameGUI.java files in order to support multiplayer. 
+* **Cohesive Design** We moved the code towards a more abstract design instead of a hardcoded two-player assumption, such as putting the players in an ArrayList. We also cleaned up the code and got rid of unnecessary commented out chunks of code.
+
+**Recommendations**
+
+After we refactored the project to multiplayer, there are some errors in CompareHands.java in which some match-ups don't calculate properly. Use the CompareHandsTest.java to be sure, but some examples we're sure of is when two people have the same hand (ie: a pair of 4's vs a pair of 5's) it counts it as a tie instead of the higher hand winning. Also, currently winner gets set to 0 when a tie occurs at the moment to avoid an out-of-index error, but consider figuring a way around that to set a unique number for ties. Try to figure out a way to get compareHands() to call the tie functions in order to figure out which tying hand is higher.  Also, compareHands shouldn't take folded players into account when calculating the winning hand, but it currently does. Right now, the rules panel only pop-ups a single image instead of the entire rules, so consider implementing a scroll panel or something similar. A piece of advice is to utilize system outputs in order to check your functions; it helps figure out where things are going wrong or which clauses are getting executed.  Something in multiplayer, with many opponents, if you bet a certain amount, only the first opponent will call and the others won't lose their chips (they don't know how to react to other opponent/CPU players). 
