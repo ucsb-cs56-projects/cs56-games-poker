@@ -26,7 +26,7 @@ public abstract class Player implements Serializable {
     /**
      * The current PokerGame the player is a part of
      */
-    public PokerGame delegate;
+    public PokerGameMult delegate;
 
     /**
      * Whether the player is active or folded
@@ -36,9 +36,10 @@ public abstract class Player implements Serializable {
     public boolean winStatus;
     public boolean turn;
     public int type;
+    protected int index;
 
-    /** 
-     *Creates a Poker player with a set hand 
+    /**
+     *Creates a Poker player with a set hand
      * @param hand the hand you have
      */
     public Player(Hand hand){
@@ -58,8 +59,8 @@ public abstract class Player implements Serializable {
         this.pokerHand = new Hand(deck);
         this.chips = chips;
         this.wins = 0;
-	status = 1;
-	winStatus = false;
+      	status = 1;
+      	winStatus = false;
     }
 
     /**
@@ -69,8 +70,8 @@ public abstract class Player implements Serializable {
     public Hand getHand() {
         return pokerHand;
     }
-	
-	
+
+
     /**
      * Get Player's Chips
      * @return int
@@ -103,6 +104,14 @@ public abstract class Player implements Serializable {
         wins += 1;
     }
 
+    public void setWins(int Wins) {
+	wins = Wins;
+    }
+    public void setIndex(int idx)
+    {
+      index = idx;
+    }
+
     /**
      * Bet chips
      * @param chipsBet number of chips to bet
@@ -121,14 +130,14 @@ public abstract class Player implements Serializable {
      */
     // Might never need to be used---Check later
     public void foldHand() {
-	status = 0;
+	      status = 0;
         delegate.fold();
     }
-    
-    public void setDelegate(PokerGame game) {
+
+    public void setDelegate(PokerGameMult game) {
         this.delegate = game;
     }
-    
+
     public void setWin() {
 	winStatus = true;
     }
@@ -142,5 +151,5 @@ public abstract class Player implements Serializable {
      * This behavior changes depending on if the player is human or AI
      * and must be implemented by the subclass (User or OpponentAI)
      */
-    public abstract void takeTurn(); 
+    public abstract void takeTurn();
 }

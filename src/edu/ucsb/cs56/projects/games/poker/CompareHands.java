@@ -8,162 +8,86 @@ import java.util.ArrayList;
  * Class that Compares Hands between Players
  */
 public class CompareHands implements Serializable{
-
     /**
-     * ArrayList holding player1's cards and the table cards
-     */
-    private ArrayList<Card> cardHand1;
-
-    /**
-     * ArrayList holding player2's cards and the table cards
-     */
-    private ArrayList<Card> cardHand2;
-
-    /**
-     * ArrayList to hold each Player's hand
+     * ArrayList to hold each Player's hand, index = player number
     */
+    private ArrayList<Card> cardHand1;
+    private ArrayList<Card> cardHand2;
     private ArrayList<ArrayList<Card>> hands;
 
+    private ArrayList<Player> players;
+
+    private int ties;
     /**
-     * ArrayList to hold each Hand's cards 
-    */
-
-    private ArrayList<Card> cards; 
-
-    /*
-     * Value of player1's hand
-     */
-    private int player1Value = 0;
-
-    /*
-     * Value of player2's hand
-     */
-    private int player2Value = 0;    
-
-    /**
-     * Compare Hands Constructor
-     * @param player1 first player
-     * @param player2 second player
+     * Multiplayer Compare Hands Constructor
+     * supports dynamic arraylist for any number of players
+     * @param ArrayList of all participating Players
      * @param table the cards that are on the table
-     * 
-     */    
-    public CompareHands(Player player1, Player player2, TableCards table) {
-        cardHand1 = new ArrayList<Card>();
-        cardHand1.addAll(player1.getHand());
-        cardHand1.addAll(table.getFlopCards());
-        cardHand1.add(table.getTurnCard());
-        cardHand1.add(table.getRiverCard());
-
-        cardHand2 = new ArrayList<Card>();
-        cardHand2.addAll(player2.getHand());
-        cardHand2.addAll(table.getFlopCards());
-        cardHand2.add(table.getTurnCard());
-        cardHand2.add(table.getRiverCard());
-    }
-
-    /* Multiplayer Compare Hands Constructor */
-    /* Supports dynamic arraylist for any number of players */
-    public CompareHands(ArrayList<Player> Players, TableCards table) {
-	// initialize ArrayLists
-	// nested ArrayList; Players[0] = ArrayList of cards
-	// EX: Hands = [ [card1, card2...], [card1, card2...] ]
-	
-	hands = new ArrayList<ArrayList<Card>>(Players.size());
-	cards = new ArrayList<Card>(Players.size()); 
-	for (int i = 0; i < Players.size(); i ++) {
-	    hands.add(cards);
-	    
-	    Player current = Players.get(i);
-	    ArrayList<Card> hand = hands.get(i);
-	    
-	    hand.addAll(current.getHand());
-	    hand.addAll(table.getFlopCards());
-            hand.add(table.getTurnCard());
-            hand.add(table.getRiverCard());
-	}
-	
-    }
-	
-    /**
-     * Returns 1 if "Player 1" hand is better than "Player 2" hand
-     * Returns 0 if the opposite.
-     * Returns 2 if exact tie
-     * @return int representing round winnner
+     *
      */
-    public int compareHands(){
-        player1Value = calculateValue(cardHand1);
-        player2Value = calculateValue(cardHand2);
+    public CompareHands(ArrayList<Player> Players, TableCards table) {
+    	// initialize ArrayLists
+    	// nested ArrayList; hands[0] = cards of player 0
+    	// EX: hands = [ [card1, card2...], [card1, card2...] ]
+    	hands = new ArrayList<ArrayList<Card>>(Players.size());
+      players = Players;
+      // for each player, get their hand and put it into ArrayList hands
+    	for (int i = 0; i < Players.size(); i ++) {
+          // collection to store cards
+          ArrayList<Card> cards = new ArrayList<Card>();
+    	    // get player at current index
+    	    Player current = Players.get(i);
 
-        if(player1Value>player2Value)
-            return 1;
-        else if(player1Value<player2Value)
-            return 0;
-        else {
-	    // return value for below functions are T/F values, return values are lost and have no functionality here
-	    /*
-	    // player1Value and player2Value are equal (same general hand)
-            switch (player1Value) {
-                case 8:
-                    // straight flush
-                    return straightFlushTie();
-                case 7:
-                    // four of a kind
-                    return fourOfAKindTie();
-                case 6:
-                    // full house
-                    return fullHouseTie();
-                case 5:
-                    // flush
-                    return flushTie();
-                case 4:
-                    // straight
-                    return straightTie();
-                case 3:
-                    // three of a kind
-                    return threeOfAKindTie();
-                case 2:
-                    // two pair
-                    return twoPairTie();
-                case 1:
-                    // pair
-                    return pairTie();
-                case 0:
-                    // high card
-                    return highCardTie();
-                default:
-                    // should never happen
-		    return 2;
-            }
-	    */
-	    return 2;
-        }
+          // get current player's hand and add to cards
+          cards.addAll(current.getHand());
+    	    cards.addAll(table.getFlopCards());
+          cards.add(table.getTurnCard());
+          // add player's cards into their hand
+          hands.add(cards);
+    	}
+
+
     }
 
     /**
      * compareHands multiplayer function
-     * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing) 
-     * Returns -1 if there is a tie for the highest hand value
+     * Returns winner's player index (ex: winner = player 3, returns 2 because of indexing)
+     * Returns 0 if there is a tie for the highest hand value
     **/
-    public int compareHands_mult() {
-	int max_value = -1;
-	int winner = -1;
-	
-	for (ArrayList<Card> hand: hands) {
-	    int value = calculateValue(hand);
-	    
-	    if (value > max_value) {
-		// reset max value
-		max_value = value;
-		// replace previous winner 
-		winner = hands.indexOf(hand);
-	    }
-	    // if equal hands, TIE. return -1
-	    else if (value == max_value) {
-		winner = -1;
-	    }
-	}
-	return winner; 
-	
+    public int compareHands() {
+    	int max_value = -1;
+    	int winner = 0;
+      ties = 0;
+
+    	for (ArrayList<Card> hand : hands) {
+    	    int value = calculateValue(hand);
+          int idx = hands.indexOf(hand);
+              if (value > max_value) {
+        		// reset max value
+            		max_value = value;
+        		// replace previous winner
+                if (players.get(idx).status == 1) {
+                  winner = hands.indexOf(hand);
+
+                }
+                // if exceeded highest hand, tie = 0
+                ties = 0;
+
+        	    }
+        	    // if equal highest hand, add to ties
+        	    else if (value == max_value) {
+        		      winner = 0 ;
+                  ties++;
+        	    }
+
+    	}
+    	return winner;
+
+    }
+    // returns number of players tie
+    public int numberOfTies()
+    {
+      return ties;
     }
 
     /**
@@ -172,7 +96,7 @@ public class CompareHands implements Serializable{
      * recursion: Either 1 if called 1st, 2 if called 2nd
      * func won't work as intended if given a different number
      * @param c this is the array of cards
-     * @param recursion MUST BE A 1 OR A 2 IF YOU WANT THIS TO WORK 
+     * @param recursion MUST BE A 1 OR A 2 IF YOU WANT THIS TO WORK
      * @return int returns an integer
      */
     private int sameHandUpdated(ArrayList<Card> c, int recursion) {
@@ -202,7 +126,7 @@ public class CompareHands implements Serializable{
      * @param player the cards that belong to the players
      * @return int
      */
-    
+
     public int calculateValue(ArrayList<Card> player) {
         if(isStraightFlush(player))
             return 8;
@@ -223,7 +147,7 @@ public class CompareHands implements Serializable{
         else
             return 0;
     }
-	
+
    /**
     * Method that explicitly names the player's hand.
     * @param player: the cards belonging to the player.
@@ -251,39 +175,29 @@ public class CompareHands implements Serializable{
             return ("Mix");
     }
 
-    public String compareMessage(){
-	if (this.compareHands() == 1){
-		return (calculateValueToString(cardHand1) + " beats " + calculateValueToString(cardHand2));
-	}
-	else if (this.compareHands() == 0){
-		return (calculateValueToString(cardHand2) + " beats " + calculateValueToString(cardHand1));
-	}
-	else{
-		return ("Tie with " + calculateValueToString(cardHand1));
-	}
-    }
-    /** 
+    /**
      * compareMessage for multiplayer
-     * relies on compareHands of multiplayer
      **/
-    public String compareMessage_mult(){
+    public String compareMessage(){
 	// get winner's index in hands ArrayList
-	int winner = this.compareHands_mult();
-	ArrayList<Card> winning_hand = hands.get(winner);
-	String message;
-	
+    	int winner = this.compareHands();
+    	ArrayList<Card> winning_hand = hands.get(winner);
+    	String message;
+
 	/** if it is not a TIE **/
-	if (winner >= 0) {
-	    // get winner's cards
-	    // ArrayList<Card> winning_hand = hands.get(winner);
-	
-	    message = calculateValueToString(winning_hand) + " beats all!";
-	}
-	else {
-	    message = "It's a tie with " + calculateValueToString(winning_hand);
-	}
-	
-	return message;
+    	if (winner >= 0) {
+    	    // get winner's cards
+	    if (players.size() == 2) {
+		    message = calculateValueToString(winning_hand) + " beats " + calculateValueToString(hands.get(1-winner)) + "!";
+	    }
+	    else
+    	         message = calculateValueToString(winning_hand) + " beats all!";
+    	}
+    	else {
+    	    message = "It's a tie with " + calculateValueToString(winning_hand);
+    	}
+
+    	return message;
     }
 
     /**
@@ -337,14 +251,14 @@ public class CompareHands implements Serializable{
         removeDuplicates(clubs);
         removeDuplicates(diamonds);
         removeDuplicates(hearts);
-        
+
         if(spadeCounter>=5){
             Collections.sort(spades);
             if (spades.get(spades.size()-1 ) == 14) //if the top value is an ace, use the method below
             if (isLowestRankingStraight(spades))
                 return true;
             for (i = 0; i < spadeCounter-5; i++) {
-            if(spades.get(i)==(spades.get(i+1)-1) && 
+            if(spades.get(i)==(spades.get(i+1)-1) &&
                spades.get(i)==(spades.get(i+2)-2) &&
                spades.get(i)==(spades.get(i+3)-3) &&
                spades.get(i)==(spades.get(i+4)-4))
@@ -357,7 +271,7 @@ public class CompareHands implements Serializable{
             if (isLowestRankingStraight(clubs))
                 return true;
             for (i = 0; i < clubsCounter-5; i++) {
-            if(clubs.get(i)==(clubs.get(i+1)-1) && 
+            if(clubs.get(i)==(clubs.get(i+1)-1) &&
                clubs.get(i)==(clubs.get(i+2)-2) &&
                clubs.get(i)==(clubs.get(i+3)-3) &&
                clubs.get(i)==(clubs.get(i+4)-4))
@@ -370,7 +284,7 @@ public class CompareHands implements Serializable{
                 return true;
                 Collections.sort(hearts);
             for (i = 0; i < heartCounter-5; i++) {
-            if(spades.get(i)==(hearts.get(i+1)-1) && 
+            if(spades.get(i)==(hearts.get(i+1)-1) &&
                hearts.get(i)==(hearts.get(i+2)-2) &&
                hearts.get(i)==(hearts.get(i+3)-3) &&
                hearts.get(i)==(hearts.get(i+4)-4))
@@ -383,7 +297,7 @@ public class CompareHands implements Serializable{
                 return true;
                     Collections.sort(diamonds);
             for (i = 0; i < diamondCounter-5; i++) {
-            if(diamonds.get(i)==(diamonds.get(i+1)-1) && 
+            if(diamonds.get(i)==(diamonds.get(i+1)-1) &&
                diamonds.get(i)==(diamonds.get(i+2)-2) &&
                diamonds.get(i)==(diamonds.get(i+3)-3) &&
                diamonds.get(i)==(diamonds.get(i+4)-4))
@@ -392,7 +306,7 @@ public class CompareHands implements Serializable{
         }
         else
             return false;
-            
+
         if(straightFlushCounter==4)
             return true;
         else
@@ -424,7 +338,7 @@ public class CompareHands implements Serializable{
            * @param player the cards belonging to the player
            * @return boolean
         */
-        private boolean isFullHouse(ArrayList<Card> player) {
+    private boolean isFullHouse(ArrayList<Card> player) {
         ArrayList<Integer> sortedHand=sortHand(player);
         int doubleCounter=0;
         int tripleCounter=0;
@@ -446,7 +360,7 @@ public class CompareHands implements Serializable{
             else
             tripleCounter=0;
         }
-        
+
         if(tripleCounter==2) {
             sortedHand.trimToSize();
             int size=sortedHand.size();
@@ -462,7 +376,7 @@ public class CompareHands implements Serializable{
         else
             return false;
     }
-    
+
     /**
        Returns boolean for if the hand is a flush.
        * @param player the cards belonging to the player
@@ -483,13 +397,13 @@ public class CompareHands implements Serializable{
             else
             heartCounter++;
         }
-        if(spadeCounter>=5 || cloverCounter>=5 || diamondCounter>=5 
+        if(spadeCounter>=5 || cloverCounter>=5 || diamondCounter>=5
            || heartCounter>=5)
             return true;
         else
             return false;
     }
-    
+
     /**
        Returns boolean for if the hand is a straight.
        * @param player the card belonging to the player
@@ -503,7 +417,7 @@ public class CompareHands implements Serializable{
             return true;
         int straightCounter=0;
         for(int i=0;i<player.size()-4;i++) {
-            if(sortedHand.get(i)==(sortedHand.get(i+1)-1) && 
+            if(sortedHand.get(i)==(sortedHand.get(i+1)-1) &&
                sortedHand.get(i)==(sortedHand.get(i+2)-2) &&
                sortedHand.get(i)==(sortedHand.get(i+3)-3) &&
                sortedHand.get(i)==(sortedHand.get(i+4)-4))
@@ -518,7 +432,7 @@ public class CompareHands implements Serializable{
      *Used when checking for Straights. Ace has a value of 14
      * but technically it should also have a value of one. This method covers this.
      * @param sortedHand a hand that is already sorted from lowest to highest
-     * @return boolean 
+     * @return boolean
      */
     private boolean isLowestRankingStraight(ArrayList<Integer> sortedHand) {
         for (int i = 0; i<sortedHand.size()-3; i++) {
@@ -547,7 +461,7 @@ public class CompareHands implements Serializable{
         sortedHand = deDupList;
         return sortedHand;
     }
-    
+
     /**
        Returns boolean for if the hand has three of a kind.
        * @param player the cards belonging to the player
@@ -557,7 +471,7 @@ public class CompareHands implements Serializable{
         if(isFullHouse(player)){
             return false;
         }
-        
+
         ArrayList<Integer> sortedHand= sortHand(player);
         int tripleCounter=0;
         for(int i=0;i<player.size()-1;i++) {
@@ -571,9 +485,9 @@ public class CompareHands implements Serializable{
         if(tripleCounter==2)
             return true;
         else
-            return false;		
+            return false;
     }
-    
+
     /**
        Returns boolean for if the hand has two pairs.
        * @param player the cards that belong to the player
@@ -603,7 +517,7 @@ public class CompareHands implements Serializable{
         }
         return(pair1Counter==1 && pair2Counter>=1);
     }
-    
+
     /**
        Returns boolean for if the hand has only one pair.
        * @param player cards that belong to the player
@@ -775,14 +689,14 @@ public class CompareHands implements Serializable{
         int straightEndIndex2 = 0;
 
         for (int i = 0; i < sortedHand1.size() - 4; i++) {
-            if(sortedHand1.get(i)==(sortedHand1.get(i + 1) - 1) && 
+            if(sortedHand1.get(i)==(sortedHand1.get(i + 1) - 1) &&
                sortedHand1.get(i)==(sortedHand1.get(i + 2) - 2) &&
                sortedHand1.get(i)==(sortedHand1.get(i + 3) - 3) &&
                sortedHand1.get(i)==(sortedHand1.get(i + 4) - 4))
                 {
                 straightEndIndex1 = i + 4;
                 }
-            if(sortedHand2.get(i)==(sortedHand2.get(i + 1) - 1) && 
+            if(sortedHand2.get(i)==(sortedHand2.get(i + 1) - 1) &&
                sortedHand2.get(i)==(sortedHand2.get(i + 2) - 2) &&
                sortedHand2.get(i)==(sortedHand2.get(i + 3) - 3) &&
                sortedHand2.get(i)==(sortedHand2.get(i + 4) - 4))

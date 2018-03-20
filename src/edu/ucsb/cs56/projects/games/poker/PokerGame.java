@@ -74,7 +74,7 @@ public class PokerGame {
     protected int pot;
 
     // Variables maybe used ---- Eventually this should not be in existence
-    
+
     /**
      * The current bet
      */
@@ -140,7 +140,8 @@ public class PokerGame {
      * Whether or not someone has gone all in
      */
     protected boolean allIn = false;
-    
+    protected ArrayList<Player> players = new ArrayList<Player>();
+
     /** TODO: Change for multiplayer
      * No arg constructor that initializes a new deck.
      */
@@ -152,7 +153,7 @@ public class PokerGame {
         this.table = new TableCards(deck);
         pot = 0;
     }
-    
+
     // Getters and setters for various members
 
     /**
@@ -231,8 +232,8 @@ public class PokerGame {
      * Sets up the player's and opponent's hand.
      */
     public void setUp() {
-        player.setDelegate(this);
-        opponent.setDelegate(this);
+    //    player.setDelegate(this);
+      //  opponent.setDelegate(this);
         if (player.getChips() >= 5 && opponent.getChips() >= 5) {
             player.bet(5);
             opponent.bet(5);
@@ -321,32 +322,35 @@ public class PokerGame {
             pot = 0;
         }
     }
-	
+
     /** TODO: Change for multiplayer
      * Method to determine the winner of the game
      */
     // Possibly fix this
- 
+ // BUG HERE FOR SHOWDOWN BUTTON, CHANGE COMPAREHAHNDS DECLARATION OF comparison
+ // MUST HAVE ARGUMENTS OF TYPE (ArrayList, TableCards) BC OF CONSTRUCTOR CHANGE
+ //   PLACEHOLDER FOR NOW
     public void determineWinner() {
-        CompareHands comparison = new CompareHands(player, opponent, table);
+        CompareHands comparison = new CompareHands(players, table);
         int winner = comparison.compareHands();
 
         if (winner == 1) {
             winnerType = Winner.PLAYER;
 	    player.win();
-	}
+      	}
 
-	else if (winner == 0) {
-	    winnerType = Winner.OPPONENT;
-            opponent.win();   
-        }
-	else {
-	    winnerType = Winner.TIE;
-	}
+      	else if (winner == 0) {
+      	    winnerType = Winner.OPPONENT;
+                  opponent.win();
+              }
+      	else {
+      	    winnerType = Winner.TIE;
+      	}
     }
 
+    // BUG HERE AS WELL, ARGUMENT TYPES!
     public String winningHandMessage(){
-	CompareHands comparison = new CompareHands(player, opponent, table);
+	CompareHands comparison = new CompareHands(players, table);
 	return comparison.compareMessage();
     }
     /**
